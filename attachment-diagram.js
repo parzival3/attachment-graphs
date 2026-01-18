@@ -150,17 +150,18 @@ class AttachmentDiagram {
         this.ctx.textAlign = 'center';
         
         // Calculate positions based on scale, with bounds checking
-        const axisOffsetX = Math.min(scale * 1.2, Math.min(centerX - 70, this.canvas.width - centerX - 70));
-        const axisOffsetY = Math.min(scale * 1.2, Math.min(centerY - 50, this.canvas.height - centerY - 50));
-        const axisSpacing = 20;
+        // Use 1.7x multiplier to keep labels outside the curve
+        const axisOffsetX = Math.min(scale * 1.7, Math.min(centerX - 70, this.canvas.width - centerX - 70));
+        const axisOffsetY = Math.min(scale * 1.7, Math.min(centerY - 50, this.canvas.height - centerY - 50));
+        const axisSpacing = 25;
         
         // Anxiety axis (horizontal labels)
         this.ctx.fillText('Low Anxiety', centerX - axisOffsetX, centerY - axisSpacing);
         this.ctx.fillText('High Anxiety', centerX + axisOffsetX, centerY - axisSpacing);
         
         // Avoidance axis (vertical labels, centered above/below axis line)
-        this.ctx.fillText('Low Avoidance', centerX, centerY - axisOffsetY - 15);
-        this.ctx.fillText('High Avoidance', centerX, centerY + axisOffsetY + 30);
+        this.ctx.fillText('Low Avoidance', centerX, centerY - axisOffsetY - 20);
+        this.ctx.fillText('High Avoidance', centerX, centerY + axisOffsetY + 35);
     }
     
     /**
