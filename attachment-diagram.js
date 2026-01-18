@@ -154,13 +154,13 @@ class AttachmentDiagram {
         // Avoidance axis
         this.ctx.save();
         this.ctx.translate(centerX + 20, centerY - scale * 1.4);
-        this.ctx.rotate(-Math.PI / 2);
+        this.ctx.rotate(Math.PI / 2);
         this.ctx.fillText('Low Avoidance', 0, 0);
         this.ctx.restore();
         
         this.ctx.save();
         this.ctx.translate(centerX + 20, centerY + scale * 1.4);
-        this.ctx.rotate(-Math.PI / 2);
+        this.ctx.rotate(Math.PI / 2);
         this.ctx.fillText('High Avoidance', 0, 0);
         this.ctx.restore();
     }
