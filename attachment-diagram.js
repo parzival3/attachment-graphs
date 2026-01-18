@@ -258,27 +258,57 @@ function getAttachmentLabel(x, y) {
     return 'Transitional';
 }
 
-// Set up slider
+// Current positions
+let yourPosition = 25;
+let partnerPosition = 75;
+
+// Function to render both points
+function renderBothPoints() {
+    const yourPoint = getPointOnCurve(yourPosition);
+    const partnerPoint = getPointOnCurve(partnerPosition);
+    
+    diagram.clear();
+    diagram.drawQuadrants();
+    diagram.drawAxes();
+    diagram.drawInfinityCurve();
+    diagram.drawLabels();
+    
+    // Draw both points
+    diagram.plotPoint(partnerPoint.x, partnerPoint.y, '#8b7d6f');
+    diagram.plotPoint(yourPoint.x, yourPoint.y, '#c77f5a');
+}
+
+// Set up sliders
 const curveSlider = document.getElementById('curveSlider');
 const positionValue = document.getElementById('positionValue');
+const partnerSlider = document.getElementById('partnerSlider');
+const partnerPositionValue = document.getElementById('partnerPositionValue');
 
 if (curveSlider && positionValue) {
     // Initial render
-    const initialPoint = getPointOnCurve(25);
-    diagram.render({ anxiety: initialPoint.x, avoidance: initialPoint.y, color: '#c77f5a' });
+    const initialPoint = getPointOnCurve(yourPosition);
+    const partnerPoint = getPointOnCurve(partnerPosition);
     positionValue.textContent = getAttachmentLabel(initialPoint.x, initialPoint.y);
+    partnerPositionValue.textContent = getAttachmentLabel(partnerPoint.x, partnerPoint.y);
+    renderBothPoints();
     
-    // Slider event
+    // Your slider event
     curveSlider.addEventListener('input', (e) => {
-        const percentage = parseFloat(e.target.value);
-        const point = getPointOnCurve(percentage);
-        
-        // Update label
+        yourPosition = parseFloat(e.target.value);
+        const point = getPointOnCurve(yourPosition);
         positionValue.textContent = getAttachmentLabel(point.x, point.y);
-        
-        // Render
-        diagram.render({ anxiety: point.x, avoidance: point.y, color: '#c77f5a' });
+        renderBothPoints();
     });
+    
+    // Partner slider event
+    if (partnerSlider && partnerPositionValue) {
+        partnerSlider.addEventListener('input', (e) => {
+            partnerPosition = parseFloat(e.target.value);
+            const point = getPointOnCurve(partnerPosition);
+            partnerPositionValue.textContent = getAttachmentLabel(point.x, point.y);
+            renderBothPoints();
+        });
+    }
 }
 
 // Export for use in other scripts
