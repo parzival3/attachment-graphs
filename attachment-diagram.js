@@ -201,6 +201,8 @@ class AttachmentDiagram {
         this.ctx.stroke();
         
         this.dataPoint = { anxiety, avoidance, x, y };
+        
+        return { x, y, label, color };
     }
     
     /**
@@ -262,6 +264,9 @@ function getAttachmentLabel(x, y) {
 let yourPosition = 25;
 let partnerPosition = 75;
 
+// Store point positions for hover detection
+let points = [];
+
 // Function to render both points
 function renderBothPoints() {
     const yourPoint = getPointOnCurve(yourPosition);
@@ -273,9 +278,46 @@ function renderBothPoints() {
     diagram.drawInfinityCurve();
     diagram.drawLabels();
     
-    // Draw both points with labels
-    diagram.plotPoint(partnerPoint.x, partnerPoint.y, '#8b7d6f', 'Partner');
-    diagram.plotPoint(yourPoint.x, yourPoint.y, '#c77f5a', 'You');
+    // Draw both points and store their positions
+    points = [];
+    points.push(diagram.plotPoint(partnerPoint.x, partnerPoint.y, '#8b7d6f', 'Partner'));
+    points.push(diagram.plotPoint(yourPoint.x, yourPoint.y, '#c77f5a', 'You'));
+}
+
+// Function to draw tooltip
+function drawTooltip(point, mouseX, mouseY) {
+    const ctx = diagram.ctx;
+    const label = point.label;
+    
+    ctx.font = '600 13px "Segoe UI", sans-serif';
+    const textMetrics = ctx.measureText(label);
+    const padding = 8;
+    const tooltipWidth = textMetrics.width + padding * 2;
+    const tooltipHeight = 26;
+    
+    // Position tooltip above the cursor
+    const tooltipX = mouseX - tooltipWidth / 2;
+    const tooltipY = mouseY - 35;
+    
+    // Draw tooltip background with shadow
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+    ctx.shadowBlur = 8;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 2;
+    
+    ctx.fillStyle = point.color;
+    ctx.beginPath();
+    ctx.roundRect(tooltipX, tooltipY, tooltipWidth, tooltipHeight, 6);
+    ctx.fill();
+    
+    // Reset shadow
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+    
+    // Draw tooltip text
+    ctx.fillStyle = 'white';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, tooltipX + tooltipWidth / 2, tooltipY + 17);
 }
 
 // Set up sliders
@@ -310,6 +352,55 @@ if (curveSlider && positionValue) {
         });
     }
 }
+
+// Add hover tooltip functionality
+const canvas = diagram.canvas;
+let hoveredPoint = null;
+
+canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    // Check if mouse is over any point
+    let foundPoint = null;
+    for (const point of points) {
+        const distance = Math.sqrt(
+            Math.pow(mouseX - point.x, 2) + 
+            Math.pow(mouseY - point.y, 2)
+        );
+        
+        if (distance < 15) {
+            foundPoint = point;
+            break;
+        }
+    }
+    
+    // If hovering state changed, redraw
+    if (foundPoint !== hoveredPoint) {
+        hoveredPoint = foundPoint;
+        renderBothPoints();
+        
+        if (hoveredPoint) {
+            drawTooltip(hoveredPoint, mouseX, mouseY);
+            canvas.style.cursor = 'pointer';
+        } else {
+            canvas.style.cursor = 'default';
+        }
+    } else if (hoveredPoint) {
+        // Update tooltip position while hovering
+        renderBothPoints();
+        drawTooltip(hoveredPoint, mouseX, mouseY);
+    }
+});
+
+canvas.addEventListener('mouseleave', () => {
+    if (hoveredPoint) {
+        hoveredPoint = null;
+        canvas.style.cursor = 'default';
+        renderBothPoints();
+    }
+});
 
 // Export for use in other scripts
 if (typeof module !== 'undefined' && module.exports) {
