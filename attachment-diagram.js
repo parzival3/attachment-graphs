@@ -231,6 +231,62 @@ const diagram = new AttachmentDiagram('attachmentCanvas');
 let currentAnxiety = 0.5;
 let currentAvoidance = -0.3;
 
+// Function to check if point is inside the infinity curve (lemniscate)
+function isInsideLemniscate(x, y) {
+    // Lemniscate equation: (x^2 + y^2)^2 = x^2 - y^2
+    // We normalize to the unit scale (a = 1)
+    const left = Math.pow(x * x + y * y, 2);
+    const right = x * x - y * y;
+    return left <= right + 0.01; // Small tolerance for numerical stability
+}
+
+// Function to find the maximum avoidance for a given anxiety level
+function getMaxAvoidance(anxiety) {
+    // For a given x (anxiety), find the maximum y (avoidance) on the lemniscate
+    // From the equation: y^2 = x^2 - (x^2 + y^2)^2
+    // We solve numerically by testing values
+    let maxY = 0;
+    for (let y = -1; y <= 1; y += 0.01) {
+        if (isInsideLemniscate(anxiety, y) && Math.abs(y) > Math.abs(maxY)) {
+            maxY = y;
+        }
+    }
+    return maxY;
+}
+
+// Function to find the maximum anxiety for a given avoidance level
+function getMaxAnxiety(avoidance) {
+    // For a given y (avoidance), find the maximum x (anxiety) on the lemniscate
+    let maxX = 0;
+    for (let x = -1; x <= 1; x += 0.01) {
+        if (isInsideLemniscate(x, avoidance) && Math.abs(x) > Math.abs(maxX)) {
+            maxX = x;
+        }
+    }
+    return maxX;
+}
+
+// Function to constrain point to be inside curve
+function constrainToCurve(anxiety, avoidance) {
+    if (isInsideLemniscate(anxiety, avoidance)) {
+        return { anxiety, avoidance };
+    }
+    
+    // If outside, find the closest point on the curve
+    // Simple approach: scale down from origin until inside
+    let scale = 1.0;
+    while (scale > 0.01) {
+        const newAnxiety = anxiety * scale;
+        const newAvoidance = avoidance * scale;
+        if (isInsideLemniscate(newAnxiety, newAvoidance)) {
+            return { anxiety: newAnxiety, avoidance: newAvoidance };
+        }
+        scale -= 0.01;
+    }
+    
+    return { anxiety: 0, avoidance: 0 };
+}
+
 // Render initial diagram
 diagram.render({ anxiety: currentAnxiety, avoidance: currentAvoidance, color: '#c77f5a' });
 
@@ -242,14 +298,36 @@ const avoidanceValue = document.getElementById('avoidanceValue');
 
 if (anxietySlider && avoidanceSlider) {
     anxietySlider.addEventListener('input', (e) => {
-        currentAnxiety = parseFloat(e.target.value);
+        const newAnxiety = parseFloat(e.target.value);
+        
+        // Constrain the point to stay inside the curve
+        const constrained = constrainToCurve(newAnxiety, currentAvoidance);
+        currentAnxiety = constrained.anxiety;
+        currentAvoidance = constrained.avoidance;
+        
+        // Update slider values
+        anxietySlider.value = currentAnxiety;
+        avoidanceSlider.value = currentAvoidance;
         anxietyValue.textContent = currentAnxiety.toFixed(2);
+        avoidanceValue.textContent = currentAvoidance.toFixed(2);
+        
         diagram.render({ anxiety: currentAnxiety, avoidance: currentAvoidance, color: '#c77f5a' });
     });
     
     avoidanceSlider.addEventListener('input', (e) => {
-        currentAvoidance = parseFloat(e.target.value);
+        const newAvoidance = parseFloat(e.target.value);
+        
+        // Constrain the point to stay inside the curve
+        const constrained = constrainToCurve(currentAnxiety, newAvoidance);
+        currentAnxiety = constrained.anxiety;
+        currentAvoidance = constrained.avoidance;
+        
+        // Update slider values
+        anxietySlider.value = currentAnxiety;
+        avoidanceSlider.value = currentAvoidance;
+        anxietyValue.textContent = currentAnxiety.toFixed(2);
         avoidanceValue.textContent = currentAvoidance.toFixed(2);
+        
         diagram.render({ anxiety: currentAnxiety, avoidance: currentAvoidance, color: '#c77f5a' });
     });
 }
