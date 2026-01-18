@@ -215,6 +215,13 @@ class AttachmentDiagram {
     }
     
     /**
+     * Set the scale/zoom level of the diagram
+     */
+    setScale(scale) {
+        this.config.scale = scale;
+    }
+    
+    /**
      * Render the complete diagram
      */
     render(dataPoint = null) {
