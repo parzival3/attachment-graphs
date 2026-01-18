@@ -146,15 +146,15 @@ class AttachmentDiagram {
         // Axis labels
         this.ctx.font = `400 ${fontSize - 2}px 'Segoe UI', sans-serif`;
         this.ctx.fillStyle = '#9b8f82';
+        this.ctx.textAlign = 'center';
         
-        // Anxiety axis
-        this.ctx.fillText('Low Anxiety', centerX - scale * 1.6, centerY - 20);
-        this.ctx.fillText('High Anxiety', centerX + scale * 1.6, centerY - 20);
+        // Anxiety axis (horizontal labels)
+        this.ctx.fillText('Low Anxiety', centerX - scale * 1.6, centerY - 15);
+        this.ctx.fillText('High Anxiety', centerX + scale * 1.6, centerY - 15);
         
-        // Avoidance axis (horizontal text)
-        this.ctx.textAlign = 'left';
-        this.ctx.fillText('Low Avoidance', centerX + 25, centerY - scale * 1.4);
-        this.ctx.fillText('High Avoidance', centerX + 25, centerY + scale * 1.4);
+        // Avoidance axis (vertical labels, centered above/below axis line)
+        this.ctx.fillText('Low Avoidance', centerX, centerY - scale * 1.5);
+        this.ctx.fillText('High Avoidance', centerX, centerY + scale * 1.5);
     }
     
     /**
