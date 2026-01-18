@@ -231,57 +231,55 @@ const diagram = new AttachmentDiagram('attachmentCanvas');
 let currentAnxiety = 0.5;
 let currentAvoidance = -0.3;
 
-// Function to check if point is inside the infinity curve (lemniscate)
-function isInsideLemniscate(x, y) {
-    // Lemniscate equation: (x^2 + y^2)^2 = x^2 - y^2
-    // We normalize to the unit scale (a = 1)
-    const left = Math.pow(x * x + y * y, 2);
-    const right = x * x - y * y;
-    return left <= right + 0.01; // Small tolerance for numerical stability
+// Pre-calculate curve points for boundary checking
+const curvePoints = [];
+for (let t = 0; t <= 2 * Math.PI; t += 0.02) {
+    const denominator = 1 + Math.sin(t) * Math.sin(t);
+    const x = Math.cos(t) / denominator;
+    const y = (Math.sin(t) * Math.cos(t)) / denominator;
+    curvePoints.push({ x, y, t });
 }
 
-// Function to find the maximum avoidance for a given anxiety level
-function getMaxAvoidance(anxiety) {
-    // For a given x (anxiety), find the maximum y (avoidance) on the lemniscate
-    // From the equation: y^2 = x^2 - (x^2 + y^2)^2
-    // We solve numerically by testing values
-    let maxY = 0;
-    for (let y = -1; y <= 1; y += 0.01) {
-        if (isInsideLemniscate(anxiety, y) && Math.abs(y) > Math.abs(maxY)) {
-            maxY = y;
+// Function to check if point is inside the curve using ray casting
+function isInsideCurve(px, py) {
+    // Simple radius check - if too far from origin, definitely outside
+    const dist = Math.sqrt(px * px + py * py);
+    if (dist > 1.2) return false;
+    
+    // Count intersections with a horizontal ray from the point
+    let intersections = 0;
+    for (let i = 0; i < curvePoints.length - 1; i++) {
+        const p1 = curvePoints[i];
+        const p2 = curvePoints[i + 1];
+        
+        // Check if ray crosses this line segment
+        if ((p1.y <= py && p2.y > py) || (p1.y > py && p2.y <= py)) {
+            const xIntersect = p1.x + (py - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
+            if (xIntersect > px) {
+                intersections++;
+            }
         }
     }
-    return maxY;
-}
-
-// Function to find the maximum anxiety for a given avoidance level
-function getMaxAnxiety(avoidance) {
-    // For a given y (avoidance), find the maximum x (anxiety) on the lemniscate
-    let maxX = 0;
-    for (let x = -1; x <= 1; x += 0.01) {
-        if (isInsideLemniscate(x, avoidance) && Math.abs(x) > Math.abs(maxX)) {
-            maxX = x;
-        }
-    }
-    return maxX;
+    
+    // Odd number of intersections means inside
+    return intersections % 2 === 1;
 }
 
 // Function to constrain point to be inside curve
 function constrainToCurve(anxiety, avoidance) {
-    if (isInsideLemniscate(anxiety, avoidance)) {
+    if (isInsideCurve(anxiety, avoidance)) {
         return { anxiety, avoidance };
     }
     
-    // If outside, find the closest point on the curve
-    // Simple approach: scale down from origin until inside
-    let scale = 1.0;
-    while (scale > 0.01) {
+    // If outside, scale down toward origin until inside
+    let scale = 0.99;
+    while (scale > 0.05) {
         const newAnxiety = anxiety * scale;
         const newAvoidance = avoidance * scale;
-        if (isInsideLemniscate(newAnxiety, newAvoidance)) {
+        if (isInsideCurve(newAnxiety, newAvoidance)) {
             return { anxiety: newAnxiety, avoidance: newAvoidance };
         }
-        scale -= 0.01;
+        scale -= 0.02;
     }
     
     return { anxiety: 0, avoidance: 0 };
