@@ -144,24 +144,22 @@ class AttachmentDiagram {
         // Fearful (high anxiety, high avoidance)
         this.ctx.fillText('Fearful', centerX, this.canvas.height - 60);
         
-        // Axis labels
+        // Axis labels - aligned with attachment style labels
         this.ctx.font = `400 ${fontSize - 2}px 'Segoe UI', sans-serif`;
         this.ctx.fillStyle = '#9b8f82';
         this.ctx.textAlign = 'center';
         
-        // Calculate positions based on scale, with bounds checking
-        // Use 1.7x multiplier to keep labels outside the curve
-        const axisOffsetX = Math.min(scale * 1.7, Math.min(centerX - 70, this.canvas.width - centerX - 70));
-        const axisOffsetY = Math.min(scale * 1.7, Math.min(centerY - 50, this.canvas.height - centerY - 50));
-        const axisSpacing = 25;
+        // Use same offset as attachment style labels for alignment
+        const anxiousX = Math.max(60, centerX - maxStyleOffset);
+        const avoidantX = Math.min(this.canvas.width - 60, centerX + maxStyleOffset);
         
-        // Anxiety axis (horizontal labels)
-        this.ctx.fillText('Low Anxiety', centerX - axisOffsetX, centerY - axisSpacing);
-        this.ctx.fillText('High Anxiety', centerX + axisOffsetX, centerY - axisSpacing);
+        // Anxiety axis (horizontal labels) - aligned with Anxious/Avoidant
+        this.ctx.fillText('Low Anxiety', anxiousX, centerY - 35);
+        this.ctx.fillText('High Anxiety', avoidantX, centerY - 35);
         
-        // Avoidance axis (vertical labels, centered above/below axis line)
-        this.ctx.fillText('Low Avoidance', centerX, centerY - axisOffsetY - 20);
-        this.ctx.fillText('High Avoidance', centerX, centerY + axisOffsetY + 35);
+        // Avoidance axis (vertical labels) - aligned with Secure/Fearful
+        this.ctx.fillText('Low Avoidance', centerX, 35);
+        this.ctx.fillText('High Avoidance', centerX, this.canvas.height - 35);
     }
     
     /**
