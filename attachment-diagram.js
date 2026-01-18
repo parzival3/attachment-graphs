@@ -165,8 +165,9 @@ class AttachmentDiagram {
      * @param {number} anxiety - Score from -1 (low) to 1 (high)
      * @param {number} avoidance - Score from -1 (low) to 1 (high)
      * @param {string} color - Color of the point
+     * @param {string} label - Label for the point
      */
-    plotPoint(anxiety, avoidance, color = '#c77f5a') {
+    plotPoint(anxiety, avoidance, color = '#c77f5a', label = '') {
         const { centerX, centerY, scale, pointRadius } = this.config;
         
         const x = centerX + anxiety * scale;
