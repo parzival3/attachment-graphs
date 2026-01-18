@@ -326,6 +326,8 @@ const curveSlider = document.getElementById('curveSlider');
 const positionValue = document.getElementById('positionValue');
 const partnerSlider = document.getElementById('partnerSlider');
 const partnerPositionValue = document.getElementById('partnerPositionValue');
+const zoomSlider = document.getElementById('zoomSlider');
+const zoomValue = document.getElementById('zoomValue');
 
 if (curveSlider && positionValue) {
     // Initial render
@@ -349,6 +351,16 @@ if (curveSlider && positionValue) {
             partnerPosition = parseFloat(e.target.value);
             const point = getPointOnCurve(partnerPosition);
             partnerPositionValue.textContent = getAttachmentLabel(point.x, point.y);
+            renderBothPoints();
+        });
+    }
+    
+    // Zoom slider event
+    if (zoomSlider && zoomValue) {
+        zoomSlider.addEventListener('input', (e) => {
+            const scale = parseFloat(e.target.value);
+            zoomValue.textContent = scale;
+            diagram.setScale(scale);
             renderBothPoints();
         });
     }
