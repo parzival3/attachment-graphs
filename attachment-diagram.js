@@ -135,10 +135,10 @@ class AttachmentDiagram {
         
         // Anxious (high anxiety, low avoidance)
         this.ctx.fillStyle = labelColor;
-        this.ctx.fillText('Anxious', centerX - styleOffset, centerY + 5);
+        this.ctx.fillText('Anxious', centerX - styleOffset, centerY + 30);
         
         // Avoidant (low anxiety, high avoidance)
-        this.ctx.fillText('Avoidant', centerX + styleOffset, centerY + 5);
+        this.ctx.fillText('Avoidant', centerX + styleOffset, centerY + 30);
         
         // Fearful (high anxiety, high avoidance)
         this.ctx.fillText('Fearful', centerX, centerY + styleOffset + 45);
