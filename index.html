@@ -52,6 +52,73 @@
             display: block;
             margin: 0 auto;
         }
+        
+        .controls {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .slider-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #5a5348;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .slider-label span:last-child {
+            color: #a8937e;
+            font-weight: 600;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e8dfd4;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #c77f5a;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.15s;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #c77f5a;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.15s;
+        }
+        
+        input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
@@ -59,6 +126,24 @@
         <h2>Attachment Style Diagram</h2>
         <p class="subtitle">Understanding your attachment patterns</p>
         <canvas id="attachmentCanvas" width="700" height="500"></canvas>
+        
+        <div class="controls">
+            <div class="slider-group">
+                <div class="slider-label">
+                    <span>Anxiety Level</span>
+                    <span id="anxietyValue">0.50</span>
+                </div>
+                <input type="range" id="anxietySlider" min="-1" max="1" step="0.01" value="0.5">
+            </div>
+            
+            <div class="slider-group">
+                <div class="slider-label">
+                    <span>Avoidance Level</span>
+                    <span id="avoidanceValue">-0.30</span>
+                </div>
+                <input type="range" id="avoidanceSlider" min="-1" max="1" step="0.01" value="-0.3">
+            </div>
+        </div>
     </div>
     <script src="attachment-diagram.js"></script>
 </body>

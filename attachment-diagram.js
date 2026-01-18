@@ -127,7 +127,7 @@ class AttachmentDiagram {
         this.ctx.fillStyle = labelColor;
         this.ctx.textAlign = 'center';
         
-        const offset = scale * 1.35;
+        const offset = scale * 1.5;
         
         // Secure (low anxiety, low avoidance)
         this.ctx.fillStyle = highlightColor;
@@ -151,18 +151,10 @@ class AttachmentDiagram {
         this.ctx.fillText('Low Anxiety', centerX - scale * 1.6, centerY - 20);
         this.ctx.fillText('High Anxiety', centerX + scale * 1.6, centerY - 20);
         
-        // Avoidance axis
-        this.ctx.save();
-        this.ctx.translate(centerX + 20, centerY - scale * 1.4);
-        this.ctx.rotate(Math.PI / 2);
-        this.ctx.fillText('Low Avoidance', 0, 0);
-        this.ctx.restore();
-        
-        this.ctx.save();
-        this.ctx.translate(centerX + 20, centerY + scale * 1.4);
-        this.ctx.rotate(Math.PI / 2);
-        this.ctx.fillText('High Avoidance', 0, 0);
-        this.ctx.restore();
+        // Avoidance axis (horizontal text)
+        this.ctx.textAlign = 'left';
+        this.ctx.fillText('Low Avoidance', centerX + 25, centerY - scale * 1.4);
+        this.ctx.fillText('High Avoidance', centerX + 25, centerY + scale * 1.4);
     }
     
     /**
@@ -234,13 +226,33 @@ class AttachmentDiagram {
 
 // Initialize the diagram
 const diagram = new AttachmentDiagram('attachmentCanvas');
-diagram.render();
 
-// Example: Plot a point after 1 second (for demonstration)
-setTimeout(() => {
-    // Example scores: moderate anxiety (0.5), low avoidance (-0.3)
-    diagram.render({ anxiety: 0.5, avoidance: -0.3, color: '#c77f5a' });
-}, 1000);
+// Initial values
+let currentAnxiety = 0.5;
+let currentAvoidance = -0.3;
+
+// Render initial diagram
+diagram.render({ anxiety: currentAnxiety, avoidance: currentAvoidance, color: '#c77f5a' });
+
+// Set up sliders
+const anxietySlider = document.getElementById('anxietySlider');
+const avoidanceSlider = document.getElementById('avoidanceSlider');
+const anxietyValue = document.getElementById('anxietyValue');
+const avoidanceValue = document.getElementById('avoidanceValue');
+
+if (anxietySlider && avoidanceSlider) {
+    anxietySlider.addEventListener('input', (e) => {
+        currentAnxiety = parseFloat(e.target.value);
+        anxietyValue.textContent = currentAnxiety.toFixed(2);
+        diagram.render({ anxiety: currentAnxiety, avoidance: currentAvoidance, color: '#c77f5a' });
+    });
+    
+    avoidanceSlider.addEventListener('input', (e) => {
+        currentAvoidance = parseFloat(e.target.value);
+        avoidanceValue.textContent = currentAvoidance.toFixed(2);
+        diagram.render({ anxiety: currentAnxiety, avoidance: currentAvoidance, color: '#c77f5a' });
+    });
+}
 
 // Export for use in other scripts
 if (typeof module !== 'undefined' && module.exports) {
