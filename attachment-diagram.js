@@ -129,10 +129,10 @@ class AttachmentDiagram {
         
         // Use minimum of scale-based or fixed offset to keep labels in bounds
         // Increase multiplier to 1.8 to keep labels outside the curve
-        const maxStyleOffset = Math.min(scale * 1.8, 200);
+        const maxStyleOffset = Math.min(scale * 1.8, 300);
         
         // Secure (low anxiety, low avoidance)
-        this.ctx.fillStyle = highlightColor;
+        this.ctx.fillStyle = labelColor;
         this.ctx.fillText('Secure', centerX, 60);
         
         // Anxious (high anxiety, low avoidance)
