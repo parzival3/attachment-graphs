@@ -227,106 +227,54 @@ class AttachmentDiagram {
 // Initialize the diagram
 const diagram = new AttachmentDiagram('attachmentCanvas');
 
-// Initial values
-let currentAnxiety = 0.5;
-let currentAvoidance = -0.3;
-
-// Pre-calculate curve points for boundary checking
+// Pre-calculate curve points for the slider to follow
 const curvePoints = [];
-for (let t = 0; t <= 2 * Math.PI; t += 0.02) {
+for (let t = 0; t <= 2 * Math.PI; t += 0.01) {
     const denominator = 1 + Math.sin(t) * Math.sin(t);
     const x = Math.cos(t) / denominator;
     const y = (Math.sin(t) * Math.cos(t)) / denominator;
     curvePoints.push({ x, y, t });
 }
 
-// Function to check if point is inside the curve using ray casting
-function isInsideCurve(px, py) {
-    // Simple radius check - if too far from origin, definitely outside
-    const dist = Math.sqrt(px * px + py * py);
-    if (dist > 1.2) return false;
-    
-    // Count intersections with a horizontal ray from the point
-    let intersections = 0;
-    for (let i = 0; i < curvePoints.length - 1; i++) {
-        const p1 = curvePoints[i];
-        const p2 = curvePoints[i + 1];
-        
-        // Check if ray crosses this line segment
-        if ((p1.y <= py && p2.y > py) || (p1.y > py && p2.y <= py)) {
-            const xIntersect = p1.x + (py - p1.y) * (p2.x - p1.x) / (p2.y - p1.y);
-            if (xIntersect > px) {
-                intersections++;
-            }
-        }
-    }
-    
-    // Odd number of intersections means inside
-    return intersections % 2 === 1;
+// Function to get position on curve from percentage (0-100)
+function getPointOnCurve(percentage) {
+    const index = Math.floor((percentage / 100) * (curvePoints.length - 1));
+    return curvePoints[index];
 }
 
-// Function to constrain point to be inside curve
-function constrainToCurve(anxiety, avoidance) {
-    if (isInsideCurve(anxiety, avoidance)) {
-        return { anxiety, avoidance };
-    }
-    
-    // If outside, scale down toward origin until inside
-    let scale = 0.99;
-    while (scale > 0.05) {
-        const newAnxiety = anxiety * scale;
-        const newAvoidance = avoidance * scale;
-        if (isInsideCurve(newAnxiety, newAvoidance)) {
-            return { anxiety: newAnxiety, avoidance: newAvoidance };
-        }
-        scale -= 0.02;
-    }
-    
-    return { anxiety: 0, avoidance: 0 };
+// Function to get attachment style label based on position
+function getAttachmentLabel(x, y) {
+    if (x < -0.3 && Math.abs(y) < 0.3) return 'Anxious-Preoccupied';
+    if (x > 0.3 && Math.abs(y) < 0.3) return 'Dismissive-Avoidant';
+    if (Math.abs(x) < 0.3 && y < -0.3) return 'Secure';
+    if (Math.abs(x) < 0.3 && y > 0.3) return 'Fearful-Avoidant';
+    if (x < 0 && y < 0) return 'Secure-Anxious';
+    if (x > 0 && y < 0) return 'Secure-Avoidant';
+    if (x < 0 && y > 0) return 'Anxious-Fearful';
+    if (x > 0 && y > 0) return 'Avoidant-Fearful';
+    return 'Transitional';
 }
 
-// Render initial diagram
-diagram.render({ anxiety: currentAnxiety, avoidance: currentAvoidance, color: '#c77f5a' });
+// Set up slider
+const curveSlider = document.getElementById('curveSlider');
+const positionValue = document.getElementById('positionValue');
 
-// Set up sliders
-const anxietySlider = document.getElementById('anxietySlider');
-const avoidanceSlider = document.getElementById('avoidanceSlider');
-const anxietyValue = document.getElementById('anxietyValue');
-const avoidanceValue = document.getElementById('avoidanceValue');
-
-if (anxietySlider && avoidanceSlider) {
-    anxietySlider.addEventListener('input', (e) => {
-        const newAnxiety = parseFloat(e.target.value);
-        
-        // Constrain the point to stay inside the curve
-        const constrained = constrainToCurve(newAnxiety, currentAvoidance);
-        currentAnxiety = constrained.anxiety;
-        currentAvoidance = constrained.avoidance;
-        
-        // Update slider values
-        anxietySlider.value = currentAnxiety;
-        avoidanceSlider.value = currentAvoidance;
-        anxietyValue.textContent = currentAnxiety.toFixed(2);
-        avoidanceValue.textContent = currentAvoidance.toFixed(2);
-        
-        diagram.render({ anxiety: currentAnxiety, avoidance: currentAvoidance, color: '#c77f5a' });
-    });
+if (curveSlider && positionValue) {
+    // Initial render
+    const initialPoint = getPointOnCurve(25);
+    diagram.render({ anxiety: initialPoint.x, avoidance: initialPoint.y, color: '#c77f5a' });
+    positionValue.textContent = getAttachmentLabel(initialPoint.x, initialPoint.y);
     
-    avoidanceSlider.addEventListener('input', (e) => {
-        const newAvoidance = parseFloat(e.target.value);
+    // Slider event
+    curveSlider.addEventListener('input', (e) => {
+        const percentage = parseFloat(e.target.value);
+        const point = getPointOnCurve(percentage);
         
-        // Constrain the point to stay inside the curve
-        const constrained = constrainToCurve(currentAnxiety, newAvoidance);
-        currentAnxiety = constrained.anxiety;
-        currentAvoidance = constrained.avoidance;
+        // Update label
+        positionValue.textContent = getAttachmentLabel(point.x, point.y);
         
-        // Update slider values
-        anxietySlider.value = currentAnxiety;
-        avoidanceSlider.value = currentAvoidance;
-        anxietyValue.textContent = currentAnxiety.toFixed(2);
-        avoidanceValue.textContent = currentAvoidance.toFixed(2);
-        
-        diagram.render({ anxiety: currentAnxiety, avoidance: currentAvoidance, color: '#c77f5a' });
+        // Render
+        diagram.render({ anxiety: point.x, avoidance: point.y, color: '#c77f5a' });
     });
 }
 
