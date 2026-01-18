@@ -128,7 +128,8 @@ class AttachmentDiagram {
         this.ctx.textAlign = 'center';
         
         // Use minimum of scale-based or fixed offset to keep labels in bounds
-        const maxStyleOffset = Math.min(scale * 1.5, 200);
+        // Increase multiplier to 1.8 to keep labels outside the curve
+        const maxStyleOffset = Math.min(scale * 1.8, 200);
         
         // Secure (low anxiety, low avoidance)
         this.ctx.fillStyle = highlightColor;
