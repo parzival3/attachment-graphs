@@ -273,9 +273,9 @@ function renderBothPoints() {
     diagram.drawInfinityCurve();
     diagram.drawLabels();
     
-    // Draw both points
-    diagram.plotPoint(partnerPoint.x, partnerPoint.y, '#8b7d6f');
-    diagram.plotPoint(yourPoint.x, yourPoint.y, '#c77f5a');
+    // Draw both points with labels
+    diagram.plotPoint(partnerPoint.x, partnerPoint.y, '#8b7d6f', 'Partner');
+    diagram.plotPoint(yourPoint.x, yourPoint.y, '#c77f5a', 'You');
 }
 
 // Set up sliders
