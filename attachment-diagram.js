@@ -244,17 +244,21 @@ class AttachmentDiagram {
 const canvas = document.getElementById('attachmentCanvas');
 const diagram = new AttachmentDiagram('attachmentCanvas');
 
-// Make canvas responsive
+// Make canvas responsive with high DPI support
 function resizeCanvas() {
     const container = document.getElementById('container');
     const containerWidth = container.offsetWidth - 80; // Account for padding
     const isMobile = window.innerWidth <= 768;
     
+    // Get device pixel ratio for retina displays
+    const dpr = window.devicePixelRatio || 1;
+    
+    let width, height;
+    
     if (isMobile) {
         // Mobile: use full container width
-        const width = Math.min(containerWidth, 400);
-        canvas.width = width;
-        canvas.height = width * 0.7; // Maintain aspect ratio
+        width = Math.min(containerWidth, 400);
+        height = width * 0.7; // Maintain aspect ratio
         
         // Adjust scale for mobile
         diagram.config.scale = Math.min(200, width * 0.5);
@@ -262,16 +266,27 @@ function resizeCanvas() {
         diagram.config.labelFontSize = 14;
     } else {
         // Desktop: use fixed size
-        canvas.width = 700;
-        canvas.height = 500;
+        width = 700;
+        height = 500;
         diagram.config.scale = 200;
         diagram.config.fontSize = 16;
         diagram.config.labelFontSize = 18;
     }
     
-    // Update center positions
-    diagram.config.centerX = canvas.width / 2;
-    diagram.config.centerY = canvas.height / 2;
+    // Set display size (CSS pixels)
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    
+    // Set actual size in memory (scaled for retina)
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    
+    // Scale the context to match device pixel ratio
+    diagram.ctx.scale(dpr, dpr);
+    
+    // Update center positions (use CSS pixel values)
+    diagram.config.centerX = width / 2;
+    diagram.config.centerY = height / 2;
 }
 
 // Initial resize
