@@ -12,7 +12,7 @@ class AttachmentDiagram {
         this.config = {
             centerX: options.centerX || this.canvas.width / 2,
             centerY: options.centerY || this.canvas.height / 2,
-            scale: options.scale || 130,
+            scale: options.scale || 200,
             lineWidth: options.lineWidth || 3.5,
             curveColor: options.curveColor || '#8b7d6f',
             labelColor: options.labelColor || '#5a5348',
