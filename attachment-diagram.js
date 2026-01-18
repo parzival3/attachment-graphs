@@ -12,17 +12,17 @@ class AttachmentDiagram {
         this.config = {
             centerX: options.centerX || this.canvas.width / 2,
             centerY: options.centerY || this.canvas.height / 2,
-            scale: options.scale || 100,
-            lineWidth: options.lineWidth || 3,
+            scale: options.scale || 130,
+            lineWidth: options.lineWidth || 3.5,
             curveColor: options.curveColor || '#8b7d6f',
             labelColor: options.labelColor || '#5a5348',
             axisColor: options.axisColor || '#d4c9bd',
             highlightColor: options.highlightColor || '#a8937e',
-            fontSize: options.fontSize || 15,
-            labelFontSize: options.labelFontSize || 16,
+            fontSize: options.fontSize || 16,
+            labelFontSize: options.labelFontSize || 18,
             showLabels: options.showLabels !== false,
             showAxes: options.showAxes !== false,
-            pointRadius: options.pointRadius || 8,
+            pointRadius: options.pointRadius || 10,
             showQuadrants: options.showQuadrants !== false
         };
         
