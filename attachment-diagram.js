@@ -8,21 +8,42 @@ class AttachmentDiagram {
         this.canvas = document.getElementById(canvasId);
         this.ctx = this.canvas.getContext('2d');
         
-        // Configuration
+        // Configuration with warm, calming color palette
         this.config = {
             centerX: options.centerX || this.canvas.width / 2,
             centerY: options.centerY || this.canvas.height / 2,
-            scale: options.scale || 80,
-            lineWidth: options.lineWidth || 2,
-            curveColor: options.curveColor || '#2563eb',
-            labelColor: options.labelColor || '#1e293b',
-            fontSize: options.fontSize || 14,
+            scale: options.scale || 100,
+            lineWidth: options.lineWidth || 3,
+            curveColor: options.curveColor || '#8b7d6f',
+            labelColor: options.labelColor || '#5a5348',
+            axisColor: options.axisColor || '#d4c9bd',
+            highlightColor: options.highlightColor || '#a8937e',
+            fontSize: options.fontSize || 15,
+            labelFontSize: options.labelFontSize || 16,
             showLabels: options.showLabels !== false,
             showAxes: options.showAxes !== false,
-            pointRadius: options.pointRadius || 6
+            pointRadius: options.pointRadius || 8,
+            showQuadrants: options.showQuadrants !== false
         };
         
         this.dataPoint = null;
+    }
+    
+    /**
+     * Draw quadrant backgrounds
+     */
+    drawQuadrants() {
+        if (!this.config.showQuadrants) return;
+        
+        const { centerX, centerY, scale } = this.config;
+        const gradient1 = this.ctx.createRadialGradient(centerX, centerY - scale * 0.5, 0, centerX, centerY - scale * 0.5, scale * 0.8);
+        gradient1.addColorStop(0, 'rgba(168, 147, 126, 0.08)');
+        gradient1.addColorStop(1, 'rgba(168, 147, 126, 0)');
+        
+        this.ctx.fillStyle = gradient1;
+        this.ctx.beginPath();
+        this.ctx.arc(centerX, centerY - scale * 0.5, scale * 0.8, 0, 2 * Math.PI);
+        this.ctx.fill();
     }
     
     /**
@@ -31,8 +52,16 @@ class AttachmentDiagram {
     drawInfinityCurve() {
         const { centerX, centerY, scale, lineWidth, curveColor } = this.config;
         
+        // Draw shadow
+        this.ctx.shadowColor = 'rgba(90, 83, 72, 0.2)';
+        this.ctx.shadowBlur = 8;
+        this.ctx.shadowOffsetX = 0;
+        this.ctx.shadowOffsetY = 2;
+        
         this.ctx.strokeStyle = curveColor;
         this.ctx.lineWidth = lineWidth;
+        this.ctx.lineCap = 'round';
+        this.ctx.lineJoin = 'round';
         this.ctx.beginPath();
         
         // Parametric equations for infinity symbol
@@ -49,6 +78,12 @@ class AttachmentDiagram {
         }
         
         this.ctx.stroke();
+        
+        // Reset shadow
+        this.ctx.shadowColor = 'transparent';
+        this.ctx.shadowBlur = 0;
+        this.ctx.shadowOffsetX = 0;
+        this.ctx.shadowOffsetY = 0;
     }
     
     /**
@@ -57,12 +92,12 @@ class AttachmentDiagram {
     drawAxes() {
         if (!this.config.showAxes) return;
         
-        const { centerX, centerY } = this.config;
-        const padding = 30;
+        const { centerX, centerY, axisColor } = this.config;
+        const padding = 40;
         
-        this.ctx.strokeStyle = '#94a3b8';
-        this.ctx.lineWidth = 1;
-        this.ctx.setLineDash([5, 5]);
+        this.ctx.strokeStyle = axisColor;
+        this.ctx.lineWidth = 1.5;
+        this.ctx.setLineDash([8, 6]);
         
         // Horizontal axis (Anxiety)
         this.ctx.beginPath();
@@ -85,44 +120,46 @@ class AttachmentDiagram {
     drawLabels() {
         if (!this.config.showLabels) return;
         
-        const { centerX, centerY, scale, fontSize, labelColor } = this.config;
+        const { centerX, centerY, scale, labelFontSize, fontSize, labelColor, highlightColor } = this.config;
         
-        this.ctx.font = `${fontSize}px Arial`;
+        // Quadrant labels for attachment styles
+        this.ctx.font = `600 ${labelFontSize}px 'Segoe UI', sans-serif`;
         this.ctx.fillStyle = labelColor;
         this.ctx.textAlign = 'center';
         
-        // Quadrant labels for attachment styles
-        const offset = scale * 1.3;
+        const offset = scale * 1.35;
         
         // Secure (low anxiety, low avoidance)
+        this.ctx.fillStyle = highlightColor;
         this.ctx.fillText('Secure', centerX, centerY - offset - 10);
         
         // Anxious (high anxiety, low avoidance)
-        this.ctx.fillText('Anxious', centerX - offset, centerY);
+        this.ctx.fillStyle = labelColor;
+        this.ctx.fillText('Anxious', centerX - offset, centerY + 5);
         
         // Avoidant (low anxiety, high avoidance)
-        this.ctx.fillText('Avoidant', centerX + offset, centerY);
+        this.ctx.fillText('Avoidant', centerX + offset, centerY + 5);
         
         // Fearful (high anxiety, high avoidance)
-        this.ctx.fillText('Fearful', centerX, centerY + offset + 20);
+        this.ctx.fillText('Fearful', centerX, centerY + offset + 25);
         
         // Axis labels
-        this.ctx.font = `${fontSize - 2}px Arial`;
-        this.ctx.fillStyle = '#64748b';
+        this.ctx.font = `400 ${fontSize - 2}px 'Segoe UI', sans-serif`;
+        this.ctx.fillStyle = '#9b8f82';
         
         // Anxiety axis
-        this.ctx.fillText('Low Anxiety', centerX - scale * 1.5, centerY - 15);
-        this.ctx.fillText('High Anxiety', centerX + scale * 1.5, centerY - 15);
+        this.ctx.fillText('Low Anxiety', centerX - scale * 1.6, centerY - 20);
+        this.ctx.fillText('High Anxiety', centerX + scale * 1.6, centerY - 20);
         
         // Avoidance axis
         this.ctx.save();
-        this.ctx.translate(centerX + 15, centerY - scale * 1.3);
+        this.ctx.translate(centerX + 20, centerY - scale * 1.4);
         this.ctx.rotate(-Math.PI / 2);
         this.ctx.fillText('Low Avoidance', 0, 0);
         this.ctx.restore();
         
         this.ctx.save();
-        this.ctx.translate(centerX + 15, centerY + scale * 1.3);
+        this.ctx.translate(centerX + 20, centerY + scale * 1.4);
         this.ctx.rotate(-Math.PI / 2);
         this.ctx.fillText('High Avoidance', 0, 0);
         this.ctx.restore();
@@ -134,19 +171,38 @@ class AttachmentDiagram {
      * @param {number} avoidance - Score from -1 (low) to 1 (high)
      * @param {string} color - Color of the point
      */
-    plotPoint(anxiety, avoidance, color = '#dc2626') {
+    plotPoint(anxiety, avoidance, color = '#c77f5a') {
         const { centerX, centerY, scale, pointRadius } = this.config;
         
         const x = centerX + anxiety * scale;
         const y = centerY + avoidance * scale;
+        
+        // Draw outer glow
+        const gradient = this.ctx.createRadialGradient(x, y, 0, x, y, pointRadius * 2);
+        gradient.addColorStop(0, color + '40');
+        gradient.addColorStop(1, color + '00');
+        
+        this.ctx.fillStyle = gradient;
+        this.ctx.beginPath();
+        this.ctx.arc(x, y, pointRadius * 2, 0, 2 * Math.PI);
+        this.ctx.fill();
+        
+        // Draw main point with shadow
+        this.ctx.shadowColor = 'rgba(90, 83, 72, 0.3)';
+        this.ctx.shadowBlur = 6;
+        this.ctx.shadowOffsetX = 0;
+        this.ctx.shadowOffsetY = 2;
         
         this.ctx.fillStyle = color;
         this.ctx.beginPath();
         this.ctx.arc(x, y, pointRadius, 0, 2 * Math.PI);
         this.ctx.fill();
         
+        // White border
+        this.ctx.shadowColor = 'transparent';
+        this.ctx.shadowBlur = 0;
         this.ctx.strokeStyle = 'white';
-        this.ctx.lineWidth = 2;
+        this.ctx.lineWidth = 3;
         this.ctx.stroke();
         
         this.dataPoint = { anxiety, avoidance, x, y };
@@ -165,6 +221,7 @@ class AttachmentDiagram {
      */
     render(dataPoint = null) {
         this.clear();
+        this.drawQuadrants();
         this.drawAxes();
         this.drawInfinityCurve();
         this.drawLabels();
@@ -182,7 +239,7 @@ diagram.render();
 // Example: Plot a point after 1 second (for demonstration)
 setTimeout(() => {
     // Example scores: moderate anxiety (0.5), low avoidance (-0.3)
-    diagram.render({ anxiety: 0.5, avoidance: -0.3, color: '#dc2626' });
+    diagram.render({ anxiety: 0.5, avoidance: -0.3, color: '#c77f5a' });
 }, 1000);
 
 // Export for use in other scripts
