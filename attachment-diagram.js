@@ -241,7 +241,47 @@ class AttachmentDiagram {
 }
 
 // Initialize the diagram
+const canvas = document.getElementById('attachmentCanvas');
 const diagram = new AttachmentDiagram('attachmentCanvas');
+
+// Make canvas responsive
+function resizeCanvas() {
+    const container = document.getElementById('container');
+    const containerWidth = container.offsetWidth - 80; // Account for padding
+    const isMobile = window.innerWidth <= 768;
+    
+    if (isMobile) {
+        // Mobile: use full container width
+        const width = Math.min(containerWidth, 400);
+        canvas.width = width;
+        canvas.height = width * 0.7; // Maintain aspect ratio
+        
+        // Adjust scale for mobile
+        diagram.config.scale = Math.min(200, width * 0.5);
+        diagram.config.fontSize = 12;
+        diagram.config.labelFontSize = 14;
+    } else {
+        // Desktop: use fixed size
+        canvas.width = 700;
+        canvas.height = 500;
+        diagram.config.scale = 200;
+        diagram.config.fontSize = 16;
+        diagram.config.labelFontSize = 18;
+    }
+    
+    // Update center positions
+    diagram.config.centerX = canvas.width / 2;
+    diagram.config.centerY = canvas.height / 2;
+}
+
+// Initial resize
+resizeCanvas();
+
+// Resize on window resize
+window.addEventListener('resize', () => {
+    resizeCanvas();
+    renderBothPoints();
+});
 
 // Pre-calculate curve points for the slider to follow
 const curvePoints = [];
@@ -381,8 +421,7 @@ if (curveSlider && positionValue) {
     }
 }
 
-// Add hover tooltip functionality
-const canvas = diagram.canvas;
+// Add hover/touch tooltip functionality
 let hoveredPoint = null;
 
 canvas.addEventListener('mousemove', (e) => {
@@ -426,6 +465,45 @@ canvas.addEventListener('mouseleave', () => {
     if (hoveredPoint) {
         hoveredPoint = null;
         canvas.style.cursor = 'default';
+        renderBothPoints();
+    }
+});
+
+// Add touch support for mobile
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const touch = e.touches[0];
+    const touchX = touch.clientX - rect.left;
+    const touchY = touch.clientY - rect.top;
+    
+    // Check if touch is over any point
+    let foundPoint = null;
+    for (const point of points) {
+        const distance = Math.sqrt(
+            Math.pow(touchX - point.x, 2) + 
+            Math.pow(touchY - point.y, 2)
+        );
+        
+        if (distance < 20) {
+            foundPoint = point;
+            break;
+        }
+    }
+    
+    if (foundPoint !== hoveredPoint) {
+        hoveredPoint = foundPoint;
+        renderBothPoints();
+        
+        if (hoveredPoint) {
+            drawTooltip(hoveredPoint, touchX, touchY);
+        }
+    }
+});
+
+canvas.addEventListener('touchend', () => {
+    if (hoveredPoint) {
+        hoveredPoint = null;
         renderBothPoints();
     }
 });
