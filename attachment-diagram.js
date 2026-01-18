@@ -127,34 +127,37 @@ class AttachmentDiagram {
         this.ctx.fillStyle = labelColor;
         this.ctx.textAlign = 'center';
         
-        const offset = scale * 1.5;
+        const styleOffset = scale * 1.5;
         
         // Secure (low anxiety, low avoidance)
         this.ctx.fillStyle = highlightColor;
-        this.ctx.fillText('Secure', centerX, centerY - offset - 10);
+        this.ctx.fillText('Secure', centerX, centerY - styleOffset - 30);
         
         // Anxious (high anxiety, low avoidance)
         this.ctx.fillStyle = labelColor;
-        this.ctx.fillText('Anxious', centerX - offset, centerY + 5);
+        this.ctx.fillText('Anxious', centerX - styleOffset, centerY + 5);
         
         // Avoidant (low anxiety, high avoidance)
-        this.ctx.fillText('Avoidant', centerX + offset, centerY + 5);
+        this.ctx.fillText('Avoidant', centerX + styleOffset, centerY + 5);
         
         // Fearful (high anxiety, high avoidance)
-        this.ctx.fillText('Fearful', centerX, centerY + offset + 25);
+        this.ctx.fillText('Fearful', centerX, centerY + styleOffset + 45);
         
         // Axis labels
         this.ctx.font = `400 ${fontSize - 2}px 'Segoe UI', sans-serif`;
         this.ctx.fillStyle = '#9b8f82';
         this.ctx.textAlign = 'center';
         
+        const axisOffset = scale * 1.5;
+        const axisSpacing = 20;
+        
         // Anxiety axis (horizontal labels)
-        this.ctx.fillText('Low Anxiety', centerX - scale * 1.6, centerY - 15);
-        this.ctx.fillText('High Anxiety', centerX + scale * 1.6, centerY - 15);
+        this.ctx.fillText('Low Anxiety', centerX - axisOffset, centerY - axisSpacing);
+        this.ctx.fillText('High Anxiety', centerX + axisOffset, centerY - axisSpacing);
         
         // Avoidance axis (vertical labels, centered above/below axis line)
-        this.ctx.fillText('Low Avoidance', centerX, centerY - scale * 1.5);
-        this.ctx.fillText('High Avoidance', centerX, centerY + scale * 1.5);
+        this.ctx.fillText('Low Avoidance', centerX, centerY - axisOffset - 10);
+        this.ctx.fillText('High Avoidance', centerX, centerY + axisOffset + 25);
     }
     
     /**
