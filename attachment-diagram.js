@@ -271,9 +271,9 @@ function getAttachmentLabel(x, y) {
     return 'Transitional';
 }
 
-// Current positions
-let yourPosition = 25;
-let partnerPosition = 75;
+// Current positions - randomized on load
+let yourPosition = Math.floor(Math.random() * 100);
+let partnerPosition = Math.floor(Math.random() * 100);
 
 // Store point positions for hover detection
 let points = [];
@@ -340,9 +340,14 @@ const zoomSlider = document.getElementById('zoomSlider');
 const zoomValue = document.getElementById('zoomValue');
 
 if (curveSlider && positionValue) {
-    // Initial render
+    // Initial render with random positions
     const initialPoint = getPointOnCurve(yourPosition);
     const partnerPoint = getPointOnCurve(partnerPosition);
+    
+    // Update sliders to match random positions
+    curveSlider.value = yourPosition;
+    if (partnerSlider) partnerSlider.value = partnerPosition;
+    
     positionValue.textContent = getAttachmentLabel(initialPoint.x, initialPoint.y);
     partnerPositionValue.textContent = getAttachmentLabel(partnerPoint.x, partnerPoint.y);
     renderBothPoints();
