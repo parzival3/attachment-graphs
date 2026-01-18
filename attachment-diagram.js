@@ -136,10 +136,10 @@ class AttachmentDiagram {
         
         // Anxious (high anxiety, low avoidance)
         this.ctx.fillStyle = labelColor;
-        this.ctx.fillText('Anxious', Math.max(60, centerX - maxStyleOffset), centerY + 30);
+        this.ctx.fillText('Anxious', Math.max(60, centerX - maxStyleOffset), centerY + 15);
         
         // Avoidant (low anxiety, high avoidance)
-        this.ctx.fillText('Avoidant', Math.min(this.canvas.width - 60, centerX + maxStyleOffset), centerY + 30);
+        this.ctx.fillText('Avoidant', Math.min(this.canvas.width - 60, centerX + maxStyleOffset), centerY + 15);
         
         // Fearful (high anxiety, high avoidance)
         this.ctx.fillText('Fearful', centerX, this.canvas.height - 60);
@@ -154,8 +154,8 @@ class AttachmentDiagram {
         const avoidantX = Math.min(this.canvas.width - 60, centerX + maxStyleOffset);
         
         // Anxiety axis (horizontal labels) - aligned with Anxious/Avoidant
-        this.ctx.fillText('Low Anxiety', anxiousX, centerY - 35);
-        this.ctx.fillText('High Anxiety', avoidantX, centerY - 35);
+        this.ctx.fillText('Low Anxiety', anxiousX, centerY - 10);
+        this.ctx.fillText('High Anxiety', avoidantX, centerY - 10);
         
         // Avoidance axis (vertical labels) - aligned with Secure/Fearful
         this.ctx.fillText('Low Avoidance', centerX, 35);
