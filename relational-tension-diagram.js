@@ -91,7 +91,7 @@ class RelationalTensionDiagram {
      * Get Y position for a theme line
      */
     getThemeY(themeIndex) {
-        const startY = 100;
+        const startY = 130;
         return startY + themeIndex * this.config.lineSpacing;
     }
 
@@ -386,7 +386,7 @@ function resizeCanvas() {
     }
 
     // Calculate height based on number of themes
-    height = 100 + (diagram.themes.length * diagram.config.lineSpacing) + 40;
+    height = 130 + (diagram.themes.length * diagram.config.lineSpacing) + 40;
 
     // Set display size (CSS pixels)
     canvas.style.width = width + 'px';
