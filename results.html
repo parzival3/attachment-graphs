@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Results | Cross-Cultural Couple Questionnaire</title>
+  <link rel="stylesheet" href="questionnaire.css">
+  <style>
+    body {
+      background: linear-gradient(to bottom, #f2ede8, #e8dfd5);
+    }
+    .results-page {
+      padding-top: 40px;
+    }
+    /* Attachment diagram specific background */
+    #attachmentWrapper {
+      background: linear-gradient(to bottom, #fefdfb, #f9f7f4);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    #tensionWrapper {
+      background: linear-gradient(to bottom, #fefdfb, #f9f7f4);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .score-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      font-size: 13px;
+      color: var(--text-mid);
+    }
+    .score-bar-label {
+      width: 160px;
+      flex-shrink: 0;
+    }
+    .score-bar-track {
+      flex: 1;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .score-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 3px;
+      transition: width 0.6s ease;
+    }
+    .score-bar-value {
+      width: 34px;
+      text-align: right;
+      font-size: 12px;
+      color: var(--text-light);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="q-header no-print">
+    <a href="https://www.piatorp.dk" class="q-site-link">&larr; piatorp.dk</a>
+  </header>
+
+  <div class="results-page" id="resultsPage">
+
+    <!-- Header -->
+    <header class="results-header">
+      <h1 class="results-title">Cross-Cultural Couple Questionnaire</h1>
+      <p class="results-date" id="resultsDate"></p>
+    </header>
+
+    <!-- Background summary -->
+    <div class="results-background" id="backgroundSection">
+      <div class="results-background-pills" id="backgroundPills"></div>
+    </div>
+
+    <!-- ── Attachment Pattern ─────────────────────────────── -->
+    <section class="results-section">
+      <h2>Attachment Pattern</h2>
+      <p class="results-section-intro">
+        The diagram below places your communication and conflict patterns within the
+        attachment style framework. It reflects tendencies — not fixed traits — and is
+        meant as a starting point for reflection, not a clinical assessment.
+      </p>
+
+      <div id="attachmentWrapper">
+        <canvas id="attachmentCanvas"></canvas>
+      </div>
+
+      <div id="attachmentInterpretation"></div>
+      <p class="attachment-note">
+        Position is derived from your communication openness and conflict regulation patterns.
+      </p>
+    </section>
+
+    <!-- ── Relational Dimensions ─────────────────────────── -->
+    <section class="results-section">
+      <h2>Relational Dimensions</h2>
+      <p class="results-section-intro">
+        Each line below shows where your responses place you on four key dimensions
+        of cross-cultural relationships. The marker shows your position on each spectrum.
+      </p>
+
+      <div id="tensionWrapper">
+        <canvas id="tensionCanvas"></canvas>
+      </div>
+
+      <div class="interpretation-grid" id="tensionInterpretation"></div>
+    </section>
+
+    <!-- ── Your Reflections ───────────────────────────────── -->
+    <section class="results-section reflections-section" id="reflectionsSection" style="display:none;">
+      <h2>Your Reflections</h2>
+      <div id="reflections"></div>
+    </section>
+
+    <!-- ── Actions ───────────────────────────────────────── -->
+    <div class="results-actions no-print">
+      <button class="btn-primary" onclick="exportToPDF()">Download PDF</button>
+      <a href="questionnaire.html" class="btn-secondary">Retake Questionnaire</a>
+    </div>
+
+  </div><!-- /.results-page -->
+
+  <!-- No-results fallback (shown if hash is missing/invalid) -->
+  <div id="noResults" style="display:none;">
+    <div class="no-results-card">
+      <div style="font-size:36px; margin-bottom:16px;">&#9998;</div>
+      <h2>No results found</h2>
+      <p>Complete the questionnaire to see your personalised results.</p>
+      <a href="questionnaire.html" class="btn-primary">Start Questionnaire</a>
+    </div>
+  </div>
+
+  <script src="attachment-diagram.class.js"></script>
+  <script src="relational-tension-diagram.class.js"></script>
+  <script src="questionnaire-config.js"></script>
+  <script src="questionnaire-framework.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    // ── 1. Decode results from URL hash ───────────────────────
+
+    var hash = window.location.hash.slice(1);
+    if (!hash) {
+      showNoResults();
+      return;
+    }
+
+    var payload = Questionnaire.fromHash(hash);
+    if (!payload || !payload.dimensions) {
+      showNoResults();
+      return;
+    }
+
+    var dims = payload.dimensions;
+    var answers = payload.rawAnswers || {};
+
+    // ── 2. Render date ────────────────────────────────────────
+
+    if (payload.timestamp) {
+      var d = new Date(payload.timestamp);
+      var dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      document.getElementById('resultsDate').textContent = dateStr;
+    }
+
+    // ── 3. Background summary pills ───────────────────────────
+
+    var pills = [];
+    if (answers.q1) {
+      pills.push('<span class="background-pill"><strong>Background:</strong> ' + esc(answers.q1) + '</span>');
+    }
+    if (answers.q2) {
+      pills.push('<span class="background-pill"><strong>Together:</strong> ' + esc(answers.q2) + '</span>');
+    }
+    if (answers.q3) {
+      pills.push('<span class="background-pill"><strong>Home country:</strong> ' + esc(answers.q3) + '</span>');
+    }
+
+    if (pills.length > 0) {
+      document.getElementById('backgroundPills').innerHTML = pills.join('');
+    } else {
+      document.getElementById('backgroundSection').style.display = 'none';
+    }
+
+    // ── 4. Attachment diagram ─────────────────────────────────
+
+    var attachCanvas = document.getElementById('attachmentCanvas');
+    var attachWrapper = document.getElementById('attachmentWrapper');
+
+    function setupAttachmentCanvas() {
+      var maxW = Math.min(attachWrapper.offsetWidth, 700);
+      var w = Math.max(300, maxW);
+      var h = Math.round(w * 0.714);
+
+      attachCanvas.width = w;
+      attachCanvas.height = h;
+      attachCanvas.style.width = w + 'px';
+      attachCanvas.style.height = h + 'px';
+
+      return { w: w, h: h };
+    }
+
+    var attachSize = setupAttachmentCanvas();
+
+    var attachDiagram = new AttachmentDiagram('attachmentCanvas', {
+      centerX: attachSize.w / 2,
+      centerY: attachSize.h / 2,
+      scale: Math.min(190, attachSize.w * 0.27),
+      fontSize: attachSize.w < 420 ? 12 : 16,
+      labelFontSize: attachSize.w < 420 ? 14 : 18
+    });
+
+    // Map dimension scores to attachment axes:
+    // anxiety   = –communication  (withdrawn → left/Anxious; expressive → right/Avoidant)
+    // avoidance = –conflict        (escalatory → bottom/Fearful; calm → top/Secure)
+    var targetAnxiety  = clamp(-dims.communication * 0.85);
+    var targetAvoidance = clamp(-dims.conflict * 0.85);
+
+    // Project target onto the nearest point on the lemniscate curve so the
+    // "You" dot always sits on the line rather than floating in free space.
+    // The curve's x range is [-1, 1] but y range is only ~[-0.354, 0.354],
+    // so scale the avoidance target to match before comparing distances.
+    var CURVE_PTS = (function () {
+      var pts = [];
+      for (var t = 0; t <= 2 * Math.PI; t += 0.01) {
+        var d = 1 + Math.sin(t) * Math.sin(t);
+        pts.push({ x: Math.cos(t) / d, y: Math.sin(t) * Math.cos(t) / d });
+      }
+      return pts;
+    }());
+    var CURVE_MAX_Y = 0.3536; // √2/4
+
+    function snapToCurve(ax, av) {
+      var ty = av * CURVE_MAX_Y;
+      var minD = Infinity;
+      var best = CURVE_PTS[0];
+      for (var i = 0; i < CURVE_PTS.length; i++) {
+        var dx = CURVE_PTS[i].x - ax;
+        var dy = CURVE_PTS[i].y - ty;
+        var d2 = dx * dx + dy * dy;
+        if (d2 < minD) { minD = d2; best = CURVE_PTS[i]; }
+      }
+      return best;
+    }
+
+    var curvePoint = snapToCurve(targetAnxiety, targetAvoidance);
+    attachDiagram.render({ anxiety: curvePoint.x, avoidance: curvePoint.y, color: '#c77f5a' });
+
+    // Draw "You" label at the projected curve point
+    var px = attachSize.w / 2 + curvePoint.x * attachDiagram.config.scale;
+    var py = attachSize.h / 2 + curvePoint.y * attachDiagram.config.scale;
+    var ctx = attachDiagram.ctx;
+    ctx.font = "600 13px 'Segoe UI', sans-serif";
+    ctx.fillStyle = '#5a5348';
+    ctx.textAlign = 'center';
+    ctx.fillText('You', px, py - 18);
+
+    // Attachment zone label — use original target scores for semantic accuracy
+    var zoneLabel = getAttachmentZone(targetAnxiety, targetAvoidance);
+    var attachInterp = document.getElementById('attachmentInterpretation');
+    attachInterp.innerHTML =
+      '<div class="interpretation-block">' +
+      '  <div class="dim-label">Attachment tendency</div>' +
+      '  <div class="dim-title">' + esc(zoneLabel.title) + '</div>' +
+      '  <div class="dim-text">' + esc(zoneLabel.text) + '</div>' +
+      '</div>';
+
+    // ── 5. Relational tension lines ────────────────────────────
+
+    var tensionCanvas = document.getElementById('tensionCanvas');
+    var tensionWrapper = document.getElementById('tensionWrapper');
+
+    function setupTensionCanvas(diagram) {
+      var maxW = Math.min(tensionWrapper.offsetWidth, 760);
+      var w = Math.max(300, maxW);
+      var isMobile = w < 480;
+      var spacing = isMobile ? 100 : 120;
+      var pad = isMobile ? 56 : 80;
+      var h = 130 + (4 * spacing) + 40;
+
+      diagram.config.fontSize = isMobile ? 12 : 16;
+      diagram.config.labelFontSize = isMobile ? 14 : 18;
+      diagram.config.lineSpacing = spacing;
+      diagram.config.padding = pad;
+
+      tensionCanvas.width = w;
+      tensionCanvas.height = h;
+      tensionCanvas.style.width = w + 'px';
+      tensionCanvas.style.height = h + 'px';
+
+      // _lw/_lh are set in the constructor before canvas is resized — sync them.
+      diagram._lw = w;
+      diagram._lh = h;
+
+      return { w: w, h: h };
+    }
+
+    var themes = [
+      {
+        name: 'Communication Style',
+        leftExtreme: 'Withdrawn / Silent',
+        rightExtreme: 'Expressive / Open',
+        partnerA: dims.communication,
+        partnerB: 0
+      },
+      {
+        name: 'Conflict Dynamics',
+        leftExtreme: 'Escalatory',
+        rightExtreme: 'Calm / Contained',
+        partnerA: dims.conflict,
+        partnerB: 0
+      },
+      {
+        name: 'Family & Loyalty',
+        leftExtreme: 'Independent',
+        rightExtreme: 'Family-Oriented',
+        partnerA: dims.familyLoyalty,
+        partnerB: 0
+      },
+      {
+        name: 'Cultural Attunement',
+        leftExtreme: 'Cultural Distance',
+        rightExtreme: 'Deep Understanding',
+        partnerA: dims.culturalAttunement,
+        partnerB: 0
+      }
+    ];
+
+    var tensionDiagram = new RelationalTensionDiagram('tensionCanvas', {
+      singleMode: true,
+      markerALabel: 'Your position',
+      showTitle: false,
+      themes: themes
+    });
+
+    setupTensionCanvas(tensionDiagram);
+    tensionDiagram.render();
+
+    // ── 6. Dimension interpretation texts ─────────────────────
+
+    var interpContainer = document.getElementById('tensionInterpretation');
+    var interpHtml = '';
+    var dimOrder = ['communication', 'conflict', 'familyLoyalty', 'culturalAttunement'];
+
+    dimOrder.forEach(function (dimId) {
+      var score = dims[dimId] || 0;
+      var ranges = QUESTIONNAIRE_CONFIG.interpretation[dimId];
+      var dimDef = findDimension(dimId);
+      if (!ranges || !dimDef) return;
+
+      var interp = getInterpretation(ranges, score);
+      var barPct = Math.round(((score + 1) / 2) * 100);
+
+      interpHtml +=
+        '<div class="interpretation-block">' +
+        '  <div class="dim-label">' + esc(dimDef.label) + '</div>' +
+        '  <div class="dim-title">' + esc(interp.title) + '</div>' +
+        '  <div class="score-bar-row">' +
+        '    <span class="score-bar-label" style="font-size:12px; color:var(--text-light);">' + esc(dimDef.leftLabel) + '</span>' +
+        '    <span class="score-bar-track"><span class="score-bar-fill" style="width:' + barPct + '%;"></span></span>' +
+        '    <span class="score-bar-label" style="font-size:12px; color:var(--text-light); text-align:right;">' + esc(dimDef.rightLabel) + '</span>' +
+        '  </div>' +
+        '  <div class="dim-text">' + esc(interp.text) + '</div>' +
+        '</div>';
+    });
+
+    interpContainer.innerHTML = interpHtml;
+
+    // ── 7. Reflections ─────────────────────────────────────────
+
+    var q13 = answers.q13 || '';
+    var q14 = answers.q14 || '';
+
+    if (q13 || q14) {
+      document.getElementById('reflectionsSection').style.display = '';
+      var refHtml = '';
+
+      if (q13) {
+        refHtml +=
+          '<div class="reflection-item">' +
+          '  <div class="reflection-question">What do you find most challenging about navigating cultural differences in your relationship?</div>' +
+          '  <div class="reflection-answer">' + esc(q13) + '</div>' +
+          '</div>';
+      }
+      if (q14) {
+        refHtml +=
+          '<div class="reflection-item">' +
+          '  <div class="reflection-question">What do you find most enriching or meaningful about being in a cross-cultural relationship?</div>' +
+          '  <div class="reflection-answer">' + esc(q14) + '</div>' +
+          '</div>';
+      }
+
+      document.getElementById('reflections').innerHTML = refHtml;
+    }
+
+    // ── 8. Hi-res off-screen rendering for PDF ─────────────────
+    // Creates 3× canvases so the PDF gets ~300 DPI instead of ~100 DPI.
+    // These are rendered before the screen canvases are finalized so the
+    // original canvas element is still accessible via getElementById.
+
+    var PDF_SCALE = 3;
+
+    function renderHiResAttach() {
+      var w = attachSize.w, h = attachSize.h;
+      var hiW = w * PDF_SCALE, hiH = h * PDF_SCALE;
+      var hiCanvas = document.createElement('canvas');
+      hiCanvas.width  = hiW;
+      hiCanvas.height = hiH;
+      var scale3 = Math.min(190, w * 0.27) * PDF_SCALE;
+      var fs3    = (w < 420 ? 12 : 16) * PDF_SCALE;
+      var lfs3   = (w < 420 ? 14 : 18) * PDF_SCALE;
+      var hiDiag = new AttachmentDiagram(hiCanvas, {
+        centerX:         w  / 2 * PDF_SCALE,
+        centerY:         h  / 2 * PDF_SCALE,
+        scale:           scale3,
+        fontSize:        fs3,
+        labelFontSize:   lfs3,
+        lineWidth:       3.5 * PDF_SCALE,
+        pointRadius:     10  * PDF_SCALE,
+        labelPixelScale: PDF_SCALE,
+        logicalWidth:    hiW,
+        logicalHeight:   hiH
+      });
+      hiDiag.render({ anxiety: curvePoint.x, avoidance: curvePoint.y, color: '#c77f5a' });
+      var px3 = w / 2 * PDF_SCALE + curvePoint.x * scale3;
+      var py3 = h / 2 * PDF_SCALE + curvePoint.y * scale3;
+      var ctx3 = hiDiag.ctx;
+      ctx3.font = '600 ' + (13 * PDF_SCALE) + "px 'Segoe UI', sans-serif";
+      ctx3.fillStyle = '#5a5348';
+      ctx3.textAlign = 'center';
+      ctx3.fillText('You', px3, py3 - 18 * PDF_SCALE);
+      return hiCanvas.toDataURL('image/png');
+    }
+
+    function renderHiResTension() {
+      var w       = tensionCanvas.width;
+      var h       = tensionCanvas.height;
+      var spacing = tensionDiagram.config.lineSpacing;
+      var pad     = tensionDiagram.config.padding;
+      var fs      = tensionDiagram.config.fontSize;
+      var lfs     = tensionDiagram.config.labelFontSize;
+      var hiW = w * PDF_SCALE, hiH = h * PDF_SCALE;
+      var hiCanvas = document.createElement('canvas');
+      hiCanvas.width  = hiW;
+      hiCanvas.height = hiH;
+      var hiDiag = new RelationalTensionDiagram(hiCanvas, {
+        singleMode:         true,
+        markerALabel:       'Your position',
+        showTitle:          false,
+        themes:             themes,
+        padding:            pad     * PDF_SCALE,
+        lineSpacing:        spacing * PDF_SCALE,
+        themeStartY:        130     * PDF_SCALE,
+        fontSize:           fs      * PDF_SCALE,
+        labelFontSize:      lfs     * PDF_SCALE,
+        pointRadius:        10      * PDF_SCALE,
+        lineWidth:          3       * PDF_SCALE,
+        lineLabelOffset:    35      * PDF_SCALE,
+        extremeLabelOffset: 25      * PDF_SCALE,
+        endpointDotRadius:  4       * PDF_SCALE,
+        distanceBandHalf:   8       * PDF_SCALE,
+        distanceBracketY:   15      * PDF_SCALE,
+        logicalWidth:       hiW,
+        logicalHeight:      hiH
+      });
+      hiDiag.render();
+      return hiCanvas.toDataURL('image/png');
+    }
+
+    var attachHiSrc  = renderHiResAttach();
+    var tensionHiSrc = renderHiResTension();
+
+    // ── 8b. Convert screen canvases to static images ───────────
+    // Replaces each canvas with a static <img> in the DOM to prevent
+    // duplication when the page is saved with "Save Page As".
+
+    function finalizeCanvas(canvasId, wrapperId) {
+      var canvas = document.getElementById(canvasId);
+      if (!canvas) return null;
+      var wrapper = document.getElementById(wrapperId);
+      try {
+        var dataUrl = canvas.toDataURL('image/png');
+        var aspect  = canvas.height / canvas.width;
+        var img = document.createElement('img');
+        img.src = dataUrl;
+        img.style.maxWidth = '100%';
+        img.style.display = 'block';
+        img.alt = '';
+        wrapper.replaceChild(img, canvas);
+        return { src: dataUrl, aspect: aspect };
+      } catch (e) {
+        return null;
+      }
+    }
+
+    var attachImage = finalizeCanvas('attachmentCanvas', 'attachmentWrapper');
+    var tensionImage = finalizeCanvas('tensionCanvas', 'tensionWrapper');
+
+    // ── 9. PDF export (jsPDF) ──────────────────────────────────
+    // Produces a downloadable A4 PDF with diagrams + all answers.
+    // Requires jsPDF loaded from CDN (internet connection needed).
+
+    window.exportToPDF = function () {
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert('PDF library is still loading — please try again in a moment.');
+        return;
+      }
+
+      var doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+
+      var PW = 210, PH = 297, M = 18, CW = 174;
+      var y = M;
+
+      var DARK   = '#2C2520';
+      var MID    = '#6B5F52';
+      var LIGHT  = '#9B8F82';
+      var ACCENT = '#C77F5A';
+      var BORDER = '#D4C9BD';
+      var BGFILL = '#F2EDE8';
+
+      function newPage() { doc.addPage(); y = M; }
+      function gap(mm)   { y += mm; }
+
+      function guard(need) {
+        if (y + need > PH - M) newPage();
+      }
+
+      function hline() {
+        guard(6);
+        doc.setDrawColor(BORDER);
+        doc.setLineWidth(0.25);
+        doc.line(M, y, PW - M, y);
+        gap(5);
+      }
+
+      function h1(text) {
+        guard(10);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(18);
+        doc.setTextColor(DARK);
+        doc.text(text, M, y);
+        gap(9);
+      }
+
+      function sectionLabel(text) {
+        guard(9);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.setTextColor(ACCENT);
+        doc.text(text.toUpperCase(), M, y);
+        gap(5.5);
+      }
+
+      function boldLine(text, size) {
+        size = size || 11;
+        guard(size * 0.55);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(size);
+        doc.setTextColor(DARK);
+        doc.text(text, M, y);
+        gap(size * 0.5);
+      }
+
+      function para(text, size, color) {
+        size  = size  || 10;
+        color = color || MID;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(size);
+        doc.setTextColor(color);
+        var lines = doc.splitTextToSize(String(text), CW);
+        var lh = size * 0.45;
+        guard(lines.length * lh + 2);
+        doc.text(lines, M, y);
+        gap(lines.length * lh + 2);
+      }
+
+      function addDiagram(imgData, aspect) {
+        if (!imgData) return;
+        var iw = CW, ih = CW * aspect;
+        guard(ih + 4);
+        doc.addImage(imgData, 'PNG', M, y, iw, ih);
+        gap(ih + 4);
+      }
+
+      // ── Header ───────────────────────────────────────────
+      h1(QUESTIONNAIRE_CONFIG.title || 'Cross-Cultural Couple Questionnaire');
+
+      if (payload.timestamp) {
+        var pd = new Date(payload.timestamp);
+        para(pd.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), 9, LIGHT);
+      }
+      var bgParts = [];
+      if (answers.q1) bgParts.push('Cultural background: ' + answers.q1);
+      if (answers.q2) bgParts.push('In relationship: '    + answers.q2);
+      if (answers.q3) bgParts.push('Home country: '       + answers.q3);
+      if (bgParts.length) { gap(1); bgParts.forEach(function (s) { para(s, 9, LIGHT); }); }
+
+      gap(3);
+      hline();
+
+      // ── Attachment Pattern ────────────────────────────────
+      sectionLabel('Attachment Pattern');
+      para('The diagram places your communication and conflict patterns within the attachment style framework. It reflects tendencies, not fixed traits.', 9);
+      gap(2);
+      addDiagram(attachHiSrc || (attachImage && attachImage.src), attachImage && attachImage.aspect);
+
+      var zone = getAttachmentZone(targetAnxiety, targetAvoidance);
+      if (zone) {
+        gap(1);
+        boldLine(zone.title, 11);
+        para(zone.text, 9.5);
+      }
+      gap(4);
+      hline();
+
+      // ── Relational Dimensions ──────────────────────────────
+      sectionLabel('Relational Dimensions');
+      para('Each spectrum shows where your responses place you on four key dimensions of cross-cultural relationships.', 9);
+      gap(2);
+      addDiagram(tensionHiSrc || (tensionImage && tensionImage.src), tensionImage && tensionImage.aspect);
+
+      gap(2);
+      dimOrder.forEach(function (dimId) {
+        var score   = dims[dimId] || 0;
+        var ranges  = QUESTIONNAIRE_CONFIG.interpretation[dimId];
+        var dimDef  = findDimension(dimId);
+        if (!ranges || !dimDef) return;
+        var interp = getInterpretation(ranges, score);
+
+        guard(18);
+        doc.setFillColor(ACCENT);
+        doc.rect(M, y - 1, 2, 11, 'F');
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(ACCENT);
+        doc.text(dimDef.label.toUpperCase(), M + 4, y + 2.5);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10.5);
+        doc.setTextColor(DARK);
+        doc.text(interp.title, M + 4, y + 8);
+        gap(12);
+        para(interp.text, 9);
+        gap(2);
+      });
+
+      hline();
+
+      // ── All Answers ────────────────────────────────────────
+      sectionLabel('Your Answers');
+
+      var scaleWord = ['', 'Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'];
+
+      QUESTIONNAIRE_CONFIG.questions.forEach(function (q, i) {
+        var ans = answers[q.id];
+        if (ans === undefined || ans === null || ans === '') return;
+
+        // Question text
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.setTextColor(DARK);
+        var qLines = doc.splitTextToSize((i + 1) + '.  ' + q.text, CW);
+        var qH = qLines.length * 9 * 0.45;
+        guard(qH + 10);
+        doc.text(qLines, M, y);
+        gap(qH + 1.5);
+
+        // Answer
+        var displayAns = String(ans);
+        if (q.type === 'scale') {
+          var n = parseInt(ans, 10);
+          var word = n >= 1 && n <= 5 ? scaleWord[n] : '';
+          // Use question's own labels for extremes
+          if (n === 1 && q.minLabel) word = q.minLabel;
+          if (n === 5 && q.maxLabel) word = q.maxLabel;
+          displayAns = n + ' / 5' + (word ? ' — ' + word : '');
+        }
+        para(displayAns, 9, MID);
+        gap(2.5);
+      });
+
+      // ── Save ────────────────────────────────────────────────
+      var stamp = payload.timestamp
+        ? new Date(payload.timestamp).toISOString().slice(0, 10)
+        : 'export';
+      doc.save('questionnaire-results-' + stamp + '.pdf');
+    };
+
+    // ── Helpers ────────────────────────────────────────────────
+
+    function clamp(v) {
+      return Math.max(-1, Math.min(1, v));
+    }
+
+    function esc(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function getInterpretation(ranges, score) {
+      for (var i = 0; i < ranges.length; i++) {
+        if (score >= ranges[i].min && score <= ranges[i].max) {
+          return ranges[i];
+        }
+      }
+      return ranges[ranges.length - 1];
+    }
+
+    function findDimension(dimId) {
+      var dimList = QUESTIONNAIRE_CONFIG.dimensions;
+      for (var i = 0; i < dimList.length; i++) {
+        if (dimList[i].id === dimId) return dimList[i];
+      }
+      return null;
+    }
+
+    function getAttachmentZone(ax, av) {
+      // Quadrant classification based on diagram coordinate system:
+      // ax < 0 → left  = Anxious-Preoccupied
+      // ax > 0 → right = Dismissive-Avoidant
+      // av < 0 → top   = Secure
+      // av > 0 → bottom = Fearful-Avoidant
+      var THRESH = 0.25;
+
+      if (Math.abs(ax) < THRESH && av < -THRESH) {
+        return {
+          title: 'Secure tendency',
+          text: 'Your pattern suggests relatively open communication and a capacity to manage conflict without strong escalation — hallmarks of secure relational functioning. This is a real strength in navigating cross-cultural complexity.'
+        };
+      }
+      if (ax < -THRESH && Math.abs(av) <= THRESH) {
+        return {
+          title: 'Anxious-Preoccupied tendency',
+          text: 'Your pattern suggests a communicative, emotionally engaged style that may sometimes tip into over-processing or seeking reassurance. Cross-cultural misattunements can amplify this dynamic — naming the pattern often helps.'
+        };
+      }
+      if (ax > THRESH && Math.abs(av) <= THRESH) {
+        return {
+          title: 'Dismissive-Avoidant tendency',
+          text: 'Your pattern suggests a more self-contained, independent style where direct emotional expression may feel less natural. In cross-cultural relationships, this can manifest as emotional withdrawal when cultural friction arises.'
+        };
+      }
+      if (Math.abs(ax) < THRESH && av > THRESH) {
+        return {
+          title: 'Fearful-Avoidant tendency',
+          text: 'Your pattern shows tension between wanting connection and experiencing difficulty when conflict arises. This is a common response to accumulated cross-cultural strain and can shift meaningfully with awareness and support.'
+        };
+      }
+      // Mixed quadrants
+      if (ax < -THRESH && av < -THRESH) {
+        return {
+          title: 'Secure-Anxious tendency',
+          text: 'Your pattern shows generally open communication with some anxiety around how connection is maintained. Moments of cultural misunderstanding may feel especially significant to you — bringing conscious curiosity to these moments can be transformative.'
+        };
+      }
+      if (ax > THRESH && av < -THRESH) {
+        return {
+          title: 'Secure-Avoidant tendency',
+          text: 'Your pattern shows calm conflict regulation alongside a somewhat independent communication style. You may be able to manage disagreements effectively while still keeping some emotional distance — a balance worth exploring.'
+        };
+      }
+      // Default centre
+      return {
+        title: 'Mixed / transitional pattern',
+        text: 'Your responses reflect a mixed pattern — context and relationship stage likely play a significant role. This is common in cross-cultural couples navigating ongoing change and renegotiation.'
+      };
+    }
+
+    function showNoResults() {
+      document.getElementById('resultsPage').style.display = 'none';
+      document.getElementById('noResults').style.display = 'block';
+    }
+
+  }());
+  </script>
+
+</body>
+</html>

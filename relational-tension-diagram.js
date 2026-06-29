@@ -25,7 +25,10 @@ class RelationalTensionDiagram {
             pointRadius: options.pointRadius || 10,
             padding: options.padding || 80,
             lineSpacing: options.lineSpacing || 120,
-            distanceHighlightColor: options.distanceHighlightColor || '#a8937e'
+            distanceHighlightColor: options.distanceHighlightColor || '#a8937e',
+            singleMode: options.singleMode || false,
+            markerALabel: options.markerALabel || 'Partner A',
+            showTitle: options.showTitle !== false
         };
 
         // Default themes with extremes
@@ -275,9 +278,11 @@ class RelationalTensionDiagram {
             }
 
             // Check Partner B
-            const distB = Math.sqrt(Math.pow(x - bX, 2) + Math.pow(y - lineY, 2));
-            if (distB < hitRadius) {
-                return { themeIndex: i, partner: 'B', x: bX, y: lineY };
+            if (!this.config.singleMode) {
+                const distB = Math.sqrt(Math.pow(x - bX, 2) + Math.pow(y - lineY, 2));
+                if (distB < hitRadius) {
+                    return { themeIndex: i, partner: 'B', x: bX, y: lineY };
+                }
             }
         }
 
@@ -298,10 +303,12 @@ class RelationalTensionDiagram {
         this.clear();
 
         // Draw title
-        this.ctx.font = `700 ${this.config.labelFontSize + 6}px 'Segoe UI', sans-serif`;
-        this.ctx.fillStyle = this.config.labelColor;
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText('Relational Tension Lines', this.canvas.width / 2, 40);
+        if (this.config.showTitle) {
+            this.ctx.font = `700 ${this.config.labelFontSize + 6}px 'Segoe UI', sans-serif`;
+            this.ctx.fillStyle = this.config.labelColor;
+            this.ctx.textAlign = 'center';
+            this.ctx.fillText('Relational Tension Lines', this.canvas.width / 2, 40);
+        }
 
         // Store all points for hover detection
         const points = [];
@@ -309,7 +316,9 @@ class RelationalTensionDiagram {
         // Draw all themes
         this.themes.forEach((theme, index) => {
             this.drawTensionLine(theme, index);
-            this.drawDistanceHighlight(theme, index);
+            if (!this.config.singleMode) {
+                this.drawDistanceHighlight(theme, index);
+            }
 
             const y = this.getThemeY(index);
 
@@ -326,18 +335,22 @@ class RelationalTensionDiagram {
                 theme.partnerA,
                 y,
                 this.config.partnerAColor,
-                'Partner A',
+                this.config.markerALabel,
                 isAHovered
             );
-            const pointB = this.drawMarker(
-                theme.partnerB,
-                y,
-                this.config.partnerBColor,
-                'Partner B',
-                isBHovered
-            );
 
-            points.push(pointA, pointB);
+            if (!this.config.singleMode) {
+                const pointB = this.drawMarker(
+                    theme.partnerB,
+                    y,
+                    this.config.partnerBColor,
+                    'Partner B',
+                    isBHovered
+                );
+                points.push(pointA, pointB);
+            } else {
+                points.push(pointA);
+            }
         });
 
         return points;
