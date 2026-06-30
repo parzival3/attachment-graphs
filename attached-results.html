@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Attachment Style Results</title>
+  <link rel="stylesheet" href="questionnaire.css">
+  <style>
+    body { background: linear-gradient(to bottom, #f2ede8, #e8dfd5); min-height: 100vh; }
+
+    .ar-page { max-width: 760px; margin: 0 auto; padding: 20px 16px 60px; }
+
+    .ar-header { text-align: center; padding: 32px 0 20px; }
+    .ar-title   { font-size: clamp(20px, 5vw, 28px); font-weight: 700; color: var(--text-dark); margin: 0 0 6px; }
+    .ar-sub     { font-size: 13px; color: var(--text-light); margin: 0; }
+
+    .ar-section { background: var(--surface); border-radius: var(--radius); box-shadow: 0 2px 12px var(--shadow); padding: 28px; margin-bottom: 20px; }
+    .ar-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
+    .ar-style-title   { font-size: 22px; font-weight: 700; color: var(--text-dark); margin: 0 0 10px; }
+    .ar-style-text    { font-size: 15px; line-height: 1.65; color: var(--text-mid); margin: 0; }
+
+    .ar-counts {
+      display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .ar-count-pill {
+      flex: 1; min-width: 80px; text-align: center;
+      background: var(--bg); border: 2px solid var(--border);
+      border-radius: 12px; padding: 12px 8px;
+    }
+    .ar-count-pill.dominant { border-color: var(--accent); background: var(--accent-light); }
+    .ar-count-num  { font-size: 28px; font-weight: 700; color: var(--text-dark); display: block; }
+    .ar-count-label { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    /* Partner score bands */
+    .ar-partner-bands { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+    .ar-band {
+      flex: 1; min-width: 90px; padding: 10px 8px; border-radius: 10px;
+      border: 1.5px solid var(--border); text-align: center; background: var(--bg);
+    }
+    .ar-band.dominant { border-color: #6b8fa8; background: #e8f0f5; }
+    .ar-band-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-light); }
+    .ar-band-score { font-size: 20px; font-weight: 700; color: var(--text-dark); }
+    .ar-band-range { font-size: 11px; color: var(--text-light); }
+
+    /* Diagram */
+    .ar-diagram-wrap { position: relative; margin-bottom: 20px; }
+    .ar-canvas-outer { background: var(--surface); border-radius: var(--radius); box-shadow: 0 2px 12px var(--shadow); overflow: hidden; }
+    #attachmentCanvas { display: block; max-width: 100%; }
+    .ar-legend {
+      display: flex; gap: 20px; justify-content: center;
+      padding: 12px 0 0; flex-wrap: wrap;
+    }
+    .ar-legend-item { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--text-mid); }
+    .ar-legend-dot  { width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+
+    .ar-error { text-align: center; padding: 60px 20px; color: var(--text-mid); }
+    .ar-error h2 { color: var(--text-dark); margin-bottom: 10px; }
+
+    @media print {
+      body { background: white; }
+      .ar-page { padding: 0; }
+      .q-header { display: none; }
+      canvas { display: none !important; }
+      #diagramImg { display: block !important; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="q-header">
+    <a href="attached-questionnaire.html" class="q-site-link">&larr; Retake questionnaire</a>
+  </header>
+
+  <main class="ar-page">
+
+    <div class="ar-header">
+      <h1 class="ar-title">Your Attachment Style Results</h1>
+      <p class="ar-sub" id="timestampLine"></p>
+    </div>
+
+    <div id="mainContent"></div>
+
+    <div id="errorContent" style="display:none" class="ar-error">
+      <h2>No results found</h2>
+      <p>Please complete the <a href="attached-questionnaire.html">questionnaire</a> first.</p>
+    </div>
+
+  </main>
+
+  <script src="attached-questionnaire-config.js"></script>
+  <script src="attachment-diagram.class.js"></script>
+  <script>
+  (function () {
+
+    // ── 1. Decode hash ─────────────────────────────────────────
+    var hash = window.location.hash.slice(1);
+    if (!hash) { show_error(); return; }
+
+    var payload;
+    try {
+      payload = JSON.parse(decodeURIComponent(escape(atob(hash))));
+    } catch (e) { show_error(); return; }
+
+    var rawAnswers = payload.rawAnswers || {};
+
+    if (payload.timestamp) {
+      var d = new Date(payload.timestamp);
+      document.getElementById('timestampLine').textContent =
+        d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    // ── 2. Score Part 1 ────────────────────────────────────────
+    var countA = 0, countB = 0, countC = 0;
+    ATTACHED_CONFIG.questions.forEach(function (q) {
+      if (q.section !== 'self') return;
+      if (rawAnswers[q.id] === 'True for me') {
+        if (q.group === 'A') countA++;
+        else if (q.group === 'B') countB++;
+        else if (q.group === 'C') countC++;
+      }
+    });
+
+    // ── 3. Score Part 2 ────────────────────────────────────────
+    var p2SumA = 0, p2SumB = 0, p2SumC = 0;
+    var p2CntA = 0, p2CntB = 0, p2CntC = 0;
+
+    ATTACHED_CONFIG.questions.forEach(function (q) {
+      if (q.section !== 'partner') return;
+      var v = parseInt(rawAnswers[q.id]);
+      if (!isNaN(v)) {
+        if (q.group === 'pA') { p2SumA += v; p2CntA++; }
+        else if (q.group === 'pB') { p2SumB += v; p2CntB++; }
+        else if (q.group === 'pC') { p2SumC += v; p2CntC++; }
+      }
+    });
+
+    // Partner considered answered if at least one item per group was rated.
+    var partnerAnswered = p2CntA > 0 && p2CntB > 0 && p2CntC > 0;
+
+    // Average per question (1–3), then normalize to [0, 1]: (avg − 1) / 2
+    var pNA = p2CntA ? (p2SumA / p2CntA - 1) / 2 : 0;
+    var pNB = p2CntB ? (p2SumB / p2CntB - 1) / 2 : 0;
+    var pNC = p2CntC ? (p2SumC / p2CntC - 1) / 2 : 0;
+
+    // Extrapolate to full-group score (min 11, max 33) for the band display.
+    var bandA = Math.round(11 + pNA * 22);
+    var bandB = Math.round(11 + pNB * 22);
+    var bandC = Math.round(11 + pNC * 22);
+
+    // ── 4. Attachment style labels ─────────────────────────────
+    function selfStyle() {
+      if (countB >= countA && countB >= countC) return 'secure';
+      if (countA >= countB && countA >= countC) return 'anxious';
+      return 'avoidant';
+    }
+
+    function partnerStyle() {
+      if (pNB >= pNA && pNB >= pNC) return 'secure';
+      if (pNA >= pNB && pNA >= pNC) return 'avoidant';
+      return 'anxious';
+    }
+
+    var SELF_INTERP = {
+      secure: {
+        title: 'Secure',
+        text: 'Your responses reflect a Secure attachment style. You tend to feel comfortable with intimacy and are generally confident in yourself and your relationships. Secure people find it relatively natural to get close to others and to depend on them — and are comfortable having others depend on them. When conflict arises, you can usually stay grounded without questioning the whole relationship. This is a meaningful relational strength.'
+      },
+      anxious: {
+        title: 'Anxious',
+        text: 'Your responses reflect an Anxious attachment style. You tend to be preoccupied with your relationships and may worry that your partner doesn\'t love you as much as you love them, or that s/he will eventually leave. Anxious people crave closeness but often feel uncertain about whether their partner truly values them — and this uncertainty can make even small signals feel overwhelming. Understanding this pattern is itself an important step.'
+      },
+      avoidant: {
+        title: 'Avoidant (Dismissive)',
+        text: 'Your responses reflect an Avoidant attachment style. You tend to value self-sufficiency and may feel uncomfortable with too much closeness or dependency. Avoidant people often send mixed signals — they can be warm and present at times but pull back when intimacy increases. This is frequently not a conscious choice but a deep-seated protective pattern that developed early in life.'
+      }
+    };
+
+    var PARTNER_INTERP = {
+      secure: {
+        title: 'Secure',
+        text: 'Your descriptions suggest your partner tends toward a Secure attachment style — reliable, communicative, and comfortable with closeness without needing to control it. Secure partners make conflict feel navigable and closeness feel safe.'
+      },
+      avoidant: {
+        title: 'Avoidant (Dismissive)',
+        text: 'Your descriptions suggest your partner tends toward an Avoidant attachment style — valuing independence, sending mixed signals, and pulling back when intimacy deepens. This can leave you feeling uncertain or like you\'re working harder than they are to maintain the connection.'
+      },
+      anxious: {
+        title: 'Anxious (Preoccupied)',
+        text: 'Your descriptions suggest your partner tends toward an Anxious attachment style — craving closeness, worried about rejection, and sometimes preoccupied with the relationship. This can create intensity early on but may also feel exhausting if their needs for reassurance are high.'
+      }
+    };
+
+    function bandLabel(score) {
+      if (score <= 17) return 'Very low';
+      if (score <= 22) return 'Moderate';
+      return 'High';
+    }
+
+    // ── 5. Diagram coordinates ─────────────────────────────────
+    //
+    // Diagram quadrants (existing labels):
+    //   LEFT  = Anxious  |  RIGHT = Avoidant  |  TOP = Secure  |  BOTTOM = Fearful
+    //
+    // Self (Part 1):
+    //   x: high C → right (avoidant), high A → left (anxious)
+    //   y: high B → top (secure), high A+C → bottom (fearful)
+    //
+    // Partner (Part 2):
+    //   pA = avoidant partner → right
+    //   pC = anxious partner  → left
+    //   pB = secure partner   → top
+
+    var xSelf = (countC - countA) / 14 * 0.9;
+    var ySelf = ((countA + countC) / 2 - countB) / 14 * 0.9;
+
+    var xPartner = (pNA - pNC) * 0.9;
+    var yPartner = ((pNA + pNC) / 2 - pNB) * 0.9;
+
+    function clamp(v) { return Math.max(-1, Math.min(1, v)); }
+    xSelf     = clamp(xSelf);
+    ySelf     = clamp(ySelf);
+    xPartner  = clamp(xPartner);
+    yPartner  = clamp(yPartner);
+
+    // ── 6. Snap to lemniscate curve ────────────────────────────
+    var CURVE_PTS = (function () {
+      var pts = [];
+      for (var t = 0; t <= 2 * Math.PI; t += 0.01) {
+        var d = 1 + Math.sin(t) * Math.sin(t);
+        pts.push({ x: Math.cos(t) / d, y: Math.sin(t) * Math.cos(t) / d });
+      }
+      return pts;
+    }());
+    var CURVE_MAX_Y = 0.3536;
+
+    function snapToCurve(ax, av) {
+      var ty = av * CURVE_MAX_Y;
+      var minD = Infinity, best = CURVE_PTS[0];
+      for (var i = 0; i < CURVE_PTS.length; i++) {
+        var dx = CURVE_PTS[i].x - ax;
+        var dy = CURVE_PTS[i].y - ty;
+        var d2 = dx * dx + dy * dy;
+        if (d2 < minD) { minD = d2; best = CURVE_PTS[i]; }
+      }
+      return best;
+    }
+
+    var selfCurve    = snapToCurve(xSelf, ySelf);
+    var partnerCurve = partnerAnswered ? snapToCurve(xPartner, yPartner) : null;
+
+    // ── 7. Build result HTML ───────────────────────────────────
+    var sStyle   = selfStyle();
+    var pStyle   = partnerAnswered ? partnerStyle() : null;
+    var selfInfo = SELF_INTERP[sStyle];
+
+    // Counts row
+    var dominantGroup = sStyle === 'secure' ? 'B' : sStyle === 'anxious' ? 'A' : 'C';
+    var countsHtml =
+      '<div class="ar-counts">' +
+      '  <div class="ar-count-pill' + (dominantGroup === 'A' ? ' dominant' : '') + '">' +
+      '    <span class="ar-count-num">' + countA + '</span>' +
+      '    <span class="ar-count-label">Anxious</span>' +
+      '  </div>' +
+      '  <div class="ar-count-pill' + (dominantGroup === 'B' ? ' dominant' : '') + '">' +
+      '    <span class="ar-count-num">' + countB + '</span>' +
+      '    <span class="ar-count-label">Secure</span>' +
+      '  </div>' +
+      '  <div class="ar-count-pill' + (dominantGroup === 'C' ? ' dominant' : '') + '">' +
+      '    <span class="ar-count-num">' + countC + '</span>' +
+      '    <span class="ar-count-label">Avoidant</span>' +
+      '  </div>' +
+      '</div>';
+
+    // Partner bands row
+    var pDomGroup = partnerAnswered ? (pStyle === 'secure' ? 'B' : pStyle === 'avoidant' ? 'A' : 'C') : null;
+    var partnerBandsHtml = '';
+    if (partnerAnswered) {
+      partnerBandsHtml =
+        '<div class="ar-partner-bands">' +
+        '  <div class="ar-band' + (pDomGroup === 'A' ? ' dominant' : '') + '">' +
+        '    <div class="ar-band-label">Avoidant</div>' +
+        '    <div class="ar-band-score">' + bandA + '</div>' +
+        '    <div class="ar-band-range">' + bandLabel(bandA) + '</div>' +
+        '  </div>' +
+        '  <div class="ar-band' + (pDomGroup === 'B' ? ' dominant' : '') + '">' +
+        '    <div class="ar-band-label">Secure</div>' +
+        '    <div class="ar-band-score">' + bandB + '</div>' +
+        '    <div class="ar-band-range">' + bandLabel(bandB) + '</div>' +
+        '  </div>' +
+        '  <div class="ar-band' + (pDomGroup === 'C' ? ' dominant' : '') + '">' +
+        '    <div class="ar-band-label">Anxious</div>' +
+        '    <div class="ar-band-score">' + bandC + '</div>' +
+        '    <div class="ar-band-range">' + bandLabel(bandC) + '</div>' +
+        '  </div>' +
+        '</div>';
+    }
+
+    // Legend
+    var legendHtml =
+      '<div class="ar-legend">' +
+      '  <div class="ar-legend-item">' +
+      '    <div class="ar-legend-dot" style="background:#c77f5a"></div>' +
+      '    <span>You</span>' +
+      '  </div>' +
+      (partnerAnswered
+        ? '  <div class="ar-legend-item">' +
+          '    <div class="ar-legend-dot" style="background:#6b8fa8"></div>' +
+          '    <span>Partner</span>' +
+          '  </div>'
+        : '') +
+      '</div>';
+
+    // Partner section
+    var partnerSectionHtml = '';
+    if (partnerAnswered) {
+      var pInfo = PARTNER_INTERP[pStyle];
+      partnerSectionHtml =
+        '<div class="ar-section">' +
+        '  <div class="ar-section-label">Your Partner\'s Attachment Style</div>' +
+        partnerBandsHtml +
+        '  <div class="ar-style-title">' + esc(pInfo.title) + '</div>' +
+        '  <p class="ar-style-text">' + esc(pInfo.text) + '</p>' +
+        '</div>';
+    }
+
+    document.getElementById('mainContent').innerHTML =
+      '<div class="ar-section">' +
+      '  <div class="ar-section-label">Attachment Diagram</div>' +
+      '  <div class="ar-canvas-outer">' +
+      '    <canvas id="attachmentCanvas"></canvas>' +
+      '    <img id="diagramImg" style="display:none;max-width:100%;" alt="Attachment diagram" />' +
+      '  </div>' +
+      legendHtml +
+      '</div>' +
+
+      '<div class="ar-section">' +
+      '  <div class="ar-section-label">Your Attachment Style</div>' +
+      countsHtml +
+      '  <div class="ar-style-title">' + esc(selfInfo.title) + '</div>' +
+      '  <p class="ar-style-text">' + esc(selfInfo.text) + '</p>' +
+      '</div>' +
+
+      partnerSectionHtml;
+
+    // ── 8. Render diagram ──────────────────────────────────────
+    var canvas  = document.getElementById('attachmentCanvas');
+    var wrapper = canvas.parentElement;
+
+    var maxW = Math.min(wrapper.offsetWidth || 720, 720);
+    var w    = Math.max(300, maxW);
+    var h    = Math.round(w * 0.714);
+
+    canvas.width        = w;
+    canvas.height       = h;
+    canvas.style.width  = w + 'px';
+    canvas.style.height = h + 'px';
+
+    var scale   = Math.min(190, w * 0.27);
+    var fs      = w < 420 ? 12 : 16;
+    var lfs     = w < 420 ? 14 : 18;
+
+    var diagram = new AttachmentDiagram('attachmentCanvas', {
+      centerX:       w / 2,
+      centerY:       h / 2,
+      scale:         scale,
+      fontSize:      fs,
+      labelFontSize: lfs
+    });
+
+    // Draw background (curve + axes + labels)
+    diagram.render();
+
+    // Plot "You"
+    diagram.plotPoint(selfCurve.x, selfCurve.y, '#c77f5a', 'You');
+    drawLabel(diagram.ctx, w / 2 + selfCurve.x * scale, h / 2 + selfCurve.y * scale, 'You', '#c77f5a');
+
+    // Plot "Partner" (if answered)
+    if (partnerCurve) {
+      diagram.plotPoint(partnerCurve.x, partnerCurve.y, '#6b8fa8', 'Partner');
+      drawLabel(diagram.ctx, w / 2 + partnerCurve.x * scale, h / 2 + partnerCurve.y * scale, 'Partner', '#6b8fa8');
+    }
+
+    // Snapshot for print
+    var img = document.getElementById('diagramImg');
+    img.src = canvas.toDataURL('image/png');
+
+    // ── Helpers ────────────────────────────────────────────────
+
+    function drawLabel(ctx, px, py, text, color) {
+      // Place label above point; flip below if too close to top edge
+      var above = py - 20 > 20;
+      var labelY = above ? py - 20 : py + 32;
+      ctx.font = "600 13px 'Segoe UI', sans-serif";
+      ctx.fillStyle = color || '#5a5348';
+      ctx.textAlign = 'center';
+      ctx.fillText(text, px, labelY);
+    }
+
+    function esc(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function show_error() {
+      document.getElementById('errorContent').style.display = '';
+    }
+
+  }());
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attachment Style Self-Assessment</title>
+  <link rel="stylesheet" href="questionnaire.css">
+  <style>
+    body { background: linear-gradient(to bottom, #f2ede8, #e8dfd5); }
+    .q-main { padding-top: 40px; }
+  </style>
+</head>
+<body>
+
+  <header class="q-header">
+    <a href="https://www.piatorp.dk" class="q-site-link">&larr; piatorp.dk</a>
+  </header>
+
+  <main class="q-main">
+    <div id="app" class="q-container"></div>
+  </main>
+
+  <script src="attached-questionnaire-config.js"></script>
+  <script src="questionnaire-framework.js"></script>
+  <script>
+    var q = new Questionnaire(ATTACHED_CONFIG);
+    q.mount('app');
+  </script>
+
+</body>
+</html>
