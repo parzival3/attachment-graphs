@@ -236,6 +236,16 @@ class Questionnaire {
         var showSection = this._isNewSection() && sectionTitle;
         var isLast = this.step === this._total - 1;
 
+        // Radio/scale questions auto-advance on selection so no Continue needed.
+        // Optional radio questions show a Skip button so the user can move on
+        // without answering. Text/textarea always need an explicit button.
+        var isAutoInput = q.type === 'radio' || q.type === 'scale';
+        var isOptional  = q.required === false;
+        var showNextBtn = !isAutoInput || isOptional;
+        var nextLabel   = isLast        ? 'See Results &rarr;'
+                        : isOptional    ? 'Skip &rarr;'
+                        :                 'Continue &rarr;';
+
         var html =
             '<div class="q-card">' +
             '  <div class="q-progress-bar">' +
@@ -252,7 +262,7 @@ class Questionnaire {
             '  </div>' +
             '  <div class="q-nav">' +
             '    <button class="btn-secondary q-prev-btn"' + (this.step === 0 ? ' style="visibility:hidden"' : '') + '>&larr; Back</button>' +
-            '    <button class="btn-primary q-next-btn">' + (isLast ? 'See Results &rarr;' : 'Continue &rarr;') + '</button>' +
+            (showNextBtn ? '    <button class="btn-primary q-next-btn">' + nextLabel + '</button>' : '') +
             '  </div>' +
             '</div>';
 
@@ -261,8 +271,8 @@ class Questionnaire {
         this._bindInputEvents(q);
 
         var self = this;
-        this.container.querySelector('.q-next-btn')
-            .addEventListener('click', function () { self.next(); });
+        var nextBtn = this.container.querySelector('.q-next-btn');
+        if (nextBtn) nextBtn.addEventListener('click', function () { self.next(); });
 
         var prevBtn = this.container.querySelector('.q-prev-btn');
         if (prevBtn) {

@@ -31,6 +31,33 @@
         return;
       }
       ATTACHED_CONFIG.questions = questions;
+
+      // ── Demo mode (?demo in URL) ───────────────────────────────────────────
+      // Fills in a fixed profile (Anxious self + Secure partner) and jumps
+      // straight to the results page — useful for testing without clicking
+      // through all 75 questions.
+      if (window.location.search.indexOf('demo') !== -1) {
+        var demoAnswers = {};
+        questions.forEach(function (q) {
+          if (q.section === 'self') {
+            // Anxious self: only group-A statements are True
+            demoAnswers[q.id] = (q.group === 'A') ? 'True' : 'False';
+          } else {
+            // Secure partner: only group-pB statements are True
+            demoAnswers[q.id] = (q.group === 'pB') ? 'True' : 'False';
+          }
+        });
+        var payload = {
+          dimensions: {},
+          rawAnswers: demoAnswers,
+          timestamp: new Date().toISOString()
+        };
+        var encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+        window.location.href = 'attached-results.html#' + encoded;
+        return;
+      }
+      // ─────────────────────────────────────────────────────────────────────
+
       var q = new Questionnaire(ATTACHED_CONFIG);
       q.mount('app');
     });
