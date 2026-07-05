@@ -535,6 +535,43 @@
         guard(ih + 4); doc.addImage(imgData, 'PNG', M, y, iw, ih); gap(ih + 4);
       }
 
+      // Draw 3 score boxes side by side.
+      // boxes: [{label, value, sub, highlight}]  highlight=true → accent border + tinted bg
+      function scoreBoxes(boxes, accentColor) {
+        var boxH = 22, gap3 = 4;
+        var boxW = (CW - gap3 * (boxes.length - 1)) / boxes.length;
+        guard(boxH + 6);
+        boxes.forEach(function (b, i) {
+          var bx = M + i * (boxW + gap3);
+          var by = y;
+          var isHL = !!b.highlight;
+          // background
+          var hlBg = accentColor === '#6b8fa8' ? '#E8F0F5' : '#FDF0E8';
+          doc.setFillColor(isHL ? hlBg : '#F9F6F3');
+          doc.setDrawColor(isHL ? accentColor : BORDER);
+          doc.setLineWidth(isHL ? 0.6 : 0.3);
+          doc.roundedRect(bx, by, boxW, boxH, 2, 2, 'FD');
+          // big number / value
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(16);
+          doc.setTextColor(isHL ? accentColor : DARK);
+          doc.text(String(b.value), bx + boxW / 2, by + 10, { align: 'center' });
+          // label
+          doc.setFont('helvetica', 'bold');
+          doc.setFontSize(7);
+          doc.setTextColor(isHL ? accentColor : LIGHT);
+          doc.text(b.label.toUpperCase(), bx + boxW / 2, by + 16, { align: 'center' });
+          // optional sub-label
+          if (b.sub) {
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(6.5);
+            doc.setTextColor(LIGHT);
+            doc.text(b.sub, bx + boxW / 2, by + 20, { align: 'center' });
+          }
+        });
+        gap(boxH + 5);
+      }
+
       // Header
       h1('Attachment Style Self-Assessment');
       if (payload.timestamp) {
@@ -549,9 +586,11 @@
 
       // Self style
       sectionLabel('Your Attachment Style');
-      var countsText = 'Anxious: ' + countA + '  |  Secure: ' + countB + '  |  Avoidant: ' + countC;
-      para(countsText, 9, LIGHT);
-      gap(2);
+      scoreBoxes([
+        { label: 'Anxious',  value: countA, highlight: dominantGroup === 'A' },
+        { label: 'Secure',   value: countB, highlight: dominantGroup === 'B' },
+        { label: 'Avoidant', value: countC, highlight: dominantGroup === 'C' }
+      ], ACCENT);
       boldLine(selfInfo.title, 11);
       para(selfInfo.text, 9.5);
       gap(4);
@@ -559,7 +598,14 @@
       // Partner style
       if (partnerAnswered) {
         hline();
-        sectionLabel("Partner's Attachment Style");
+        sectionLabel("Your Partner's Attachment Style");
+        var BLUE = '#6b8fa8';
+        var pDomGroup2 = pStyle === 'secure' ? 'B' : pStyle === 'avoidant' ? 'A' : 'C';
+        scoreBoxes([
+          { label: 'Avoidant', value: bandA, sub: bandLabel(bandA), highlight: pDomGroup2 === 'A' },
+          { label: 'Secure',   value: bandB, sub: bandLabel(bandB), highlight: pDomGroup2 === 'B' },
+          { label: 'Anxious',  value: bandC, sub: bandLabel(bandC), highlight: pDomGroup2 === 'C' }
+        ], BLUE);
         var pInfo = PARTNER_INTERP[pStyle];
         boldLine(pInfo.title, 11);
         para(pInfo.text, 9.5);
