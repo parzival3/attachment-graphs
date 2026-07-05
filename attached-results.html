@@ -549,9 +549,9 @@
       }
       function addDiagram(imgData, aspect) {
         if (!imgData) return;
-        var iw = CW, ih = CW * aspect;
+        var iw = 150, ih = iw * aspect;  // narrower than CW so centering is visible
         guard(ih + 4);
-        var cx = (PW - iw) / 2;  // centre horizontally on the page
+        var cx = (PW - iw) / 2;          // (210 - 150) / 2 = 30mm each side
         doc.addImage(imgData, 'PNG', cx, y, iw, ih);
         gap(ih + 4);
       }
