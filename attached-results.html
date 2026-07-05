@@ -203,7 +203,7 @@
     //
     // Self (Part 1):
     //   x: high C → right (avoidant), high A → left (anxious)
-    //   y: high B → top (secure), high A+C → bottom (fearful)
+    //   y: high C → bottom (fearful/avoidant), high B → top (secure); A is x-only
     //
     // Partner (Part 2):
     //   pA = avoidant partner → right
@@ -211,10 +211,10 @@
     //   pB = secure partner   → top
 
     var xSelf = (countC - countA) / 14 * 0.9;
-    var ySelf = ((countA + countC) / 2 - countB) / 14 * 0.9;
+    var ySelf = (countC - countB) / 14 * 0.9;
 
     var xPartner = (pNA - pNC) * 0.9;
-    var yPartner = ((pNA + pNC) / 2 - pNB) * 0.9;
+    var yPartner = (pNA - pNB) * 0.9;
 
     function clamp(v) { return Math.max(-1, Math.min(1, v)); }
     xSelf     = clamp(xSelf);
