@@ -56,10 +56,21 @@
     .ar-error { text-align: center; padding: 60px 20px; color: var(--text-mid); }
     .ar-error h2 { color: var(--text-dark); margin-bottom: 10px; }
 
+    /* Actions bar */
+    .ar-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; padding: 8px 0 32px; }
+
+    /* Answers section */
+    .ar-answers { }
+    .ar-answer-item { padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .ar-answer-item:last-child { border-bottom: none; }
+    .ar-answer-q { font-size: 13px; font-weight: 600; color: var(--text-dark); margin: 0 0 4px; line-height: 1.5; }
+    .ar-answer-a { font-size: 13px; color: var(--text-mid); margin: 0; }
+    .ar-answer-group { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-right: 6px; }
+
     @media print {
       body { background: white; }
       .ar-page { padding: 0; }
-      .q-header { display: none; }
+      .q-header, .ar-actions { display: none; }
       canvas { display: none !important; }
       #diagramImg { display: block !important; max-width: 100%; }
     }
@@ -80,6 +91,16 @@
 
     <div id="mainContent"></div>
 
+    <div id="answersSection" style="display:none" class="ar-section">
+      <div class="ar-section-label">Your Answers</div>
+      <div class="ar-answers" id="answersBody"></div>
+    </div>
+
+    <div id="actionsBar" style="display:none" class="ar-actions">
+      <button class="btn-primary" onclick="exportToPDF()">Download PDF</button>
+      <a href="attached-questionnaire.html" class="btn-secondary">Retake questionnaire</a>
+    </div>
+
     <div id="errorContent" style="display:none" class="ar-error">
       <h2>No results found</h2>
       <p>Please complete the <a href="attached-questionnaire.html">questionnaire</a> first.</p>
@@ -89,6 +110,7 @@
 
   <script src="attached-questionnaire-config.js"></script>
   <script src="attachment-diagram.class.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
   (function () {
 
@@ -383,6 +405,157 @@
     // Snapshot for print
     var img = document.getElementById('diagramImg');
     img.src = canvas.toDataURL('image/png');
+    var diagramImgSrc = img.src;
+
+    // ── 9. Hi-res off-screen canvas for PDF ────────────────────
+    var PDF_SCALE = 3;
+
+    function renderHiResAttach() {
+      var hiW = w * PDF_SCALE, hiH = h * PDF_SCALE;
+      var hiCanvas = document.createElement('canvas');
+      hiCanvas.width = hiW; hiCanvas.height = hiH;
+      var scale3 = Math.min(190, w * 0.27) * PDF_SCALE;
+      var fs3    = (w < 420 ? 12 : 16) * PDF_SCALE;
+      var lfs3   = (w < 420 ? 14 : 18) * PDF_SCALE;
+      var hiDiag = new AttachmentDiagram(hiCanvas, {
+        centerX: w / 2 * PDF_SCALE, centerY: h / 2 * PDF_SCALE,
+        scale: scale3, fontSize: fs3, labelFontSize: lfs3,
+        lineWidth: 3.5 * PDF_SCALE, pointRadius: 10 * PDF_SCALE,
+        labelPixelScale: PDF_SCALE, logicalWidth: hiW, logicalHeight: hiH
+      });
+      hiDiag.render();
+      hiDiag.plotPoint(selfCurve.x, selfCurve.y, '#c77f5a', 'You');
+      var cx3 = w / 2 * PDF_SCALE + selfCurve.x * scale3;
+      var cy3 = h / 2 * PDF_SCALE + selfCurve.y * scale3;
+      var c3 = hiDiag.ctx;
+      c3.font = '600 ' + (13 * PDF_SCALE) + "px 'Segoe UI', sans-serif";
+      c3.fillStyle = '#c77f5a'; c3.textAlign = 'center';
+      c3.fillText('You', cx3, cy3 - 18 * PDF_SCALE);
+      if (partnerCurve) {
+        hiDiag.plotPoint(partnerCurve.x, partnerCurve.y, '#6b8fa8', 'Partner');
+        var px3 = w / 2 * PDF_SCALE + partnerCurve.x * scale3;
+        var py3 = h / 2 * PDF_SCALE + partnerCurve.y * scale3;
+        c3.fillStyle = '#6b8fa8';
+        c3.fillText('Partner', px3, py3 - 18 * PDF_SCALE);
+      }
+      return hiCanvas.toDataURL('image/png');
+    }
+
+    var attachHiSrc = renderHiResAttach();
+
+    // ── 10. Answers section ────────────────────────────────────
+    var groupName = { A: 'Anxious', B: 'Secure', C: 'Avoidant', pA: 'Avoidant', pB: 'Secure', pC: 'Anxious' };
+    var answersHtml = '';
+    var answeredCount = 0;
+    ATTACHED_CONFIG.questions.forEach(function (q, i) {
+      var ans = rawAnswers[q.id];
+      if (ans === undefined || ans === null || ans === '') return;
+      answeredCount++;
+      var gLabel = groupName[q.group] ? '<span class="ar-answer-group">' + groupName[q.group] + '</span>' : '';
+      answersHtml +=
+        '<div class="ar-answer-item">' +
+        '  <p class="ar-answer-q">' + gLabel + esc(q.text) + '</p>' +
+        '  <p class="ar-answer-a">' + esc(String(ans)) + '</p>' +
+        '</div>';
+    });
+    if (answeredCount > 0) {
+      document.getElementById('answersBody').innerHTML = answersHtml;
+      document.getElementById('answersSection').style.display = '';
+    }
+    document.getElementById('actionsBar').style.display = '';
+
+    // ── 11. PDF export ─────────────────────────────────────────
+    window.exportToPDF = function () {
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert('PDF library is still loading — please try again in a moment.');
+        return;
+      }
+      var doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+      var PW = 210, PH = 297, M = 18, CW = 174;
+      var y = M;
+      var DARK = '#2C2520', MID = '#6B5F52', LIGHT = '#9B8F82', ACCENT = '#C77F5A', BORDER = '#D4C9BD';
+
+      function newPage() { doc.addPage(); y = M; }
+      function gap(mm)   { y += mm; }
+      function guard(need) { if (y + need > PH - M) newPage(); }
+      function hline() {
+        guard(6); doc.setDrawColor(BORDER); doc.setLineWidth(0.25);
+        doc.line(M, y, PW - M, y); gap(5);
+      }
+      function h1(text) {
+        guard(10); doc.setFont('helvetica', 'bold'); doc.setFontSize(18);
+        doc.setTextColor(DARK); doc.text(text, M, y); gap(9);
+      }
+      function sectionLabel(text) {
+        guard(9); doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
+        doc.setTextColor(ACCENT); doc.text(text.toUpperCase(), M, y); gap(5.5);
+      }
+      function boldLine(text, size) {
+        size = size || 11; guard(size * 0.55); doc.setFont('helvetica', 'bold');
+        doc.setFontSize(size); doc.setTextColor(DARK); doc.text(text, M, y); gap(size * 0.5);
+      }
+      function para(text, size, color) {
+        size = size || 10; color = color || MID;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(size); doc.setTextColor(color);
+        var lines = doc.splitTextToSize(String(text), CW);
+        var lh = size * 0.45;
+        guard(lines.length * lh + 2); doc.text(lines, M, y); gap(lines.length * lh + 2);
+      }
+      function addDiagram(imgData, aspect) {
+        if (!imgData) return;
+        var iw = CW, ih = CW * aspect;
+        guard(ih + 4); doc.addImage(imgData, 'PNG', M, y, iw, ih); gap(ih + 4);
+      }
+
+      // Header
+      h1('Attachment Style Self-Assessment');
+      if (payload.timestamp) {
+        var pd = new Date(payload.timestamp);
+        para(pd.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), 9, LIGHT);
+      }
+      gap(3); hline();
+
+      // Diagram
+      sectionLabel('Attachment Diagram');
+      addDiagram(attachHiSrc, h / w);
+
+      // Self style
+      sectionLabel('Your Attachment Style');
+      var countsText = 'Anxious: ' + countA + '  |  Secure: ' + countB + '  |  Avoidant: ' + countC;
+      para(countsText, 9, LIGHT);
+      gap(2);
+      boldLine(selfInfo.title, 11);
+      para(selfInfo.text, 9.5);
+      gap(4);
+
+      // Partner style
+      if (partnerAnswered) {
+        hline();
+        sectionLabel("Partner's Attachment Style");
+        var pInfo = PARTNER_INTERP[pStyle];
+        boldLine(pInfo.title, 11);
+        para(pInfo.text, 9.5);
+        gap(4);
+      }
+
+      hline();
+      sectionLabel('Your Answers');
+      ATTACHED_CONFIG.questions.forEach(function (q, i) {
+        var ans = rawAnswers[q.id];
+        if (ans === undefined || ans === null || ans === '') return;
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(DARK);
+        var qLines = doc.splitTextToSize((i + 1) + '.  ' + q.text, CW);
+        var qH = qLines.length * 9 * 0.45;
+        guard(qH + 10); doc.text(qLines, M, y); gap(qH + 1.5);
+        para(String(ans), 9, MID);
+        gap(2.5);
+      });
+
+      var stamp = payload.timestamp
+        ? new Date(payload.timestamp).toISOString().slice(0, 10)
+        : 'export';
+      doc.save('attachment-results-' + stamp + '.pdf');
+    };
 
     // ── Helpers ────────────────────────────────────────────────
 
