@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Attachment Reflection — How Do You Create Connection?</title>
+  <link rel="stylesheet" href="questionnaire.css">
+  <style>
+    body { background: linear-gradient(to bottom, #f2ede8, #e8dfd5); min-height: 100vh; }
+
+    .r-page { max-width: 680px; margin: 0 auto; padding: 32px 20px 60px; }
+
+    .r-title { font-size: 26px; font-weight: 700; color: var(--text-dark); margin: 0 0 4px; }
+    .r-subtitle { font-size: 15px; color: var(--text-mid); margin: 0 0 32px; }
+
+    /* ── Tendency bars ──────────────────────────────────── */
+    .r-bars { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 24px; margin-bottom: 24px; }
+    .r-bars-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-light); margin: 0 0 20px; }
+
+    .r-bar-row { margin-bottom: 16px; }
+    .r-bar-row:last-child { margin-bottom: 0; }
+    .r-bar-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .r-bar-label { font-size: 15px; font-weight: 600; color: var(--text-dark); }
+    .r-bar-count { font-size: 13px; color: var(--text-light); }
+    .r-bar-track { height: 10px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .r-bar-fill { height: 100%; border-radius: 99px; transition: width 0.6s ease; }
+
+    /* ── Tendency interpretation blocks ───────────────── */
+    .r-tendency-blocks { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+
+    .r-tendency-card { border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; }
+    .r-tendency-card-header { display: flex; align-items: center; gap: 12px; padding: 16px 20px; cursor: pointer; user-select: none; }
+    .r-tendency-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .r-tendency-card-title { font-size: 15px; font-weight: 600; color: var(--text-dark); flex: 1; }
+    .r-tendency-chevron { font-size: 14px; color: var(--text-light); transition: transform 0.2s; }
+    .r-tendency-card.open .r-tendency-chevron { transform: rotate(180deg); }
+    .r-tendency-body { padding: 0 20px 18px; font-size: 15px; line-height: 1.7; color: var(--text-mid); display: none; }
+    .r-tendency-card.open .r-tendency-body { display: block; }
+
+    /* ── Closing note ───────────────────────────────────── */
+    .r-closing { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 28px; font-size: 15px; line-height: 1.75; color: var(--text-mid); font-style: italic; }
+
+    /* ── Actions ────────────────────────────────────────── */
+    .r-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
+    .r-actions .q-btn { flex: 1; min-width: 180px; text-align: center; }
+
+    /* ── Answers collapsible ───────────────────────────── */
+    .r-answers-toggle { background: none; border: none; padding: 0; cursor: pointer; font-size: 14px; color: var(--text-light); display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+    .r-answers-toggle-chevron { transition: transform 0.2s; display: inline-block; }
+    .r-answers-toggle.open .r-answers-toggle-chevron { transform: rotate(180deg); }
+
+    .r-answers { display: none; }
+    .r-answers.open { display: block; }
+
+    .r-answer-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 10px; }
+    .r-answer-q { font-size: 13px; font-weight: 600; color: var(--text-light); margin: 0 0 6px; }
+    .r-answer-text { font-size: 14px; color: var(--text-dark); line-height: 1.5; }
+    .r-answer-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px; margin-right: 6px; margin-top: 4px; }
+
+    @media (max-width: 480px) {
+      .r-actions { flex-direction: column; }
+      .r-actions .q-btn { min-width: unset; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="q-header">
+    <a href="https://www.piatorp.dk" class="q-site-link">&larr; piatorp.dk</a>
+  </header>
+
+  <main class="q-main">
+    <div id="results" class="r-page">
+      <p style="color:var(--text-mid);padding-top:60px;text-align:center;">Loading your reflection…</p>
+    </div>
+  </main>
+
+  <script src="attachment-reflection-config.js"></script>
+  <script>
+  (function () {
+
+    var CFG = REFLECTION_CONFIG;
+    var T = CFG.tendencies;
+
+    // ── Decode answers from hash ──────────────────────────
+    var raw = {};
+    try {
+      var hash = window.location.hash.slice(1);
+      if (hash) {
+        raw = JSON.parse(decodeURIComponent(escape(atob(hash))));
+      }
+    } catch (e) {
+      document.getElementById('results').innerHTML =
+        '<p style="padding:60px 20px;color:#c0392b;text-align:center;">Could not load your results. Please retake the questionnaire.</p>';
+      return;
+    }
+
+    // ── Tally tags ────────────────────────────────────────
+    var counts = { S: 0, A: 0, Av: 0, D: 0 };
+    var total = 0;
+
+    CFG.questions.forEach(function (q) {
+      var selected = raw[q.id] || [];
+      if (!Array.isArray(selected)) selected = [selected];
+      selected.forEach(function (val) {
+        var opt = (q.options || []).find(function (o) {
+          return (typeof o === 'object' ? o.text : o) === val;
+        });
+        if (opt && opt.tag && counts[opt.tag] !== undefined) {
+          counts[opt.tag]++;
+          total++;
+        }
+      });
+    });
+
+    var maxCount = Math.max(1, Math.max.apply(null, Object.values(counts)));
+
+    // ── Sort tendencies by count desc ─────────────────────
+    var tagOrder = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
+
+    // ── Build HTML ────────────────────────────────────────
+    var html = '';
+    html += '<h1 class="r-title">' + CFG.title + '</h1>';
+    html += '<p class="r-subtitle">' + CFG.subtitle + '</p>';
+
+    // Bars
+    html += '<div class="r-bars">';
+    html += '<div class="r-bars-title">Your tendencies</div>';
+    tagOrder.forEach(function (tag) {
+      var t = T[tag];
+      var c = counts[tag];
+      var pct = Math.round(c / Math.max(1, total) * 100);
+      var barWidth = Math.round(c / maxCount * 100);
+      html += '<div class="r-bar-row">';
+      html += '<div class="r-bar-header">';
+      html += '<span class="r-bar-label" style="color:' + t.color + '">' + t.label + '</span>';
+      html += '<span class="r-bar-count">' + c + ' selection' + (c !== 1 ? 's' : '') + (total > 0 ? ' (' + pct + '%)' : '') + '</span>';
+      html += '</div>';
+      html += '<div class="r-bar-track"><div class="r-bar-fill" style="width:' + barWidth + '%;background:' + t.color + '"></div></div>';
+      html += '</div>';
+    });
+    html += '</div>';
+
+    // Interpretation cards (only show tendencies with at least 1 selection)
+    var activeTags = tagOrder.filter(function (t) { return counts[t] > 0; });
+    if (activeTags.length > 0) {
+      html += '<div class="r-tendency-blocks">';
+      activeTags.forEach(function (tag, i) {
+        var t = T[tag];
+        html += '<div class="r-tendency-card' + (i === 0 ? ' open' : '') + '" data-tag="' + tag + '">';
+        html += '<div class="r-tendency-card-header">';
+        html += '<span class="r-tendency-dot" style="background:' + t.color + '"></span>';
+        html += '<span class="r-tendency-card-title">' + t.title + '</span>';
+        html += '<span class="r-tendency-chevron">&#9660;</span>';
+        html += '</div>';
+        html += '<div class="r-tendency-body">' + t.text + '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Closing note
+    html += '<div class="r-closing">' + CFG.closing + '</div>';
+
+    // Actions
+    html += '<div class="r-actions">';
+    html += '<a href="attachment-reflection.html" class="q-btn q-btn-secondary">Retake reflection</a>';
+    html += '</div>';
+
+    // Answers collapsible
+    html += '<button class="r-answers-toggle" id="answersToggle" onclick="window.toggleAnswers()">';
+    html += '<span class="r-answers-toggle-chevron">&#9660;</span>';
+    html += '<span>Show my answers</span>';
+    html += '</button>';
+
+    html += '<div class="r-answers" id="answersBlock">';
+    CFG.questions.forEach(function (q, qi) {
+      var selected = raw[q.id] || [];
+      if (!Array.isArray(selected)) selected = [selected];
+      html += '<div class="r-answer-item">';
+      html += '<div class="r-answer-q">Q' + (qi + 1) + '. ' + q.text + '</div>';
+      html += '<div class="r-answer-text">';
+      if (selected.length === 0) {
+        html += '<em>No answer</em>';
+      } else {
+        selected.forEach(function (val) {
+          var opt = (q.options || []).find(function (o) {
+            return (typeof o === 'object' ? o.text : o) === val;
+          });
+          var tag = opt && opt.tag ? opt.tag : null;
+          var color = tag && T[tag] ? T[tag].color : '#9b8f82';
+          html += (tag ? '<span class="r-answer-tag" style="background:' + color + '20;color:' + color + ';border:1px solid ' + color + '40">' + (T[tag] ? T[tag].label : tag) + '</span>' : '');
+          html += val + '<br>';
+        });
+      }
+      html += '</div></div>';
+    });
+    html += '</div>';
+
+    document.getElementById('results').innerHTML = html;
+
+    // ── Accordion for tendency cards ──────────────────────
+    document.querySelectorAll('.r-tendency-card-header').forEach(function (header) {
+      header.addEventListener('click', function () {
+        var card = header.closest('.r-tendency-card');
+        card.classList.toggle('open');
+      });
+    });
+
+    // ── Answers toggle ────────────────────────────────────
+    window.toggleAnswers = function () {
+      var btn = document.getElementById('answersToggle');
+      var block = document.getElementById('answersBlock');
+      var isOpen = block.classList.toggle('open');
+      btn.classList.toggle('open', isOpen);
+      btn.querySelector('span:last-child').textContent = isOpen ? 'Hide my answers' : 'Show my answers';
+    };
+
+  }());
+  </script>
+
+</body>
+</html>

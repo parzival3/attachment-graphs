@@ -242,9 +242,10 @@ class Questionnaire {
         var isAutoInput = q.type === 'radio' || q.type === 'scale';
         var isOptional  = q.required === false;
         var showNextBtn = !isAutoInput || isOptional;
-        var nextLabel   = isLast        ? 'See Results &rarr;'
-                        : isOptional    ? 'Skip &rarr;'
-                        :                 'Continue &rarr;';
+        var isCheckbox  = q.type === 'checkbox';
+        var nextLabel   = isLast                    ? 'See Results &rarr;'
+                        : isOptional && !isCheckbox ? 'Skip &rarr;'
+                        :                             'Continue &rarr;';
 
         var html =
             '<div class="q-card">' +
@@ -390,6 +391,7 @@ class Questionnaire {
             case 'radio':    return this._renderRadioInput(q);
             case 'scale':    return this._renderScaleInput(q);
             case 'textarea': return this._renderTextareaInput(q);
+            case 'checkbox': return this._renderCheckboxInput(q);
             default:         return '';
         }
     }
@@ -442,6 +444,21 @@ class Questionnaire {
                '</div>';
     }
 
+    _renderCheckboxInput(q) {
+        var current = this.answers[q.id] || [];
+        var self = this;
+        var opts = (q.options || []).map(function (opt) {
+            var val = (typeof opt === 'object') ? opt.text : opt;
+            var isChecked = current.indexOf(val) !== -1;
+            return '<label class="q-checkbox-option' + (isChecked ? ' selected' : '') + '">' +
+                   '  <input type="checkbox" name="' + q.id + '" value="' + self._esc(val) + '"' +
+                   (isChecked ? ' checked' : '') + '>' +
+                   '  <span class="q-checkbox-label">' + self._esc(val) + '</span>' +
+                   '</label>';
+        });
+        return '<div class="q-checkbox-group">' + opts.join('') + '</div>';
+    }
+
     _renderTextareaInput(q) {
         var val = this.answers[q.id] || '';
         return '<textarea class="q-textarea" id="input-' + q.id + '"' +
@@ -476,6 +493,19 @@ class Questionnaire {
                     self._clearError(root);
                 });
             }
+
+        } else if (q.type === 'checkbox') {
+            var checkboxes = root.querySelectorAll('input[name="' + q.id + '"]');
+            checkboxes.forEach(function (cb) {
+                cb.addEventListener('change', function () {
+                    var checked = [];
+                    root.querySelectorAll('input[name="' + q.id + '"]:checked')
+                        .forEach(function (c) { checked.push(c.value); });
+                    self.answers[q.id] = checked;
+                    self._clearError(root);
+                    cb.closest('.q-checkbox-option').classList.toggle('selected', cb.checked);
+                });
+            });
 
         } else if (q.type === 'radio' || q.type === 'scale') {
             var radios = root.querySelectorAll('input[name="' + q.id + '"]');
