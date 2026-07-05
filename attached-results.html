@@ -59,6 +59,16 @@
     /* Actions bar */
     .ar-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; padding: 8px 0 32px; }
 
+    /* Collapsible answers toggle */
+    .ar-answers-toggle {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      background: none; border: none; cursor: pointer; padding: 4px 0 12px;
+      font-size: 13px; font-weight: 600; color: var(--accent); text-align: left;
+    }
+    .ar-answers-toggle:hover { opacity: 0.8; }
+    .ar-answers-chevron { font-size: 11px; transition: transform 0.2s; }
+    .ar-answers-chevron.open { transform: rotate(180deg); }
+
     /* Answers section */
     .ar-answers { }
     .ar-answer-item { padding: 14px 0; border-bottom: 1px solid var(--border); }
@@ -92,13 +102,11 @@
     <div id="mainContent"></div>
 
     <div id="answersSection" style="display:none" class="ar-section">
-      <div class="ar-section-label">Your Answers</div>
-      <div class="ar-answers" id="answersBody"></div>
-    </div>
-
-    <div id="actionsBar" style="display:none" class="ar-actions">
-      <button class="btn-primary" onclick="exportToPDF()">Download PDF</button>
-      <a href="attached-questionnaire.html" class="btn-secondary">Retake questionnaire</a>
+      <button class="ar-answers-toggle" id="answersToggle" onclick="toggleAnswers()" aria-expanded="false">
+        <span id="answersToggleLabel">Show your answers</span>
+        <span class="ar-answers-chevron" id="answersChevron">&#9660;</span>
+      </button>
+      <div class="ar-answers" id="answersBody" style="display:none"></div>
     </div>
 
     <div id="errorContent" style="display:none" class="ar-error">
@@ -366,7 +374,12 @@
       '  <p class="ar-style-text">' + esc(selfInfo.text) + '</p>' +
       '</div>' +
 
-      partnerSectionHtml;
+      partnerSectionHtml +
+
+      '<div class="ar-actions">' +
+      '  <button class="btn-primary" onclick="exportToPDF()">Download PDF</button>' +
+      '  <a href="attached-questionnaire.html" class="btn-secondary">Retake questionnaire</a>' +
+      '</div>';
 
     // ── 8. Render diagram ──────────────────────────────────────
     var canvas  = document.getElementById('attachmentCanvas');
@@ -466,7 +479,18 @@
       document.getElementById('answersBody').innerHTML = answersHtml;
       document.getElementById('answersSection').style.display = '';
     }
-    document.getElementById('actionsBar').style.display = '';
+
+    window.toggleAnswers = function () {
+      var body    = document.getElementById('answersBody');
+      var chevron = document.getElementById('answersChevron');
+      var label   = document.getElementById('answersToggleLabel');
+      var toggle  = document.getElementById('answersToggle');
+      var open    = body.style.display !== 'none';
+      body.style.display    = open ? 'none' : '';
+      chevron.classList.toggle('open', !open);
+      label.textContent     = open ? 'Show your answers' : 'Hide your answers';
+      toggle.setAttribute('aria-expanded', String(!open));
+    };
 
     // ── 11. PDF export ─────────────────────────────────────────
     window.exportToPDF = function () {
