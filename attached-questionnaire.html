@@ -22,9 +22,18 @@
 
   <script src="attached-questionnaire-config.js"></script>
   <script src="questionnaire-framework.js"></script>
+  <script src="csv-loader.js"></script>
   <script>
-    var q = new Questionnaire(ATTACHED_CONFIG);
-    q.mount('app');
+    loadQuestionsCSV('questions.csv', function (err, questions) {
+      if (err) {
+        document.getElementById('app').innerHTML =
+          '<p style="padding:40px 20px;color:#c0392b;text-align:center;">Failed to load questions. Please reload the page.</p>';
+        return;
+      }
+      ATTACHED_CONFIG.questions = questions;
+      var q = new Questionnaire(ATTACHED_CONFIG);
+      q.mount('app');
+    });
   </script>
 
 </body>

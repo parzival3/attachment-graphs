@@ -111,7 +111,11 @@
   <script src="attached-questionnaire-config.js"></script>
   <script src="attachment-diagram.class.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="csv-loader.js"></script>
   <script>
+  loadQuestionsCSV('questions.csv', function (csvErr, questions) {
+  if (csvErr) { document.getElementById('errorContent').style.display = ''; return; }
+  ATTACHED_CONFIG.questions = questions;
   (function () {
 
     // ── 1. Decode hash ─────────────────────────────────────────
@@ -583,6 +587,7 @@
     }
 
   }());
+  }); // end loadQuestionsCSV
   </script>
 
 </body>
