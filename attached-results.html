@@ -139,7 +139,7 @@
     var countA = 0, countB = 0, countC = 0;
     ATTACHED_CONFIG.questions.forEach(function (q) {
       if (q.section !== 'self') return;
-      if (rawAnswers[q.id] === 'True for me') {
+      if (rawAnswers[q.id] === 'True') {
         if (q.group === 'A') countA++;
         else if (q.group === 'B') countB++;
         else if (q.group === 'C') countC++;
@@ -152,7 +152,7 @@
 
     ATTACHED_CONFIG.questions.forEach(function (q) {
       if (q.section !== 'partner') return;
-      var v = parseInt(rawAnswers[q.id]);
+      var v = {'False': 1, 'Moderately true': 2, 'True': 3}[rawAnswers[q.id]];
       if (!isNaN(v)) {
         if (q.group === 'pA') { p2SumA += v; p2CntA++; }
         else if (q.group === 'pB') { p2SumB += v; p2CntB++; }

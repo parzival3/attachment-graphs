@@ -1,76 +1,76 @@
 id,section,group,type,required,text,options
-p1_01,self,A,radio,true,"I often worry that my partner will stop loving me.",True for me|Not true for me
-p1_02,self,B,radio,true,"I find it easy to be affectionate with my partner.",True for me|Not true for me
-p1_03,self,A,radio,true,"I fear that once someone gets to know the real me, s/he won't like who I am.",True for me|Not true for me
-p1_04,self,C,radio,true,"I find that I bounce back quickly after a breakup. It's weird how I can just put someone out of my mind.",True for me|Not true for me
-p1_05,self,A,radio,true,"When I'm not involved in a relationship, I feel somewhat anxious and incomplete.",True for me|Not true for me
-p1_06,self,C,radio,true,"I find it difficult to emotionally support my partner when s/he is feeling down.",True for me|Not true for me
-p1_07,self,A,radio,true,"When my partner is away, I'm afraid that s/he might become interested in someone else.",True for me|Not true for me
-p1_08,self,B,radio,true,"I feel comfortable depending on romantic partners.",True for me|Not true for me
-p1_09,self,C,radio,true,"My independence is more important to me than my relationships.",True for me|Not true for me
-p1_10,self,C,radio,true,"I prefer not to share my innermost feelings with my partner.",True for me|Not true for me
-p1_11,self,A,radio,true,"When I show my partner how I feel, I'm afraid s/he will not feel the same about me.",True for me|Not true for me
-p1_12,self,B,radio,true,"I am generally satisfied with my romantic relationships.",True for me|Not true for me
-p1_13,self,B,radio,true,"I don't feel the need to act out much in my romantic relationships.",True for me|Not true for me
-p1_14,self,A,radio,true,"I think about my relationships a lot.",True for me|Not true for me
-p1_15,self,C,radio,true,"I find it difficult to depend on romantic partners.",True for me|Not true for me
-p1_16,self,A,radio,true,"I tend to get very quickly attached to a romantic partner.",True for me|Not true for me
-p1_17,self,B,radio,true,"I have little difficulty expressing my needs and wants to my partner.",True for me|Not true for me
-p1_18,self,C,radio,true,"I sometimes feel angry or annoyed with my partner without knowing why.",True for me|Not true for me
-p1_19,self,A,radio,true,"I am very sensitive to my partner's moods.",True for me|Not true for me
-p1_20,self,B,radio,true,"I believe most people are essentially honest and dependable.",True for me|Not true for me
-p1_21,self,C,radio,true,"I prefer casual sex with uncommitted partners to intimate sex with one person.",True for me|Not true for me
-p1_22,self,B,radio,true,"I'm comfortable sharing my personal thoughts and feelings with my partner.",True for me|Not true for me
-p1_23,self,A,radio,true,"I worry that if my partner leaves me I might never find someone else.",True for me|Not true for me
-p1_24,self,C,radio,true,"It makes me nervous when my partner gets too close.",True for me|Not true for me
-p1_25,self,A,radio,true,"During a conflict, I tend to impulsively do or say things I later regret, rather than be able to reason about things.",True for me|Not true for me
-p1_26,self,B,radio,true,"An argument with my partner doesn't usually cause me to question our entire relationship.",True for me|Not true for me
-p1_27,self,C,radio,true,"My partners often want me to be more intimate than I feel comfortable being.",True for me|Not true for me
-p1_28,self,A,radio,true,"I worry that I'm not attractive enough.",True for me|Not true for me
-p1_29,self,B,radio,true,"Sometimes people see me as boring because I create little drama in relationships.",True for me|Not true for me
-p1_30,self,C,radio,true,"I miss my partner when we're apart, but then when we're together I feel the need to escape.",True for me|Not true for me
-p1_31,self,B,radio,true,"When I disagree with someone, I feel comfortable expressing my opinions.",True for me|Not true for me
-p1_32,self,C,radio,true,"I hate feeling that other people depend on me.",True for me|Not true for me
-p1_33,self,B,radio,true,"If I notice that someone I'm interested in is checking out other people, I don't let it faze me. I might feel a pang of jealousy, but it's fleeting.",True for me|Not true for me
-p1_34,self,C,radio,true,"If I notice that someone I'm interested in is checking out other people, I feel relieved — it means s/he's not looking to make things exclusive.",True for me|Not true for me
-p1_35,self,A,radio,true,"If I notice that someone I'm interested in is checking out other people, it makes me feel depressed.",True for me|Not true for me
-p1_36,self,B,radio,true,"If someone I've been dating begins to act cold and distant, I may wonder what's happened, but I'll know it's probably not about me.",True for me|Not true for me
-p1_37,self,C,radio,true,"If someone I've been dating begins to act cold and distant, I'll probably be indifferent; I might even be relieved.",True for me|Not true for me
-p1_38,self,A,radio,true,"If someone I've been dating begins to act cold and distant, I'll worry that I've done something wrong.",True for me|Not true for me
-p1_39,self,A,radio,true,"If my partner was to break up with me, I'd try my best to show her/him what s/he is missing (a little jealousy can't hurt).",True for me|Not true for me
-p1_40,self,B,radio,true,"If someone I've been dating for several months tells me s/he wants to stop seeing me, I'd feel hurt at first, but I'd get over it.",True for me|Not true for me
-p1_41,self,C,radio,true,"Sometimes when I get what I want in a relationship, I'm not sure what I want anymore.",True for me|Not true for me
-p1_42,self,B,radio,true,"I won't have much of a problem staying in touch with my ex (strictly platonic) — after all, we have a lot in common.",True for me|Not true for me
-p2A_01,partner,pA,radio,false,"Sends mixed signals — seems distant and aloof yet vulnerable at the same time; sometimes very interested and then cold.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2A_02,partner,pA,radio,false,"Values his/her independence greatly — looks down on dependency and ""neediness.""",1 — Very untrue|2 — Moderately true|3 — Very true
-p2A_03,partner,pA,radio,false,"Devalues you or previous partners — even if only jokingly.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2A_04,partner,pA,radio,false,"Uses distancing strategies — emotional or physical (e.g., prefers sleeping at home, taking vacations alone, or leaving plans deliberately unclear).",1 — Very untrue|2 — Moderately true|3 — Very true
-p2A_05,partner,pA,radio,false,"Emphasises boundaries — makes you feel certain friends, family, or spaces are strictly off-limits.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2A_06,partner,pA,radio,false,"Has an unrealistically romantic view of how a relationship should be — idealises a past relationship but is vague about what went wrong.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2A_07,partner,pA,radio,false,"Mistrustful — fears being taken advantage of or trapped by partner.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2A_08,partner,pA,radio,false,"Has a rigid view of relationships and uncompromising rules — strong preference for a certain ""type,"" or certain that it's best never to marry.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2A_09,partner,pA,radio,false,"During a disagreement, needs to get away or ""explodes"" — shuts down entirely or walks out in fury.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2A_10,partner,pA,radio,false,"Doesn't make intentions clear — leaves you guessing about feelings (e.g., never says ""I love you""; makes long-term plans without including you).",1 — Very untrue|2 — Moderately true|3 — Very true
-p2A_11,partner,pA,radio,false,"Has difficulty talking about what is going on between you — certain topics are off-limits; asking about the relationship's future makes you feel uncomfortable.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2B_01,partner,pB,radio,false,"Reliable and consistent — phones when s/he says s/he will; follows through on plans and explains if s/he can't.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2B_02,partner,pB,radio,false,"Makes decisions with you — discusses plans and doesn't decide unilaterally.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2B_03,partner,pB,radio,false,"Flexible view of relationships — not looking for a particular ""type""; open to different living arrangements or agreements.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2B_04,partner,pB,radio,false,"Communicates relationship issues well — tells you what is bothering him/her rather than acting out or expecting you to guess.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2B_05,partner,pB,radio,false,"Can reach compromise during arguments — genuinely tries to understand what is really bothering you.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2B_06,partner,pB,radio,false,"Not afraid of commitment or dependency — doesn't worry that closeness means being trapped or taken advantage of.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2B_07,partner,pB,radio,false,"Doesn't view the relationship as hard work — open to starting something new even when life is demanding.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2B_08,partner,pB,radio,false,"Closeness creates further closeness — after emotional or revealing conversations, reassures you and stays present rather than pulling back.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2B_09,partner,pB,radio,false,"Introduces friends and family early on — wants to make you part of his/her life.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2B_10,partner,pB,radio,false,"Naturally expresses feelings for you — tells you early how s/he feels and says ""I love you"" generously.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2B_11,partner,pB,radio,false,"Doesn't play games — no strategic distance, no calculated silence to keep you on your toes.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2C_01,partner,pC,radio,false,"Wants a lot of closeness early — suggests moving in together, joint vacations, or constant contact from the start.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2C_02,partner,pC,radio,false,"Expresses insecurities — worries about rejection, asks a lot about your past partners, fears you'll lose interest.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2C_03,partner,pC,radio,false,"Unhappy when not in a relationship — seems desperate to find someone; dates can feel like auditions for the future spouse role.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2C_04,partner,pC,radio,false,"Plays games to keep your attention — acts distant if you haven't called, pretends to be unavailable, tries to make you more interested.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2C_05,partner,pC,radio,false,"Has difficulty explaining what's bothering him/her — expects you to pick up on subtle cues rather than saying directly.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2C_06,partner,pC,radio,false,"Acts out instead of resolving conflict — threatens to leave but later backs down; accumulates hurts without expressing them.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2C_07,partner,pC,radio,false,"Has a hard time not making things about himself/herself — interprets your tiredness or busyness as personal rejection.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2C_08,partner,pC,radio,false,"Lets you set the tone of the relationship so as not to get hurt — mirrors your level of interest rather than taking the initiative.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2C_09,partner,pC,radio,false,"Preoccupied with the relationship — hashes out every date detail with friends; calls or texts excessively, or goes silent as a defensive move.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2C_10,partner,pC,radio,false,"Fears that small acts will ruin the relationship — worries about having come across badly or said too much.",1 — Very untrue|2 — Moderately true|3 — Very true
-p2C_11,partner,pC,radio,false,"Suspicious that you may be unfaithful — checks messages, tracks whereabouts, or goes through belongings.",1 — Very untrue|2 — Moderately true|3 — Very true
+p1_01,self,A,radio,true,"I often worry that my partner will stop loving me.",True|False
+p1_02,self,B,radio,true,"I find it easy to be affectionate with my partner.",True|False
+p1_03,self,A,radio,true,"I fear that once someone gets to know the real me, s/he won't like who I am.",True|False
+p1_04,self,C,radio,true,"I find that I bounce back quickly after a breakup. It's weird how I can just put someone out of my mind.",True|False
+p1_05,self,A,radio,true,"When I'm not involved in a relationship, I feel somewhat anxious and incomplete.",True|False
+p1_06,self,C,radio,true,"I find it difficult to emotionally support my partner when s/he is feeling down.",True|False
+p1_07,self,A,radio,true,"When my partner is away, I'm afraid that s/he might become interested in someone else.",True|False
+p1_08,self,B,radio,true,"I feel comfortable depending on romantic partners.",True|False
+p1_09,self,C,radio,true,"My independence is more important to me than my relationships.",True|False
+p1_10,self,C,radio,true,"I prefer not to share my innermost feelings with my partner.",True|False
+p1_11,self,A,radio,true,"When I show my partner how I feel, I'm afraid s/he will not feel the same about me.",True|False
+p1_12,self,B,radio,true,"I am generally satisfied with my romantic relationships.",True|False
+p1_13,self,B,radio,true,"I don't feel the need to act out much in my romantic relationships.",True|False
+p1_14,self,A,radio,true,"I think about my relationships a lot.",True|False
+p1_15,self,C,radio,true,"I find it difficult to depend on romantic partners.",True|False
+p1_16,self,A,radio,true,"I tend to get very quickly attached to a romantic partner.",True|False
+p1_17,self,B,radio,true,"I have little difficulty expressing my needs and wants to my partner.",True|False
+p1_18,self,C,radio,true,"I sometimes feel angry or annoyed with my partner without knowing why.",True|False
+p1_19,self,A,radio,true,"I am very sensitive to my partner's moods.",True|False
+p1_20,self,B,radio,true,"I believe most people are essentially honest and dependable.",True|False
+p1_21,self,C,radio,true,"I prefer casual sex with uncommitted partners to intimate sex with one person.",True|False
+p1_22,self,B,radio,true,"I'm comfortable sharing my personal thoughts and feelings with my partner.",True|False
+p1_23,self,A,radio,true,"I worry that if my partner leaves me I might never find someone else.",True|False
+p1_24,self,C,radio,true,"It makes me nervous when my partner gets too close.",True|False
+p1_25,self,A,radio,true,"During a conflict, I tend to impulsively do or say things I later regret, rather than be able to reason about things.",True|False
+p1_26,self,B,radio,true,"An argument with my partner doesn't usually cause me to question our entire relationship.",True|False
+p1_27,self,C,radio,true,"My partners often want me to be more intimate than I feel comfortable being.",True|False
+p1_28,self,A,radio,true,"I worry that I'm not attractive enough.",True|False
+p1_29,self,B,radio,true,"Sometimes people see me as boring because I create little drama in relationships.",True|False
+p1_30,self,C,radio,true,"I miss my partner when we're apart, but then when we're together I feel the need to escape.",True|False
+p1_31,self,B,radio,true,"When I disagree with someone, I feel comfortable expressing my opinions.",True|False
+p1_32,self,C,radio,true,"I hate feeling that other people depend on me.",True|False
+p1_33,self,B,radio,true,"If I notice that someone I'm interested in is checking out other people, I don't let it faze me. I might feel a pang of jealousy, but it's fleeting.",True|False
+p1_34,self,C,radio,true,"If I notice that someone I'm interested in is checking out other people, I feel relieved — it means s/he's not looking to make things exclusive.",True|False
+p1_35,self,A,radio,true,"If I notice that someone I'm interested in is checking out other people, it makes me feel depressed.",True|False
+p1_36,self,B,radio,true,"If someone I've been dating begins to act cold and distant, I may wonder what's happened, but I'll know it's probably not about me.",True|False
+p1_37,self,C,radio,true,"If someone I've been dating begins to act cold and distant, I'll probably be indifferent; I might even be relieved.",True|False
+p1_38,self,A,radio,true,"If someone I've been dating begins to act cold and distant, I'll worry that I've done something wrong.",True|False
+p1_39,self,A,radio,true,"If my partner was to break up with me, I'd try my best to show her/him what s/he is missing (a little jealousy can't hurt).",True|False
+p1_40,self,B,radio,true,"If someone I've been dating for several months tells me s/he wants to stop seeing me, I'd feel hurt at first, but I'd get over it.",True|False
+p1_41,self,C,radio,true,"Sometimes when I get what I want in a relationship, I'm not sure what I want anymore.",True|False
+p1_42,self,B,radio,true,"I won't have much of a problem staying in touch with my ex (strictly platonic) — after all, we have a lot in common.",True|False
+p2A_01,partner,pA,radio,false,"My partner sends mixed signals — seems distant and aloof yet vulnerable at the same time; sometimes very interested and then cold.",False|Moderately true|True
+p2A_02,partner,pA,radio,false,"My partner values independence greatly — looks down on dependency and ""neediness.""",False|Moderately true|True
+p2A_03,partner,pA,radio,false,"My partner devalues me or previous partners — even if only jokingly.",False|Moderately true|True
+p2A_04,partner,pA,radio,false,"My partner uses distancing strategies — emotional or physical (e.g., prefers sleeping at home, taking vacations alone, or leaving plans deliberately unclear).",False|Moderately true|True
+p2A_05,partner,pA,radio,false,"My partner emphasises boundaries — makes me feel certain friends, family, or spaces are strictly off-limits.",False|Moderately true|True
+p2A_06,partner,pA,radio,false,"My partner has an unrealistically romantic view of relationships — idealises a past relationship but is vague about what went wrong.",False|Moderately true|True
+p2A_07,partner,pA,radio,false,"My partner is mistrustful — fears being taken advantage of or trapped.",False|Moderately true|True
+p2A_08,partner,pA,radio,false,"My partner has a rigid view of relationships — strong preference for a certain ""type,"" or certain that it's best never to marry.",False|Moderately true|True
+p2A_09,partner,pA,radio,false,"During a disagreement, my partner needs to get away or ""explodes"" — shuts down entirely or walks out in fury.",False|Moderately true|True
+p2A_10,partner,pA,radio,false,"My partner doesn't make intentions clear — leaves me guessing about feelings (e.g., never says ""I love you""; makes long-term plans without including me).",False|Moderately true|True
+p2A_11,partner,pA,radio,false,"My partner has difficulty talking about what is going on between us — certain topics are off-limits; asking about the future of our relationship feels uncomfortable.",False|Moderately true|True
+p2B_01,partner,pB,radio,false,"My partner is reliable and consistent — phones when s/he says s/he will; follows through on plans and explains if s/he can't.",False|Moderately true|True
+p2B_02,partner,pB,radio,false,"My partner makes decisions with me — discusses plans and doesn't decide unilaterally.",False|Moderately true|True
+p2B_03,partner,pB,radio,false,"My partner has a flexible view of relationships — not looking for a particular ""type""; open to different living arrangements or agreements.",False|Moderately true|True
+p2B_04,partner,pB,radio,false,"My partner communicates relationship issues well — tells me what is bothering them rather than acting out or expecting me to guess.",False|Moderately true|True
+p2B_05,partner,pB,radio,false,"My partner can reach compromise during arguments — genuinely tries to understand what is really bothering me.",False|Moderately true|True
+p2B_06,partner,pB,radio,false,"My partner is not afraid of commitment or dependency — doesn't worry that closeness means being trapped or taken advantage of.",False|Moderately true|True
+p2B_07,partner,pB,radio,false,"My partner doesn't view the relationship as hard work — open to starting something new even when life is demanding.",False|Moderately true|True
+p2B_08,partner,pB,radio,false,"Closeness creates further closeness for my partner — after emotional or revealing conversations, s/he reassures me and stays present rather than pulling back.",False|Moderately true|True
+p2B_09,partner,pB,radio,false,"My partner introduces friends and family early on — wants to make me part of his/her life.",False|Moderately true|True
+p2B_10,partner,pB,radio,false,"My partner naturally expresses feelings for me — tells me early how s/he feels and says ""I love you"" generously.",False|Moderately true|True
+p2B_11,partner,pB,radio,false,"My partner doesn't play games — no strategic distance, no calculated silence to keep me on my toes.",False|Moderately true|True
+p2C_01,partner,pC,radio,false,"My partner wants a lot of closeness early — suggests moving in together, joint vacations, or constant contact from the start.",False|Moderately true|True
+p2C_02,partner,pC,radio,false,"My partner expresses insecurities — worries about rejection, asks a lot about my past partners, fears I'll lose interest.",False|Moderately true|True
+p2C_03,partner,pC,radio,false,"My partner seems unhappy when not in a relationship — seems desperate to find someone; our dates can feel like auditions for the future spouse role.",False|Moderately true|True
+p2C_04,partner,pC,radio,false,"My partner plays games to keep my attention — acts distant if I haven't called, pretends to be unavailable, tries to make me more interested.",False|Moderately true|True
+p2C_05,partner,pC,radio,false,"My partner has difficulty explaining what's bothering them — expects me to pick up on subtle cues rather than saying directly.",False|Moderately true|True
+p2C_06,partner,pC,radio,false,"My partner acts out instead of resolving conflict — threatens to leave but later backs down; accumulates hurts without expressing them.",False|Moderately true|True
+p2C_07,partner,pC,radio,false,"My partner has a hard time not making things personal — interprets my tiredness or busyness as personal rejection.",False|Moderately true|True
+p2C_08,partner,pC,radio,false,"My partner lets me set the tone of the relationship so as not to get hurt — mirrors my level of interest rather than taking the initiative.",False|Moderately true|True
+p2C_09,partner,pC,radio,false,"My partner is preoccupied with our relationship — hashes out every date detail with friends; calls or texts excessively, or goes silent as a defensive move.",False|Moderately true|True
+p2C_10,partner,pC,radio,false,"My partner fears that small acts will ruin the relationship — worries about having come across badly or said too much.",False|Moderately true|True
+p2C_11,partner,pC,radio,false,"My partner is suspicious that I may be unfaithful — checks my messages, tracks my whereabouts, or goes through my belongings.",False|Moderately true|True

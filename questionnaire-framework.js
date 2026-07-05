@@ -478,6 +478,11 @@ class Questionnaire {
                     root.querySelectorAll('.q-radio-option, .q-scale-btn')
                         .forEach(function (el) { el.classList.remove('selected'); });
                     e.target.closest('.q-radio-option, .q-scale-btn').classList.add('selected');
+
+                    // Auto-advance in paged mode — brief pause so the selection is visible
+                    if (!scope) {
+                        setTimeout(function () { self.next(); }, 320);
+                    }
                 });
             });
         }
