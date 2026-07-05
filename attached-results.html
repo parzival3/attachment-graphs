@@ -550,7 +550,10 @@
       function addDiagram(imgData, aspect) {
         if (!imgData) return;
         var iw = CW, ih = CW * aspect;
-        guard(ih + 4); doc.addImage(imgData, 'PNG', M, y, iw, ih); gap(ih + 4);
+        guard(ih + 4);
+        var cx = (PW - iw) / 2;  // centre horizontally on the page
+        doc.addImage(imgData, 'PNG', cx, y, iw, ih);
+        gap(ih + 4);
       }
 
       // Draw score boxes side by side.
@@ -594,9 +597,10 @@
       }
       gap(3); hline();
 
-      // Diagram
+      // Diagram — centred on its own section, then new page for the text
       sectionLabel('Attachment Diagram');
       addDiagram(attachHiSrc, h / w);
+      newPage();
 
       // Self style
       sectionLabel('Your Attachment Style');
@@ -627,6 +631,7 @@
 
       hline();
       sectionLabel('Your Answers');
+
       ATTACHED_CONFIG.questions.forEach(function (q, i) {
         var ans = rawAnswers[q.id];
         if (ans === undefined || ans === null || ans === '') return;
