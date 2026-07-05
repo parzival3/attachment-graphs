@@ -501,7 +501,25 @@
       var doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
       var PW = 210, PH = 297, M = 18, CW = 174;
       var y = M;
-      var DARK = '#2C2520', MID = '#6B5F52', LIGHT = '#9B8F82', ACCENT = '#C77F5A', BORDER = '#D4C9BD';
+
+      // ── Colour palette ── edit these to restyle the whole PDF ──────────────
+      var P = {
+        dark:           '#2C2520',  // headings, bold text
+        mid:            '#6B5F52',  // body text
+        light:          '#9B8F82',  // captions, dates, sub-labels
+        border:         '#D4C9BD',  // divider lines, box outlines
+        pageBg:         '#F9F6F3',  // default box background
+        // Self (You) score boxes
+        selfAccent:     '#C77F5A',  // terracotta — border + text when highlighted
+        selfHlBg:       '#FDF0E8',  // warm tint when highlighted
+        // Partner score boxes
+        partnerAccent:  '#6B8FA8',  // blue — border + text when highlighted
+        partnerHlBg:    '#E8F0F5',  // cool tint when highlighted
+      };
+      // ───────────────────────────────────────────────────────────────────────
+
+      // Legacy aliases used by helper functions below
+      var DARK = P.dark, MID = P.mid, LIGHT = P.light, ACCENT = P.selfAccent, BORDER = P.border;
 
       function newPage() { doc.addPage(); y = M; }
       function gap(mm)   { y += mm; }
@@ -535,9 +553,10 @@
         guard(ih + 4); doc.addImage(imgData, 'PNG', M, y, iw, ih); gap(ih + 4);
       }
 
-      // Draw 3 score boxes side by side.
-      // boxes: [{label, value, sub, highlight}]  highlight=true → accent border + tinted bg
-      function scoreBoxes(boxes, accentColor) {
+      // Draw score boxes side by side.
+      // boxes: [{label, value, sub, highlight}]
+      // hlAccent / hlBg: palette colours for the highlighted box
+      function scoreBoxes(boxes, hlAccent, hlBg) {
         var boxH = 22, gap3 = 4;
         var boxW = (CW - gap3 * (boxes.length - 1)) / boxes.length;
         guard(boxH + 6);
@@ -545,27 +564,22 @@
           var bx = M + i * (boxW + gap3);
           var by = y;
           var isHL = !!b.highlight;
-          // background
-          var hlBg = accentColor === '#6b8fa8' ? '#E8F0F5' : '#FDF0E8';
-          doc.setFillColor(isHL ? hlBg : '#F9F6F3');
-          doc.setDrawColor(isHL ? accentColor : BORDER);
+          doc.setFillColor(isHL ? hlBg : P.pageBg);
+          doc.setDrawColor(isHL ? hlAccent : P.border);
           doc.setLineWidth(isHL ? 0.6 : 0.3);
           doc.roundedRect(bx, by, boxW, boxH, 2, 2, 'FD');
-          // big number / value
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(16);
-          doc.setTextColor(isHL ? accentColor : DARK);
+          doc.setTextColor(isHL ? hlAccent : P.dark);
           doc.text(String(b.value), bx + boxW / 2, by + 10, { align: 'center' });
-          // label
           doc.setFont('helvetica', 'bold');
           doc.setFontSize(7);
-          doc.setTextColor(isHL ? accentColor : LIGHT);
+          doc.setTextColor(isHL ? hlAccent : P.light);
           doc.text(b.label.toUpperCase(), bx + boxW / 2, by + 16, { align: 'center' });
-          // optional sub-label
           if (b.sub) {
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(6.5);
-            doc.setTextColor(LIGHT);
+            doc.setTextColor(P.light);
             doc.text(b.sub, bx + boxW / 2, by + 20, { align: 'center' });
           }
         });
@@ -590,7 +604,7 @@
         { label: 'Anxious',  value: countA, highlight: dominantGroup === 'A' },
         { label: 'Secure',   value: countB, highlight: dominantGroup === 'B' },
         { label: 'Avoidant', value: countC, highlight: dominantGroup === 'C' }
-      ], ACCENT);
+      ], P.selfAccent, P.selfHlBg);
       boldLine(selfInfo.title, 11);
       para(selfInfo.text, 9.5);
       gap(4);
@@ -599,13 +613,12 @@
       if (partnerAnswered) {
         hline();
         sectionLabel("Your Partner's Attachment Style");
-        var BLUE = '#6b8fa8';
         var pDomGroup2 = pStyle === 'secure' ? 'B' : pStyle === 'avoidant' ? 'A' : 'C';
         scoreBoxes([
           { label: 'Avoidant', value: bandA, sub: bandLabel(bandA), highlight: pDomGroup2 === 'A' },
           { label: 'Secure',   value: bandB, sub: bandLabel(bandB), highlight: pDomGroup2 === 'B' },
           { label: 'Anxious',  value: bandC, sub: bandLabel(bandC), highlight: pDomGroup2 === 'C' }
-        ], BLUE);
+        ], P.partnerAccent, P.partnerHlBg);
         var pInfo = PARTNER_INTERP[pStyle];
         boldLine(pInfo.title, 11);
         para(pInfo.text, 9.5);
