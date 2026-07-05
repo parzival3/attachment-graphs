@@ -597,9 +597,13 @@
       }
       gap(3); hline();
 
-      // Diagram — centred on its own section, then new page for the text
+      // Diagram — horizontally and vertically centred in the remaining page space
       sectionLabel('Attachment Diagram');
-      addDiagram(attachHiSrc, h / w);
+      var diagW = 150, diagH = diagW * (h / w);
+      var diagX = (PW - diagW) / 2;
+      // Push diagram down so it sits in the middle of the space below the header
+      var diagY = y + Math.max(6, (PH - M - y - diagH) / 2);
+      doc.addImage(attachHiSrc, 'PNG', diagX, diagY, diagW, diagH);
       newPage();
 
       // Self style
