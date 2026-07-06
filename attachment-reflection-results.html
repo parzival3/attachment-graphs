@@ -8,99 +8,129 @@
   <style>
     body { background: linear-gradient(to bottom, #f2ede8, #e8dfd5); min-height: 100vh; }
 
-    .r-page { max-width: 680px; margin: 0 auto; padding: 32px 20px 60px; }
+    .r-page { max-width: 680px; margin: 0 auto; padding: 20px 16px 60px; }
 
-    .r-title { font-size: 26px; font-weight: 700; color: var(--text-dark); margin: 0 0 4px; }
-    .r-subtitle { font-size: 15px; color: var(--text-mid); margin: 0 0 32px; }
+    .r-header { text-align: center; padding: 32px 0 20px; }
+    .r-title   { font-size: clamp(20px, 5vw, 26px); font-weight: 700; color: var(--text-dark); margin: 0 0 6px; }
+    .r-sub     { font-size: 13px; color: var(--text-light); margin: 0; }
+
+    .r-section { background: var(--surface); border-radius: var(--radius); box-shadow: 0 2px 12px var(--shadow); padding: 28px; margin-bottom: 20px; }
+    .r-section-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; }
 
     /* ── Tendency bars ──────────────────────────────────── */
-    .r-bars { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 24px; margin-bottom: 24px; }
-    .r-bars-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-light); margin: 0 0 20px; }
-
     .r-bar-row { margin-bottom: 16px; }
     .r-bar-row:last-child { margin-bottom: 0; }
     .r-bar-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
-    .r-bar-label { font-size: 15px; font-weight: 600; color: var(--text-dark); }
+    .r-bar-label { font-size: 15px; font-weight: 600; }
     .r-bar-count { font-size: 13px; color: var(--text-light); }
     .r-bar-track { height: 10px; background: var(--border); border-radius: 99px; overflow: hidden; }
-    .r-bar-fill { height: 100%; border-radius: 99px; transition: width 0.6s ease; }
+    .r-bar-fill  { height: 100%; border-radius: 99px; }
 
-    /* ── Tendency interpretation blocks ───────────────── */
-    .r-tendency-blocks { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
-
-    .r-tendency-card { border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; }
+    /* ── Tendency cards ─────────────────────────────────── */
+    .r-tendency-card { background: var(--surface); border-radius: var(--radius); box-shadow: 0 2px 12px var(--shadow); margin-bottom: 12px; overflow: hidden; }
     .r-tendency-card-header { display: flex; align-items: center; gap: 12px; padding: 16px 20px; cursor: pointer; user-select: none; }
-    .r-tendency-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
-    .r-tendency-card-title { font-size: 15px; font-weight: 600; color: var(--text-dark); flex: 1; }
-    .r-tendency-chevron { font-size: 14px; color: var(--text-light); transition: transform 0.2s; }
+    .r-tendency-dot   { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    .r-tendency-title { font-size: 15px; font-weight: 600; color: var(--text-dark); flex: 1; }
+    .r-tendency-chevron { font-size: 13px; color: var(--text-light); transition: transform 0.2s; }
     .r-tendency-card.open .r-tendency-chevron { transform: rotate(180deg); }
     .r-tendency-body { padding: 0 20px 18px; font-size: 15px; line-height: 1.7; color: var(--text-mid); display: none; }
     .r-tendency-card.open .r-tendency-body { display: block; }
 
-    /* ── Closing note ───────────────────────────────────── */
-    .r-closing { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 28px; font-size: 15px; line-height: 1.75; color: var(--text-mid); font-style: italic; }
+    /* ── Closing ────────────────────────────────────────── */
+    .r-closing { background: var(--surface); border-radius: var(--radius); box-shadow: 0 2px 12px var(--shadow); padding: 24px 28px; margin-bottom: 20px; font-size: 15px; line-height: 1.75; color: var(--text-mid); font-style: italic; }
 
     /* ── Actions ────────────────────────────────────────── */
-    .r-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 32px; }
-    .r-actions .q-btn { flex: 1; min-width: 180px; text-align: center; }
+    .r-actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; padding: 8px 0 32px; }
 
-    /* ── Answers collapsible ───────────────────────────── */
-    .r-answers-toggle { background: none; border: none; padding: 0; cursor: pointer; font-size: 14px; color: var(--text-light); display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
-    .r-answers-toggle-chevron { transition: transform 0.2s; display: inline-block; }
-    .r-answers-toggle.open .r-answers-toggle-chevron { transform: rotate(180deg); }
+    /* ── Collapsible answers ────────────────────────────── */
+    .ar-answers-toggle {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      background: none; border: none; cursor: pointer; padding: 4px 0 12px;
+      font-size: 13px; font-weight: 600; color: var(--accent); text-align: left;
+    }
+    .ar-answers-toggle:hover { opacity: 0.8; }
+    .ar-answers-chevron { font-size: 11px; transition: transform 0.2s; }
+    .ar-answers-chevron.open { transform: rotate(180deg); }
 
-    .r-answers { display: none; }
-    .r-answers.open { display: block; }
+    .ar-answers { }
+    .ar-answer-item { padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .ar-answer-item:last-child { border-bottom: none; }
+    .ar-answer-q { font-size: 13px; font-weight: 600; color: var(--text-dark); margin: 0 0 6px; line-height: 1.5; }
+    .ar-answer-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .ar-answer-chip {
+      font-size: 12px; padding: 3px 10px; border-radius: 99px; border: 1px solid;
+      line-height: 1.5;
+    }
 
-    .r-answer-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 10px; }
-    .r-answer-q { font-size: 13px; font-weight: 600; color: var(--text-light); margin: 0 0 6px; }
-    .r-answer-text { font-size: 14px; color: var(--text-dark); line-height: 1.5; }
-    .r-answer-tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px; margin-right: 6px; margin-top: 4px; }
+    .ar-error { text-align: center; padding: 60px 20px; color: var(--text-mid); }
+    .ar-error h2 { color: var(--text-dark); margin-bottom: 10px; }
 
     @media (max-width: 480px) {
       .r-actions { flex-direction: column; }
-      .r-actions .q-btn { min-width: unset; }
     }
   </style>
 </head>
 <body>
 
   <header class="q-header">
-    <a href="https://www.piatorp.dk" class="q-site-link">&larr; piatorp.dk</a>
+    <a href="attachment-reflection.html" class="q-site-link">&larr; Retake reflection</a>
   </header>
 
-  <main class="q-main">
-    <div id="results" class="r-page">
-      <p style="color:var(--text-mid);padding-top:60px;text-align:center;">Loading your reflection…</p>
+  <main class="r-page">
+
+    <div class="r-header">
+      <h1 class="r-title">How Do You Create Connection?</h1>
+      <p class="r-sub" id="timestampLine"></p>
     </div>
+
+    <div id="mainContent"></div>
+
+    <div id="answersSection" style="display:none" class="r-section">
+      <button class="ar-answers-toggle" id="answersToggle" onclick="toggleAnswers()" aria-expanded="false">
+        <span id="answersToggleLabel">Show your answers</span>
+        <span class="ar-answers-chevron" id="answersChevron">&#9660;</span>
+      </button>
+      <div id="answersBody" style="display:none"></div>
+    </div>
+
+    <div id="errorContent" style="display:none" class="ar-error">
+      <h2>No results found</h2>
+      <p>Please complete the <a href="attachment-reflection.html">reflection</a> first.</p>
+    </div>
+
   </main>
 
   <script src="attachment-reflection-config.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
   (function () {
 
     var CFG = REFLECTION_CONFIG;
-    var T = CFG.tendencies;
+    var T   = CFG.tendencies;
 
-    // ── Decode answers from hash ──────────────────────────
-    var raw = {};
+    // ── 1. Decode hash ─────────────────────────────────────
+    var hash = window.location.hash.slice(1);
+    if (!hash) { showError(); return; }
+
+    var payload;
     try {
-      var hash = window.location.hash.slice(1);
-      if (hash) {
-        raw = JSON.parse(decodeURIComponent(escape(atob(hash))));
-      }
-    } catch (e) {
-      document.getElementById('results').innerHTML =
-        '<p style="padding:60px 20px;color:#c0392b;text-align:center;">Could not load your results. Please retake the questionnaire.</p>';
-      return;
+      payload = JSON.parse(decodeURIComponent(escape(atob(hash))));
+    } catch (e) { showError(); return; }
+
+    var rawAnswers = payload.rawAnswers || {};
+
+    if (payload.timestamp) {
+      var d = new Date(payload.timestamp);
+      document.getElementById('timestampLine').textContent =
+        d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
-    // ── Tally tags ────────────────────────────────────────
+    // ── 2. Tally tags ──────────────────────────────────────
     var counts = { S: 0, A: 0, Av: 0, D: 0 };
-    var total = 0;
+    var total  = 0;
 
     CFG.questions.forEach(function (q) {
-      var selected = raw[q.id] || [];
+      var selected = rawAnswers[q.id] || [];
       if (!Array.isArray(selected)) selected = [selected];
       selected.forEach(function (val) {
         var opt = (q.options || []).find(function (o) {
@@ -113,108 +143,278 @@
       });
     });
 
-    var maxCount = Math.max(1, Math.max.apply(null, Object.values(counts)));
-
-    // ── Sort tendencies by count desc ─────────────────────
-    var tagOrder = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
-
-    // ── Build HTML ────────────────────────────────────────
-    var html = '';
-    html += '<h1 class="r-title">' + CFG.title + '</h1>';
-    html += '<p class="r-subtitle">' + CFG.subtitle + '</p>';
-
-    // Bars
-    html += '<div class="r-bars">';
-    html += '<div class="r-bars-title">Your tendencies</div>';
-    tagOrder.forEach(function (tag) {
-      var t = T[tag];
-      var c = counts[tag];
-      var pct = Math.round(c / Math.max(1, total) * 100);
-      var barWidth = Math.round(c / maxCount * 100);
-      html += '<div class="r-bar-row">';
-      html += '<div class="r-bar-header">';
-      html += '<span class="r-bar-label" style="color:' + t.color + '">' + t.label + '</span>';
-      html += '<span class="r-bar-count">' + c + ' selection' + (c !== 1 ? 's' : '') + (total > 0 ? ' (' + pct + '%)' : '') + '</span>';
-      html += '</div>';
-      html += '<div class="r-bar-track"><div class="r-bar-fill" style="width:' + barWidth + '%;background:' + t.color + '"></div></div>';
-      html += '</div>';
-    });
-    html += '</div>';
-
-    // Interpretation cards (only show tendencies with at least 1 selection)
+    var tagOrder  = Object.keys(counts).sort(function (a, b) { return counts[b] - counts[a]; });
     var activeTags = tagOrder.filter(function (t) { return counts[t] > 0; });
-    if (activeTags.length > 0) {
-      html += '<div class="r-tendency-blocks">';
-      activeTags.forEach(function (tag, i) {
-        var t = T[tag];
-        html += '<div class="r-tendency-card' + (i === 0 ? ' open' : '') + '" data-tag="' + tag + '">';
-        html += '<div class="r-tendency-card-header">';
-        html += '<span class="r-tendency-dot" style="background:' + t.color + '"></span>';
-        html += '<span class="r-tendency-card-title">' + t.title + '</span>';
-        html += '<span class="r-tendency-chevron">&#9660;</span>';
-        html += '</div>';
-        html += '<div class="r-tendency-body">' + t.text + '</div>';
-        html += '</div>';
-      });
-      html += '</div>';
-    }
+    var maxCount   = Math.max(1, counts[tagOrder[0]]);
 
-    // Closing note
-    html += '<div class="r-closing">' + CFG.closing + '</div>';
+    // ── 3. Build HTML ──────────────────────────────────────
+
+    // Bars card
+    var barsHtml = '<div class="r-section"><div class="r-section-label">Your tendencies</div>';
+    tagOrder.forEach(function (tag) {
+      var t   = T[tag];
+      var c   = counts[tag];
+      var pct = total > 0 ? Math.round(c / total * 100) : 0;
+      var bar = Math.round(c / maxCount * 100);
+      barsHtml +=
+        '<div class="r-bar-row">' +
+        '<div class="r-bar-header">' +
+        '<span class="r-bar-label" style="color:' + t.color + '">' + t.label + '</span>' +
+        '<span class="r-bar-count">' + c + ' selection' + (c !== 1 ? 's' : '') +
+        (total > 0 ? ' (' + pct + '%)' : '') + '</span>' +
+        '</div>' +
+        '<div class="r-bar-track"><div class="r-bar-fill" style="width:' + bar + '%;background:' + t.color + '"></div></div>' +
+        '</div>';
+    });
+    barsHtml += '</div>';
+
+    // Tendency cards
+    var cardsHtml = '';
+    activeTags.forEach(function (tag, i) {
+      var t = T[tag];
+      cardsHtml +=
+        '<div class="r-tendency-card' + (i === 0 ? ' open' : '') + '" data-tag="' + tag + '">' +
+        '<div class="r-tendency-card-header">' +
+        '<span class="r-tendency-dot" style="background:' + t.color + '"></span>' +
+        '<span class="r-tendency-title">' + esc(t.title) + '</span>' +
+        '<span class="r-tendency-chevron">&#9660;</span>' +
+        '</div>' +
+        '<div class="r-tendency-body">' + esc(t.text) + '</div>' +
+        '</div>';
+    });
+
+    // Closing
+    var closingHtml = '<div class="r-closing">' + esc(CFG.closing) + '</div>';
 
     // Actions
-    html += '<div class="r-actions">';
-    html += '<a href="attachment-reflection.html" class="q-btn q-btn-secondary">Retake reflection</a>';
-    html += '</div>';
+    var actionsHtml =
+      '<div class="r-actions">' +
+      '<button class="btn-primary" onclick="exportToPDF()">Download PDF</button>' +
+      '<a href="attachment-reflection.html" class="btn-secondary">Retake reflection</a>' +
+      '</div>';
 
-    // Answers collapsible
-    html += '<button class="r-answers-toggle" id="answersToggle" onclick="window.toggleAnswers()">';
-    html += '<span class="r-answers-toggle-chevron">&#9660;</span>';
-    html += '<span>Show my answers</span>';
-    html += '</button>';
+    document.getElementById('mainContent').innerHTML =
+      barsHtml + cardsHtml + closingHtml + actionsHtml;
 
-    html += '<div class="r-answers" id="answersBlock">';
-    CFG.questions.forEach(function (q, qi) {
-      var selected = raw[q.id] || [];
-      if (!Array.isArray(selected)) selected = [selected];
-      html += '<div class="r-answer-item">';
-      html += '<div class="r-answer-q">Q' + (qi + 1) + '. ' + q.text + '</div>';
-      html += '<div class="r-answer-text">';
-      if (selected.length === 0) {
-        html += '<em>No answer</em>';
-      } else {
-        selected.forEach(function (val) {
-          var opt = (q.options || []).find(function (o) {
-            return (typeof o === 'object' ? o.text : o) === val;
-          });
-          var tag = opt && opt.tag ? opt.tag : null;
-          var color = tag && T[tag] ? T[tag].color : '#9b8f82';
-          html += (tag ? '<span class="r-answer-tag" style="background:' + color + '20;color:' + color + ';border:1px solid ' + color + '40">' + (T[tag] ? T[tag].label : tag) + '</span>' : '');
-          html += val + '<br>';
-        });
-      }
-      html += '</div></div>';
-    });
-    html += '</div>';
-
-    document.getElementById('results').innerHTML = html;
-
-    // ── Accordion for tendency cards ──────────────────────
-    document.querySelectorAll('.r-tendency-card-header').forEach(function (header) {
-      header.addEventListener('click', function () {
-        var card = header.closest('.r-tendency-card');
-        card.classList.toggle('open');
+    // ── 4. Tendency card accordion ─────────────────────────
+    document.querySelectorAll('.r-tendency-card-header').forEach(function (hdr) {
+      hdr.addEventListener('click', function () {
+        hdr.closest('.r-tendency-card').classList.toggle('open');
       });
     });
 
-    // ── Answers toggle ────────────────────────────────────
+    // ── 5. Answers section ─────────────────────────────────
+    var answersHtml = '';
+    var answeredCount = 0;
+
+    CFG.questions.forEach(function (q, qi) {
+      var selected = rawAnswers[q.id] || [];
+      if (!Array.isArray(selected)) selected = [selected];
+      if (selected.length === 0) return;
+      answeredCount++;
+
+      var chipsHtml = selected.map(function (val) {
+        var opt = (q.options || []).find(function (o) {
+          return (typeof o === 'object' ? o.text : o) === val;
+        });
+        var tag   = opt && opt.tag ? opt.tag : null;
+        var color = tag && T[tag] ? T[tag].color : '#9b8f82';
+        return '<span class="ar-answer-chip" style="color:' + color + ';border-color:' + color + '40;background:' + color + '18">' +
+               esc(val) + '</span>';
+      }).join('');
+
+      answersHtml +=
+        '<div class="ar-answer-item">' +
+        '<p class="ar-answer-q">Q' + (qi + 1) + '. ' + esc(q.text) + '</p>' +
+        '<div class="ar-answer-chips">' + chipsHtml + '</div>' +
+        '</div>';
+    });
+
+    if (answeredCount > 0) {
+      document.getElementById('answersBody').innerHTML = answersHtml;
+      document.getElementById('answersSection').style.display = '';
+    }
+
     window.toggleAnswers = function () {
-      var btn = document.getElementById('answersToggle');
-      var block = document.getElementById('answersBlock');
-      var isOpen = block.classList.toggle('open');
-      btn.classList.toggle('open', isOpen);
-      btn.querySelector('span:last-child').textContent = isOpen ? 'Hide my answers' : 'Show my answers';
+      var body    = document.getElementById('answersBody');
+      var chevron = document.getElementById('answersChevron');
+      var label   = document.getElementById('answersToggleLabel');
+      var toggle  = document.getElementById('answersToggle');
+      var open    = body.style.display !== 'none';
+      body.style.display = open ? 'none' : '';
+      chevron.classList.toggle('open', !open);
+      label.textContent  = open ? 'Show your answers' : 'Hide your answers';
+      toggle.setAttribute('aria-expanded', String(!open));
     };
+
+    // ── 6. PDF export ──────────────────────────────────────
+    window.exportToPDF = function () {
+      if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert('PDF library is still loading — please try again in a moment.');
+        return;
+      }
+      var doc = new window.jspdf.jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+      var PW = 210, PH = 297, M = 18, CW = 174;
+      var y = M;
+
+      // ── Colour palette ─────────────────────────────────────────
+      var P = {
+        dark:   '#2C2520',
+        mid:    '#6B5F52',
+        light:  '#9B8F82',
+        border: '#D4C9BD',
+        pageBg: '#F9F6F3',
+        accent: '#C77F5A',
+      };
+      // ────────────────────────────────────────────────────────────
+
+      function newPage() { doc.addPage(); y = M; }
+      function gap(mm)   { y += mm; }
+      function guard(need) { if (y + need > PH - M) newPage(); }
+      function hline() {
+        guard(6);
+        doc.setDrawColor(P.border); doc.setLineWidth(0.25);
+        doc.line(M, y, PW - M, y); gap(5);
+      }
+      function h1(text) {
+        guard(10); doc.setFont('helvetica', 'bold'); doc.setFontSize(18);
+        doc.setTextColor(P.dark); doc.text(text, M, y); gap(9);
+      }
+      function h2(text) {
+        guard(8); doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
+        doc.setTextColor(P.dark); doc.text(text, M, y); gap(7);
+      }
+      function sectionLabel(text) {
+        guard(9); doc.setFont('helvetica', 'bold'); doc.setFontSize(9);
+        doc.setTextColor(P.accent); doc.text(text.toUpperCase(), M, y); gap(5.5);
+      }
+      function boldLine(text, size) {
+        size = size || 11; guard(size * 0.55);
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(size);
+        doc.setTextColor(P.dark); doc.text(text, M, y); gap(size * 0.5);
+      }
+      function para(text, size, color) {
+        size = size || 10; color = color || P.mid;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(size); doc.setTextColor(color);
+        var lines = doc.splitTextToSize(String(text), CW);
+        var lh = size * 0.45;
+        guard(lines.length * lh + 2); doc.text(lines, M, y); gap(lines.length * lh + 2);
+      }
+
+      // Draw tendency score boxes (label + count + % bar represented as filled rect)
+      function tendencyBoxes(tags) {
+        var boxH = 26, gapB = 4;
+        var boxW = (CW - gapB * (tags.length - 1)) / tags.length;
+        guard(boxH + 6);
+        tags.forEach(function (tag, i) {
+          var t    = T[tag];
+          var c    = counts[tag];
+          var pct  = total > 0 ? Math.round(c / total * 100) : 0;
+          var isHL = c === maxCount && c > 0;
+          var bx = M + i * (boxW + gapB), by = y;
+          doc.setFillColor(isHL ? t.hlBg : P.pageBg);
+          doc.setDrawColor(isHL ? t.color : P.border);
+          doc.setLineWidth(isHL ? 0.6 : 0.3);
+          doc.roundedRect(bx, by, boxW, boxH, 2, 2, 'FD');
+          // count
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(15);
+          doc.setTextColor(isHL ? t.color : P.dark);
+          doc.text(String(c), bx + boxW / 2, by + 9, { align: 'center' });
+          // label
+          doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5);
+          doc.setTextColor(isHL ? t.color : P.light);
+          // Fit label — use abbreviation if too wide
+          var labelText = t.label;
+          if (doc.getTextWidth(labelText) > boxW - 4) {
+            labelText = tag === 'Av' ? 'Avoidant' : t.label.split('/')[0].trim();
+          }
+          doc.text(labelText.toUpperCase(), bx + boxW / 2, by + 15, { align: 'center' });
+          // pct
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(6);
+          doc.setTextColor(P.light);
+          doc.text(pct + '%', bx + boxW / 2, by + 21, { align: 'center' });
+        });
+        gap(boxH + 5);
+      }
+
+      // ── PDF content ────────────────────────────────────────────
+
+      h1('How Do You Create Connection?');
+      para('Attachment Style Reflection · piatorp.dk', 9, P.light);
+      if (payload.timestamp) {
+        var pd = new Date(payload.timestamp);
+        para(pd.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), 9, P.light);
+      }
+      gap(3); hline();
+
+      // Tendency overview
+      sectionLabel('Your Tendencies');
+      tendencyBoxes(tagOrder);
+      gap(2);
+
+      // Interpretation for each active tendency
+      activeTags.forEach(function (tag, i) {
+        if (i > 0) { gap(3); hline(); }
+        var t = T[tag];
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+        doc.setTextColor(t.color);
+        guard(8); doc.text(t.title, M, y); gap(6);
+        para(t.text, 9.5);
+      });
+
+      if (activeTags.length === 0) {
+        para('No selections were made.', 10, P.light);
+      }
+
+      gap(4); hline();
+
+      // Closing note
+      sectionLabel('A note to carry with you');
+      para(CFG.closing, 9.5, P.mid);
+
+      gap(4); hline();
+
+      // Answers
+      sectionLabel('Your Answers');
+
+      CFG.questions.forEach(function (q, qi) {
+        var selected = rawAnswers[q.id] || [];
+        if (!Array.isArray(selected)) selected = [selected];
+        if (selected.length === 0) return;
+
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(P.dark);
+        var qLines = doc.splitTextToSize('Q' + (qi + 1) + '.  ' + q.text, CW);
+        var qH = qLines.length * 9 * 0.45;
+        guard(qH + 10); doc.text(qLines, M, y); gap(qH + 1.5);
+
+        selected.forEach(function (val) {
+          var opt   = (q.options || []).find(function (o) { return (typeof o === 'object' ? o.text : o) === val; });
+          var tag   = opt && opt.tag ? opt.tag : null;
+          var color = tag && T[tag] ? T[tag].color : P.mid;
+          doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(color);
+          var aLines = doc.splitTextToSize('• ' + val, CW - 4);
+          var aH = aLines.length * 9 * 0.45;
+          guard(aH + 4); doc.text(aLines, M + 2, y); gap(aH + 1.5);
+        });
+        gap(2);
+      });
+
+      var stamp = payload.timestamp
+        ? new Date(payload.timestamp).toISOString().slice(0, 10)
+        : 'export';
+      doc.save('attachment-reflection-' + stamp + '.pdf');
+    };
+
+    // ── Helpers ────────────────────────────────────────────
+    function esc(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function showError() {
+      document.getElementById('errorContent').style.display = '';
+    }
 
   }());
   </script>
