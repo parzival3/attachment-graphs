@@ -57,13 +57,25 @@ var REFLECTION_CONFIG = {
       id: 'q3', type: 'checkbox', required: false,
       text: 'In conflict, my first impulse is usually to:',
       options: [
-        { text: 'Stay present and try to understand',    tag: 'S'  },
-        { text: 'Explain myself quickly',                tag: 'S'  },
+        { text: 'Stay present and try to understand',          tag: 'S'  },
+        { text: 'Slow down and try to share what is happening in me', tag: 'S'  },
+        { text: 'Explain myself quickly so the distance does not grow', tag: 'A'  },
         { text: 'Seek contact and reassurance',          tag: 'A'  },
         { text: 'Defend myself',                         tag: 'A'  },
         { text: 'Withdraw or become silent',             tag: 'Av' },
         { text: 'Attack, criticise or protest',          tag: 'D'  },
         { text: 'Freeze or lose access to my words',     tag: 'D'  }
+      ]
+    },
+    {
+      id: 'q3b', type: 'checkbox', required: false,
+      text: 'After a conflict, I usually:',
+      options: [
+        { text: 'Try to repair and understand what happened',       tag: 'S'  },
+        { text: 'Need reassurance before I can feel close again',   tag: 'A'  },
+        { text: 'Prefer to move on and not talk too much about it', tag: 'Av' },
+        { text: 'Feel ashamed or afraid that something has been damaged', tag: 'D' },
+        { text: 'Want closeness, but find it hard to trust the repair', tag: 'D' }
       ]
     },
     {
@@ -86,7 +98,7 @@ var REFLECTION_CONFIG = {
         { text: 'Responsible and needed',         tag: 'S'  },
         { text: 'Pressured or trapped',           tag: 'Av' },
         { text: 'Afraid of disappointing them',   tag: 'A'  },
-        { text: 'Unsure what they expect from me',tag: 'D'  },
+        { text: 'Unsure what they expect from me', tag: 'D'  },
         { text: 'Overwhelmed and wanting space',  tag: 'Av' }
       ]
     },
@@ -99,7 +111,8 @@ var REFLECTION_CONFIG = {
         { text: 'Being rejected or abandoned',          tag: 'A'  },
         { text: 'Being controlled or swallowed up',     tag: 'Av' },
         { text: 'Being criticised or not good enough',  tag: 'D'  },
-        { text: 'Being hurt if I trust too much',       tag: 'D'  }
+        { text: 'Being hurt if I trust too much',       tag: 'D'  },
+        { text: 'I can feel afraid, but I usually believe we can find our way back', tag: 'S' }
       ]
     },
     {
@@ -111,7 +124,8 @@ var REFLECTION_CONFIG = {
         { text: 'Back and forth between closeness and distance',  tag: 'D'  },
         { text: 'Into overthinking',                              tag: 'A'  },
         { text: 'Into self-protection',                           tag: 'Av' },
-        { text: 'Into protest, anger or silence',                 tag: 'D'  }
+        { text: 'Into protest, anger or silence',                 tag: 'D'  },
+        { text: 'I try to pause, notice what is happening in me, and reach for contact more clearly', tag: 'S' }
       ]
     },
     {
@@ -124,7 +138,8 @@ var REFLECTION_CONFIG = {
         { text: 'Numbness',                            tag: 'Av' },
         { text: 'Tension in the jaw, shoulders or belly', tag: 'D' },
         { text: 'Heaviness or collapse',               tag: 'D'  },
-        { text: 'A need to do something immediately',  tag: 'A'  }
+        { text: 'A need to do something immediately',  tag: 'A'  },
+        { text: 'I may feel activated, but I can usually return to my breath and body', tag: 'S' }
       ]
     },
     {
@@ -140,6 +155,17 @@ var REFLECTION_CONFIG = {
       ]
     },
     {
+      id: 'q9b', type: 'checkbox', required: false,
+      text: 'When someone shows me love or care, I often:',
+      options: [
+        { text: 'Can take it in and feel moved',                 tag: 'S'  },
+        { text: 'Need more signs that it is real',               tag: 'A'  },
+        { text: 'Feel uncomfortable or want to change the subject', tag: 'Av' },
+        { text: 'Want it, but do not fully trust it',            tag: 'D'  },
+        { text: 'Feel both longing and fear',                    tag: 'D'  }
+      ]
+    },
+    {
       id: 'q10', type: 'checkbox', required: false,
       text: 'What I am slowly learning about myself is:',
       options: [
@@ -148,7 +174,8 @@ var REFLECTION_CONFIG = {
         { text: 'I may protest when I do not feel important',                 tag: 'A'  },
         { text: 'I may become independent when I actually need comfort',      tag: 'Av' },
         { text: 'I may confuse danger with intimacy',                         tag: 'D'  },
-        { text: 'I may need more safety before I can be fully open',          tag: 'D'  }
+        { text: 'I may need more safety before I can be fully open',          tag: 'D'  },
+        { text: 'I can learn to ask more clearly for what I need',            tag: 'S'  }
       ]
     }
   ],
