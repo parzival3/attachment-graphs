@@ -1,0 +1,70 @@
+name: Build and deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Allow the workflow to publish to GitHub Pages.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one concurrent Pages deployment; don't cancel an in-progress one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build single-file HTML
+        run: npm run build
+
+      - name: Assemble Pages site
+        # Publish the whole repo (keeps index.html and the other questionnaires
+        # working), then overlay the built single-file versions so the live
+        # Attachment Reflection pages are the self-contained builds.
+        run: |
+          mkdir -p _site
+          # Copy all site files except tooling / VCS / build dirs.
+          rsync -a --delete \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude 'node_modules' \
+            --exclude 'dist' \
+            --exclude '_site' \
+            ./ _site/
+          # Overlay the inlined single-file builds.
+          cp dist/attachment-reflection.html         _site/attachment-reflection.html
+          cp dist/attachment-reflection-results.html _site/attachment-reflection-results.html
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
