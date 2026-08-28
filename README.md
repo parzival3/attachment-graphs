@@ -48,30 +48,41 @@ Reflection live in one data file:
 
     reflection/attachment-reflection-questions.json
 
-Add, remove or re-tag options there — no JavaScript required.
+Add, remove or re-tag options there — no JavaScript required. Every piece of
+user-facing text is internationalized: it is an object keyed by locale
+(`{ "en": "...", "da": "..." }`). Each option carries a stable `id` and a `tag`.
 
 ```jsonc
 {
+  "locales": ["en", "da"],
+  "defaultLocale": "en",
+  "meta":        { "title": { "en": "...", "da": "..." }, "subtitle": { "en": "...", "da": "..." } },
+  "ui":          { "start": { "en": "Start", "da": "Start" }, "...": {} },
+  "intro":       { "en": "...", "da": "..." },
+  "privacyNote": { "en": "...", "da": "..." },
+  "closing":     { "en": "...", "da": "..." },
   "questions": [
     {
       "id": "q1",
-      "text": "When I feel emotionally close to someone, I usually feel:",
+      "text": { "en": "When I feel emotionally close...", "da": "Når jeg føler mig..." },
       "options": [
-        { "text": "Calm and safe", "tag": "S" },
-        { "text": "Uncomfortable or slightly overwhelmed", "tag": "Av" }
+        { "id": "q1-1", "text": { "en": "Calm and safe", "da": "Ro og tryghed" }, "tag": "S" }
       ]
     }
   ],
   "tendencies": {
-    "S": { "label": "Secure", "color": "#7a9e8a", "hlBg": "#eef5f1",
-           "title": "Secure tendencies", "text": "..." }
+    "S": { "label": { "en": "Secure", "da": "Tryg" }, "color": "#7a9e8a", "hlBg": "#eef5f1",
+           "title": { "en": "...", "da": "..." }, "text": { "en": "...", "da": "..." } }
   }
 }
 ```
 
+- Each option needs a **unique `id`** — answers are stored by id, never by text,
+  so scoring is language-neutral and shared result links stay valid.
 - Each option's `tag` must be a key defined in `tendencies` (`S`, `A`, `Av`, `D`).
 - Questions default to multi-select checkboxes and are optional. Add `"type"` or
   `"required"` on a question only to override that.
+- Colors and tags are single values; only human-readable text is localized.
 
 After editing, run:
 
@@ -79,10 +90,28 @@ After editing, run:
 npm run generate
 ```
 
-This validates the JSON — an unknown tag, missing text or duplicate id fails
-with a clear message — and writes the questions into the `GENERATED` block of
+This validates the JSON — an unknown tag, a missing translation for any declared
+locale, a duplicate question or option id — and fails with a clear message. On
+success it writes the data into the `GENERATED` block of
 `reflection/attachment-reflection-config.js`. Do not hand-edit that block; it is
 overwritten on every generate.
+
+### Language selection (English / Danish)
+
+The reflection is available in English and Danish. The language defaults from the
+visitor's browser (`navigator.language`; a Danish browser gets Danish, otherwise
+English) and can be changed with the EN / DA switch on the intro screen; the
+choice is remembered in `localStorage`. The results page renders in whichever
+language the reflection was taken in (stored in the result link), so a shared
+link looks the same for everyone.
+
+To add another language, add its code to `locales`, then provide that key on
+every localized string — the generator will refuse to build until all are
+present.
+
+> Note: the Danish translation was drafted programmatically and **must be
+> reviewed by Pia** before it is considered final, as the wording is
+> therapeutic and nuance matters.
 
 ### Regenerating automatically on commit (optional)
 

@@ -121,10 +121,64 @@
 
     var rawAnswers = payload.rawAnswers || {};
 
+    // ── i18n: render results in the language the quiz was taken in ──
+    var LOCALE = payload.locale && (CFG.locales || []).indexOf(payload.locale) !== -1
+      ? payload.locale
+      : (CFG.defaultLocale || 'en');
+    var LOCALE_TAG = { en: 'en-GB', da: 'da-DK' }[LOCALE] || 'en-GB';
+    document.documentElement.setAttribute('lang', LOCALE);
+
+    // Resolve a localized value ({en,da,…}) or plain string to LOCALE.
+    function L(value) {
+      if (value == null) return '';
+      if (typeof value === 'string') return value;
+      if (value[LOCALE] != null) return value[LOCALE];
+      var def = CFG.defaultLocale;
+      if (def && value[def] != null) return value[def];
+      var keys = Object.keys(value); return keys.length ? value[keys[0]] : '';
+    }
+    // UI string by key.
+    function t(key) { var ui = CFG.ui || {}; return ui[key] != null ? L(ui[key]) : key; }
+
+    // Match a stored answer value to an option: by stable id first, then fall
+    // back to matching the option's text in any locale (legacy pre-i18n links).
+    function findOption(q, val) {
+      var opts = q.options || [];
+      for (var i = 0; i < opts.length; i++) {
+        var o = opts[i];
+        if (typeof o === 'object') {
+          if ((o.id != null ? o.id : String(i)) === val) return o;
+        } else if (o === val) {
+          return o;
+        }
+      }
+      for (var j = 0; j < opts.length; j++) {
+        var o2 = opts[j];
+        if (typeof o2 === 'object' && o2.text) {
+          var tx = o2.text;
+          if (typeof tx === 'string' && tx === val) return o2;
+          if (typeof tx === 'object') {
+            for (var k in tx) { if (tx[k] === val) return o2; }
+          }
+        }
+      }
+      return null;
+    }
+
+    // Localize the static page chrome.
+    document.title = L(CFG.meta ? CFG.meta.title : '') + ' — ' + L(CFG.meta ? CFG.meta.subtitle : '');
+    var titleEl = document.querySelector('.r-title');
+    if (titleEl) titleEl.textContent = L(CFG.meta ? CFG.meta.title : '');
+    document.querySelectorAll('.q-site-link').forEach(function (el) {
+      el.textContent = '← ' + t('retake');
+    });
+    var privacyEl = document.querySelector('.q-privacy-note');
+    if (privacyEl && CFG.privacyNote) privacyEl.textContent = L(CFG.privacyNote);
+
     if (payload.timestamp) {
       var d = new Date(payload.timestamp);
       document.getElementById('timestampLine').textContent =
-        d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        d.toLocaleDateString(LOCALE_TAG, { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
     // ── 2. Tally tags ──────────────────────────────────────
@@ -135,9 +189,7 @@
       var selected = rawAnswers[q.id] || [];
       if (!Array.isArray(selected)) selected = [selected];
       selected.forEach(function (val) {
-        var opt = (q.options || []).find(function (o) {
-          return (typeof o === 'object' ? o.text : o) === val;
-        });
+        var opt = findOption(q, val);
         if (opt && opt.tag && counts[opt.tag] !== undefined) {
           counts[opt.tag]++;
           total++;
@@ -152,20 +204,20 @@
     // ── 3. Build HTML ──────────────────────────────────────
 
     // Bars card
-    var barsHtml = '<div class="r-section"><div class="r-section-label">Your tendencies</div>';
+    var barsHtml = '<div class="r-section"><div class="r-section-label">' + esc(t('yourTendencies')) + '</div>';
     tagOrder.forEach(function (tag) {
-      var t   = T[tag];
+      var td  = T[tag];
       var c   = counts[tag];
       var pct = total > 0 ? Math.round(c / total * 100) : 0;
       var bar = Math.round(c / maxCount * 100);
       barsHtml +=
         '<div class="r-bar-row">' +
         '<div class="r-bar-header">' +
-        '<span class="r-bar-label" style="color:' + t.color + '">' + t.label + '</span>' +
-        '<span class="r-bar-count">' + c + ' selection' + (c !== 1 ? 's' : '') +
+        '<span class="r-bar-label" style="color:' + td.color + '">' + esc(L(td.label)) + '</span>' +
+        '<span class="r-bar-count">' + c + ' ' + esc(c !== 1 ? t('selections') : t('selection')) +
         (total > 0 ? ' (' + pct + '%)' : '') + '</span>' +
         '</div>' +
-        '<div class="r-bar-track"><div class="r-bar-fill" style="width:' + bar + '%;background:' + t.color + '"></div></div>' +
+        '<div class="r-bar-track"><div class="r-bar-fill" style="width:' + bar + '%;background:' + td.color + '"></div></div>' +
         '</div>';
     });
     barsHtml += '</div>';
@@ -173,26 +225,26 @@
     // Tendency cards
     var cardsHtml = '';
     activeTags.forEach(function (tag, i) {
-      var t = T[tag];
+      var td = T[tag];
       cardsHtml +=
         '<div class="r-tendency-card' + (i === 0 ? ' open' : '') + '" data-tag="' + tag + '">' +
         '<div class="r-tendency-card-header">' +
-        '<span class="r-tendency-dot" style="background:' + t.color + '"></span>' +
-        '<span class="r-tendency-title">' + esc(t.title) + '</span>' +
+        '<span class="r-tendency-dot" style="background:' + td.color + '"></span>' +
+        '<span class="r-tendency-title">' + esc(L(td.title)) + '</span>' +
         '<span class="r-tendency-chevron">&#9660;</span>' +
         '</div>' +
-        '<div class="r-tendency-body">' + esc(t.text) + '</div>' +
+        '<div class="r-tendency-body">' + esc(L(td.text)) + '</div>' +
         '</div>';
     });
 
     // Closing
-    var closingHtml = '<div class="r-closing">' + esc(CFG.closing) + '</div>';
+    var closingHtml = '<div class="r-closing">' + esc(L(CFG.closing)) + '</div>';
 
     // Actions
     var actionsHtml =
       '<div class="r-actions">' +
-      '<button class="btn-primary" onclick="exportToPDF()">Download PDF</button>' +
-      '<a href="attachment-reflection.html" class="btn-secondary">Retake reflection</a>' +
+      '<button class="btn-primary" onclick="exportToPDF()">' + esc(t('downloadPdf')) + '</button>' +
+      '<a href="attachment-reflection.html" class="btn-secondary">' + esc(t('retake')) + '</a>' +
       '</div>';
 
     document.getElementById('mainContent').innerHTML =
@@ -216,18 +268,17 @@
       answeredCount++;
 
       var chipsHtml = selected.map(function (val) {
-        var opt = (q.options || []).find(function (o) {
-          return (typeof o === 'object' ? o.text : o) === val;
-        });
+        var opt   = findOption(q, val);
         var tag   = opt && opt.tag ? opt.tag : null;
         var color = tag && T[tag] ? T[tag].color : '#9b8f82';
+        var label = opt ? L(typeof opt === 'object' ? opt.text : opt) : val;
         return '<span class="ar-answer-chip" style="color:' + color + ';border-color:' + color + '40;background:' + color + '18">' +
-               esc(val) + '</span>';
+               esc(label) + '</span>';
       }).join('');
 
       answersHtml +=
         '<div class="ar-answer-item">' +
-        '<p class="ar-answer-q">Q' + (qi + 1) + '. ' + esc(q.text) + '</p>' +
+        '<p class="ar-answer-q">Q' + (qi + 1) + '. ' + esc(L(q.text)) + '</p>' +
         '<div class="ar-answer-chips">' + chipsHtml + '</div>' +
         '</div>';
     });
@@ -245,9 +296,10 @@
       var open    = body.style.display !== 'none';
       body.style.display = open ? 'none' : '';
       chevron.classList.toggle('open', !open);
-      label.textContent  = open ? 'Show your answers' : 'Hide your answers';
+      label.textContent  = open ? t('showAnswers') : t('hideAnswers');
       toggle.setAttribute('aria-expanded', String(!open));
     };
+    document.getElementById('answersToggleLabel').textContent = t('showAnswers');
 
     // ── 6. PDF export ──────────────────────────────────────
     window.exportToPDF = function () {
@@ -309,26 +361,26 @@
         var boxW = (CW - gapB * (tags.length - 1)) / tags.length;
         guard(boxH + 6);
         tags.forEach(function (tag, i) {
-          var t    = T[tag];
+          var td   = T[tag];
           var c    = counts[tag];
           var pct  = total > 0 ? Math.round(c / total * 100) : 0;
           var isHL = c === maxCount && c > 0;
           var bx = M + i * (boxW + gapB), by = y;
-          doc.setFillColor(isHL ? t.hlBg : P.pageBg);
-          doc.setDrawColor(isHL ? t.color : P.border);
+          doc.setFillColor(isHL ? td.hlBg : P.pageBg);
+          doc.setDrawColor(isHL ? td.color : P.border);
           doc.setLineWidth(isHL ? 0.6 : 0.3);
           doc.roundedRect(bx, by, boxW, boxH, 2, 2, 'FD');
           // count
           doc.setFont('helvetica', 'bold'); doc.setFontSize(15);
-          doc.setTextColor(isHL ? t.color : P.dark);
+          doc.setTextColor(isHL ? td.color : P.dark);
           doc.text(String(c), bx + boxW / 2, by + 9, { align: 'center' });
           // label
           doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5);
-          doc.setTextColor(isHL ? t.color : P.light);
-          // Fit label — use abbreviation if too wide
-          var labelText = t.label;
+          doc.setTextColor(isHL ? td.color : P.light);
+          // Fit label — use the part before "/" if the full label is too wide
+          var labelText = L(td.label);
           if (doc.getTextWidth(labelText) > boxW - 4) {
-            labelText = tag === 'Av' ? 'Avoidant' : t.label.split('/')[0].trim();
+            labelText = labelText.split('/')[0].trim();
           }
           doc.text(labelText.toUpperCase(), bx + boxW / 2, by + 15, { align: 'center' });
           // pct
@@ -341,43 +393,43 @@
 
       // ── PDF content ────────────────────────────────────────────
 
-      h1('How Do You Create Connection?');
-      para('Attachment Style Reflection · piatorp.dk', 9, P.light);
+      h1(L(CFG.meta ? CFG.meta.title : ''));
+      para(t('pdfCaption'), 9, P.light);
       if (payload.timestamp) {
         var pd = new Date(payload.timestamp);
-        para(pd.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }), 9, P.light);
+        para(pd.toLocaleDateString(LOCALE_TAG, { day: 'numeric', month: 'long', year: 'numeric' }), 9, P.light);
       }
       gap(3); hline();
 
       // Tendency overview
-      sectionLabel('Your Tendencies');
+      sectionLabel(t('yourTendencies'));
       tendencyBoxes(tagOrder);
       gap(2);
 
       // Interpretation for each active tendency
       activeTags.forEach(function (tag, i) {
         if (i > 0) { gap(3); hline(); }
-        var t = T[tag];
+        var td = T[tag];
         doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
-        doc.setTextColor(t.color);
-        guard(8); doc.text(t.title, M, y); gap(6);
-        para(t.text, 9.5);
+        doc.setTextColor(td.color);
+        guard(8); doc.text(L(td.title), M, y); gap(6);
+        para(L(td.text), 9.5);
       });
 
       if (activeTags.length === 0) {
-        para('No selections were made.', 10, P.light);
+        para(t('pdfNoSelections'), 10, P.light);
       }
 
       gap(4); hline();
 
       // Closing note
-      sectionLabel('A note to carry with you');
-      para(CFG.closing, 9.5, P.mid);
+      sectionLabel(t('pdfNote'));
+      para(L(CFG.closing), 9.5, P.mid);
 
       gap(4); hline();
 
       // Answers
-      sectionLabel('Your Answers');
+      sectionLabel(t('pdfAnswers'));
 
       CFG.questions.forEach(function (q, qi) {
         var selected = rawAnswers[q.id] || [];
@@ -385,16 +437,17 @@
         if (selected.length === 0) return;
 
         doc.setFont('helvetica', 'bold'); doc.setFontSize(9); doc.setTextColor(P.dark);
-        var qLines = doc.splitTextToSize('Q' + (qi + 1) + '.  ' + q.text, CW);
+        var qLines = doc.splitTextToSize('Q' + (qi + 1) + '.  ' + L(q.text), CW);
         var qH = qLines.length * 9 * 0.45;
         guard(qH + 10); doc.text(qLines, M, y); gap(qH + 1.5);
 
         selected.forEach(function (val) {
-          var opt   = (q.options || []).find(function (o) { return (typeof o === 'object' ? o.text : o) === val; });
+          var opt   = findOption(q, val);
           var tag   = opt && opt.tag ? opt.tag : null;
           var color = tag && T[tag] ? T[tag].color : P.mid;
+          var label = opt ? L(typeof opt === 'object' ? opt.text : opt) : val;
           doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(color);
-          var aLines = doc.splitTextToSize('• ' + val, CW - 4);
+          var aLines = doc.splitTextToSize('• ' + label, CW - 4);
           var aH = aLines.length * 9 * 0.45;
           guard(aH + 4); doc.text(aLines, M + 2, y); gap(aH + 1.5);
         });
@@ -415,6 +468,24 @@
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
     function showError() {
+      // Best-effort localization of the error block (config is available even
+      // when there is no valid hash).
+      try {
+        var errLocale = (CFG.defaultLocale || 'en');
+        var nav = (navigator.language || '').toLowerCase();
+        (CFG.locales || []).forEach(function (loc) {
+          if (nav.indexOf(loc.toLowerCase()) === 0) errLocale = loc;
+        });
+        var pick = function (v) {
+          return v && typeof v === 'object' ? (v[errLocale] || v[CFG.defaultLocale] || '') : (v || '');
+        };
+        var ec = document.getElementById('errorContent');
+        var h2 = ec.querySelector('h2'), p = ec.querySelector('p');
+        if (CFG.ui && CFG.ui.noResultsTitle) h2.textContent = pick(CFG.ui.noResultsTitle);
+        if (CFG.ui && CFG.ui.noResultsBody) {
+          p.innerHTML = '<a href="attachment-reflection.html">' + pick(CFG.ui.noResultsBody) + '</a>';
+        }
+      } catch (e) {}
       document.getElementById('errorContent').style.display = '';
     }
 

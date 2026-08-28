@@ -23,6 +23,53 @@ class Questionnaire {
         this.layout = config.layout || 'paged';
         this.container = null;
         this._total = config.questions.length;
+        this.locale = this._resolveLocale();
+    }
+
+    // ── Internationalization ─────────────────────────────────
+    // Locale is resolved from a saved choice, then the browser, falling back to
+    // the config's defaultLocale. Only locales the config declares are honored.
+    _resolveLocale() {
+        var supported = this.config.locales || [this.config.defaultLocale || 'en'];
+        var fallback = this.config.defaultLocale || supported[0] || 'en';
+
+        var saved = null;
+        try { saved = window.localStorage.getItem('reflection-locale'); } catch (e) {}
+        if (saved && supported.indexOf(saved) !== -1) return saved;
+
+        var nav = (navigator.language || navigator.userLanguage || '').toLowerCase();
+        for (var i = 0; i < supported.length; i++) {
+            if (nav.indexOf(supported[i].toLowerCase()) === 0) return supported[i];
+        }
+        return fallback;
+    }
+
+    setLocale(loc) {
+        var supported = this.config.locales || [];
+        if (supported.indexOf(loc) === -1) return;
+        this.locale = loc;
+        try { window.localStorage.setItem('reflection-locale', loc); } catch (e) {}
+        document.documentElement.setAttribute('lang', loc);
+        this._render();
+    }
+
+    // Resolve a localized value ({en, da, …}) to the active locale, with a
+    // fallback to defaultLocale. Plain strings pass through unchanged so the
+    // engine still works with non-localized configs.
+    L(value) {
+        if (value == null) return '';
+        if (typeof value === 'string') return value;
+        if (value[this.locale] != null) return value[this.locale];
+        var def = this.config.defaultLocale;
+        if (def && value[def] != null) return value[def];
+        var keys = Object.keys(value);
+        return keys.length ? value[keys[0]] : '';
+    }
+
+    // Look up a UI string by key from config.ui, resolved to the active locale.
+    t(key) {
+        var ui = this.config.ui || {};
+        return ui[key] != null ? this.L(ui[key]) : key;
     }
 
     mount(containerId) {
@@ -30,6 +77,7 @@ class Questionnaire {
         if (!this.container) {
             throw new Error('Questionnaire: container not found — "' + containerId + '"');
         }
+        document.documentElement.setAttribute('lang', this.locale);
         this._render();
     }
 
@@ -75,6 +123,7 @@ class Questionnaire {
         return {
             dimensions: this._computeScores(),
             rawAnswers: Object.assign({}, this.answers),
+            locale: this.locale,
             timestamp: new Date().toISOString()
         };
     }
@@ -129,7 +178,7 @@ class Questionnaire {
         if (value === undefined || value === null || value === '') {
             return {
                 valid: false,
-                message: 'Please respond to this question before continuing.'
+                message: this.t('answerPrompt')
             };
         }
         return { valid: true };
@@ -197,23 +246,51 @@ class Questionnaire {
     _renderIntro() {
         var c = this.config;
         var self = this;
-        var introParas = (c.intro || '').split('\n')
+        var title = this.L(c.meta && c.meta.title ? c.meta.title : c.title);
+        var introParas = this.L(c.intro).split('\n')
             .filter(function (p) { return p.trim(); })
-            .map(function (p) { return '<p>' + p + '</p>'; })
+            .map(function (p) { return '<p>' + self._esc(p) + '</p>'; })
             .join('');
+        var privacy = this.L(c.privacyNote);
 
         this.container.innerHTML =
             '<div class="q-card q-intro-card">' +
-            '  <h1 class="q-intro-title">' + this._esc(c.title) + '</h1>' +
+            this._renderLangSwitch() +
+            '  <h1 class="q-intro-title">' + this._esc(title) + '</h1>' +
             '  <div class="q-intro-text">' + introParas + '</div>' +
             '  <div class="q-intro-actions">' +
-            '    <button class="btn-primary q-begin-btn">Start &rarr;</button>' +
+            '    <button class="btn-primary q-begin-btn">' + this._esc(this.t('start')) + ' &rarr;</button>' +
             '  </div>' +
-            (c.privacyNote ? '  <p class="q-privacy-note">' + c.privacyNote + '</p>' : '') +
+            (privacy ? '  <p class="q-privacy-note">' + this._esc(privacy) + '</p>' : '') +
             '</div>';
+
+        this._bindLangSwitch();
 
         this.container.querySelector('.q-begin-btn')
             .addEventListener('click', function () { self.next(); });
+    }
+
+    // EN/DA (or more) language switch, shown only when the config declares more
+    // than one locale.
+    _renderLangSwitch() {
+        var locales = this.config.locales || [];
+        if (locales.length < 2) return '';
+        var self = this;
+        var buttons = locales.map(function (loc) {
+            var active = loc === self.locale ? ' active' : '';
+            return '<button class="q-lang-btn' + active + '" data-locale="' + loc + '">' +
+                   loc.toUpperCase() + '</button>';
+        }).join('');
+        return '<div class="q-lang-switch">' + buttons + '</div>';
+    }
+
+    _bindLangSwitch() {
+        var self = this;
+        this.container.querySelectorAll('.q-lang-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                self.setLocale(btn.dataset.locale);
+            });
+        });
     }
 
     _renderQuestion() {
@@ -230,9 +307,9 @@ class Questionnaire {
         var isOptional  = q.required === false;
         var showNextBtn = !isAutoInput || isOptional;
         var isCheckbox  = q.type === 'checkbox';
-        var nextLabel   = isLast                    ? 'See Results &rarr;'
-                        : isOptional && !isCheckbox ? 'Skip &rarr;'
-                        :                             'Continue &rarr;';
+        var nextLabel   = isLast                    ? this._esc(this.t('seeResults')) + ' &rarr;'
+                        : isOptional && !isCheckbox ? this._esc(this.t('skip')) + ' &rarr;'
+                        :                             this._esc(this.t('continue')) + ' &rarr;';
 
         var html =
             '<div class="q-card">' +
@@ -244,12 +321,12 @@ class Questionnaire {
             '  </div>' +
             (showSection ? '  <div class="q-section-label">' + this._esc(sectionTitle) + '</div>' : '') +
             '  <div class="q-question">' +
-            '    <p class="q-text">' + this._esc(q.text) + '</p>' +
+            '    <p class="q-text">' + this._esc(this.L(q.text)) + '</p>' +
             '    <div class="q-input-area">' + this._renderInput(q) + '</div>' +
             '    <div class="q-error" style="display:none;"></div>' +
             '  </div>' +
             '  <div class="q-nav">' +
-            '    <button class="btn-secondary q-prev-btn"' + (this.step === 0 ? ' style="visibility:hidden"' : '') + '>&larr; Back</button>' +
+            '    <button class="btn-secondary q-prev-btn"' + (this.step === 0 ? ' style="visibility:hidden"' : '') + '>&larr; ' + this._esc(this.t('back')) + '</button>' +
             (showNextBtn ? '    <button class="btn-primary q-next-btn">' + nextLabel + '</button>' : '') +
             '  </div>' +
             '</div>';
@@ -285,7 +362,8 @@ class Questionnaire {
         var self = this;
 
         var html = '<div class="q-scroll-wrapper">';
-        html += '<p class="q-scroll-meta">' + this._total + ' questions — fill in at your own pace</p>';
+        html += '<p class="q-scroll-meta">' +
+            this._esc(this.t('scrollMeta').replace('{n}', this._total)) + '</p>';
 
         var currentSection = null;
         c.questions.forEach(function (q, i) {
@@ -305,7 +383,7 @@ class Questionnaire {
                 '<div class="q-scroll-item" id="sq-' + q.id + '">' +
                 '  <div class="q-scroll-item-header">' +
                 '    <span class="q-scroll-num">' + (i + 1) + '</span>' +
-                '    <p class="q-text">' + self._esc(q.text) + '</p>' +
+                '    <p class="q-text">' + self._esc(self.L(q.text)) + '</p>' +
                 '  </div>' +
                 '  <div class="q-input-area">' + self._renderInput(q) + '</div>' +
                 '  <div class="q-error" style="display:none;"></div>' +
@@ -316,7 +394,7 @@ class Questionnaire {
 
         html +=
             '<div class="q-scroll-submit">' +
-            '  <button class="btn-primary q-submit-btn">See Results &rarr;</button>' +
+            '  <button class="btn-primary q-submit-btn">' + this._esc(this.t('seeResults')) + ' &rarr;</button>' +
             '</div>' +
             '</div>';
 
@@ -357,7 +435,7 @@ class Questionnaire {
                 item.classList.add('q-scroll-item--error');
                 var err = item.querySelector('.q-error');
                 if (err) {
-                    err.textContent = 'Please answer this question.';
+                    err.textContent = self.t('answerPrompt');
                     err.style.display = 'block';
                 }
             });
@@ -434,16 +512,27 @@ class Questionnaire {
     _renderCheckboxInput(q) {
         var current = this.answers[q.id] || [];
         var self = this;
-        var opts = (q.options || []).map(function (opt) {
-            var val = (typeof opt === 'object') ? opt.text : opt;
+        var opts = (q.options || []).map(function (opt, i) {
+            // Store the option's stable id (or index) as the value so answers are
+            // language-neutral; display the localized text.
+            var val = self._optionValue(opt, i);
+            var label = self.L(typeof opt === 'object' ? opt.text : opt);
             var isChecked = current.indexOf(val) !== -1;
             return '<label class="q-checkbox-option' + (isChecked ? ' selected' : '') + '">' +
                    '  <input type="checkbox" name="' + q.id + '" value="' + self._esc(val) + '"' +
                    (isChecked ? ' checked' : '') + '>' +
-                   '  <span class="q-checkbox-label">' + self._esc(val) + '</span>' +
+                   '  <span class="q-checkbox-label">' + self._esc(label) + '</span>' +
                    '</label>';
         });
         return '<div class="q-checkbox-group">' + opts.join('') + '</div>';
+    }
+
+    // The language-neutral key stored for a chosen option.
+    _optionValue(opt, index) {
+        if (opt && typeof opt === 'object') {
+            return opt.id != null ? opt.id : String(index);
+        }
+        return opt;  // legacy string option
     }
 
     _renderTextareaInput(q) {

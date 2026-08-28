@@ -580,6 +580,32 @@ body {
   text-align: center;
 }
 
+/* Language switch (EN / DA) on the intro screen */
+.q-lang-switch {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+.q-lang-btn {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 99px;
+  background: transparent;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.q-lang-btn:hover { color: var(--text-mid); }
+.q-lang-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
 .q-intro-title {
   font-size: 24px;
   font-weight: 600;

@@ -1,410 +1,241 @@
 {
+  "locales": ["en", "da"],
+  "defaultLocale": "en",
+
+  "meta": {
+    "title":    { "en": "How Do You Create Connection?", "da": "Hvordan skaber du forbindelse?" },
+    "subtitle": { "en": "Attachment Style Reflection", "da": "Refleksion over tilknytningsmønstre" }
+  },
+
+  "ui": {
+    "start":        { "en": "Start", "da": "Start" },
+    "back":         { "en": "Back", "da": "Tilbage" },
+    "continue":     { "en": "Continue", "da": "Fortsæt" },
+    "skip":         { "en": "Skip", "da": "Spring over" },
+    "seeResults":   { "en": "See Results", "da": "Se resultater" },
+    "scrollMeta":   { "en": "{n} questions — fill in at your own pace", "da": "{n} spørgsmål — svar i dit eget tempo" },
+    "answerPrompt": { "en": "Please answer this question.", "da": "Besvar venligst dette spørgsmål." },
+    "yourTendencies": { "en": "Your tendencies", "da": "Dine tendenser" },
+    "selection":    { "en": "selection", "da": "valg" },
+    "selections":   { "en": "selections", "da": "valg" },
+    "showAnswers":  { "en": "Show your answers", "da": "Vis dine svar" },
+    "hideAnswers":  { "en": "Hide your answers", "da": "Skjul dine svar" },
+    "downloadPdf":  { "en": "Download PDF", "da": "Hent PDF" },
+    "retake":       { "en": "Retake reflection", "da": "Tag refleksionen igen" },
+    "noResultsTitle": { "en": "No results found", "da": "Ingen resultater fundet" },
+    "noResultsBody":  { "en": "Please complete the reflection first.", "da": "Gennemfør venligst refleksionen først." },
+    "pdfNote":      { "en": "A note to carry with you", "da": "En tanke at tage med dig" },
+    "pdfAnswers":   { "en": "Your Answers", "da": "Dine svar" },
+    "pdfNoSelections": { "en": "No selections were made.", "da": "Der blev ikke foretaget nogen valg." },
+    "pdfCaption":   { "en": "Attachment Style Reflection · piatorp.dk", "da": "Refleksion over tilknytningsmønstre · piatorp.dk" }
+  },
+
+  "intro": {
+    "en": "This reflection is designed to help you become more aware of how you create closeness, safety and connection in your intimate relationships.\nIt is not a diagnosis, and it does not place you in a fixed category. Most people contain more than one attachment strategy. Your way of relating may also change depending on the relationship, your life situation, your stress level and how emotionally safe you feel.\nFor each question, choose all the answers that feel true for you. There are no right or wrong answers.\nThe purpose of this reflection is to help you notice your relational patterns with more compassion and clarity.",
+    "da": "Denne refleksion er tænkt som en hjælp til at blive mere bevidst om, hvordan du skaber nærhed, tryghed og forbindelse i dine nære relationer.\nDet er ikke en diagnose, og den placerer dig ikke i en fast kategori. De fleste mennesker rummer mere end én tilknytningsstrategi. Din måde at være i relation på kan også ændre sig alt efter relationen, din livssituation, dit stressniveau og hvor følelsesmæssigt tryg du føler dig.\nVælg for hvert spørgsmål alle de svar, der føles sande for dig. Der er ingen rigtige eller forkerte svar.\nFormålet med denne refleksion er at hjælpe dig med at få øje på dine relationelle mønstre med mere medfølelse og klarhed."
+  },
+
+  "privacyNote": {
+    "en": "Your privacy: this reflection runs entirely in your browser. It does not collect, store, or send any personal data — there is no account, no cookies, and no analytics. Your answers never leave your device and are not saved once you close the page. Because no personal data is processed, this tool is fully GDPR compliant.",
+    "da": "Dit privatliv: denne refleksion kører udelukkende i din browser. Den indsamler, gemmer eller sender ingen personlige data — der er ingen konto, ingen cookies og ingen analyseværktøjer. Dine svar forlader aldrig din enhed og gemmes ikke, når du lukker siden. Da der ikke behandles nogen personlige data, er dette værktøj fuldt ud GDPR-kompatibelt."
+  },
+
+  "closing": {
+    "en": "Your attachment strategy was once an intelligent adaptation. It helped you stay connected, protected or emotionally safe. In adult relationships, the work is not to get rid of yourself, but to understand your protective movements and slowly build more secure ways of reaching for connection.",
+    "da": "Din tilknytningsstrategi var engang en intelligent tilpasning. Den hjalp dig med at bevare forbindelse, beskyttelse eller følelsesmæssig tryghed. I voksne relationer handler arbejdet ikke om at slippe af med dig selv, men om at forstå dine beskyttende bevægelser og langsomt opbygge mere trygge måder at række ud efter forbindelse på."
+  },
+
   "questions": [
     {
       "id": "q1",
-      "text": "When I feel emotionally close to someone, I usually feel:",
+      "text": { "en": "When I feel emotionally close to someone, I usually feel:", "da": "Når jeg føler mig følelsesmæssigt tæt på nogen, føler jeg som regel:" },
       "options": [
-        {
-          "text": "Calm and safe",
-          "tag": "S"
-        },
-        {
-          "text": "Happy, but also a little afraid of losing the connection",
-          "tag": "A"
-        },
-        {
-          "text": "Uncomfortable or slightly overwhelmed",
-          "tag": "Av"
-        },
-        {
-          "text": "Unsure whether I can fully trust it",
-          "tag": "D"
-        },
-        {
-          "text": "Both longing for closeness and wanting to pull away",
-          "tag": "D"
-        }
+        { "id": "q1-1", "text": { "en": "Calm and safe", "da": "Ro og tryghed" }, "tag": "S" },
+        { "id": "q1-2", "text": { "en": "Happy, but also a little afraid of losing the connection", "da": "Glæde, men også en lille frygt for at miste forbindelsen" }, "tag": "A" },
+        { "id": "q1-3", "text": { "en": "Uncomfortable or slightly overwhelmed", "da": "Ubehag eller en let følelse af at være overvældet" }, "tag": "Av" },
+        { "id": "q1-4", "text": { "en": "Unsure whether I can fully trust it", "da": "Usikkerhed på, om jeg helt kan stole på det" }, "tag": "D" },
+        { "id": "q1-5", "text": { "en": "Both longing for closeness and wanting to pull away", "da": "Både en længsel efter nærhed og en trang til at trække mig" }, "tag": "D" }
       ]
     },
     {
       "id": "q2",
-      "text": "When my partner or someone close to me becomes distant, I tend to:",
+      "text": { "en": "When my partner or someone close to me becomes distant, I tend to:", "da": "Når min partner eller en, der står mig nær, bliver fjern, plejer jeg at:" },
       "options": [
-        {
-          "text": "Ask directly what is happening",
-          "tag": "S"
-        },
-        {
-          "text": "Become anxious and need reassurance",
-          "tag": "A"
-        },
-        {
-          "text": "Think about it constantly",
-          "tag": "A"
-        },
-        {
-          "text": "Withdraw and pretend it does not affect me",
-          "tag": "Av"
-        },
-        {
-          "text": "Become angry, cold or shut down",
-          "tag": "D"
-        },
-        {
-          "text": "Feel confused and unsafe",
-          "tag": "D"
-        }
+        { "id": "q2-1", "text": { "en": "Ask directly what is happening", "da": "Spørge direkte, hvad der sker" }, "tag": "S" },
+        { "id": "q2-2", "text": { "en": "Become anxious and need reassurance", "da": "Blive urolig og have brug for beroligelse" }, "tag": "A" },
+        { "id": "q2-3", "text": { "en": "Think about it constantly", "da": "Tænke på det hele tiden" }, "tag": "A" },
+        { "id": "q2-4", "text": { "en": "Withdraw and pretend it does not affect me", "da": "Trække mig og lade som om det ikke påvirker mig" }, "tag": "Av" },
+        { "id": "q2-5", "text": { "en": "Become angry, cold or shut down", "da": "Blive vred, kold eller lukke af" }, "tag": "D" },
+        { "id": "q2-6", "text": { "en": "Feel confused and unsafe", "da": "Føle mig forvirret og utryg" }, "tag": "D" }
       ]
     },
     {
       "id": "q3",
-      "text": "In conflict, my first impulse is usually to:",
+      "text": { "en": "In conflict, my first impulse is usually to:", "da": "I konflikt er min første impuls som regel at:" },
       "options": [
-        {
-          "text": "Stay present and try to understand",
-          "tag": "S"
-        },
-        {
-          "text": "Slow down and try to share what is happening in me",
-          "tag": "S"
-        },
-        {
-          "text": "Explain myself quickly so the distance does not grow",
-          "tag": "A"
-        },
-        {
-          "text": "Seek contact and reassurance",
-          "tag": "A"
-        },
-        {
-          "text": "Defend myself",
-          "tag": "A"
-        },
-        {
-          "text": "Withdraw or become silent",
-          "tag": "Av"
-        },
-        {
-          "text": "Attack, criticise or protest",
-          "tag": "D"
-        },
-        {
-          "text": "Freeze or lose access to my words",
-          "tag": "D"
-        }
+        { "id": "q3-1", "text": { "en": "Stay present and try to understand", "da": "Blive til stede og forsøge at forstå" }, "tag": "S" },
+        { "id": "q3-2", "text": { "en": "Slow down and try to share what is happening in me", "da": "Sætte tempoet ned og forsøge at dele, hvad der sker i mig" }, "tag": "S" },
+        { "id": "q3-3", "text": { "en": "Explain myself quickly so the distance does not grow", "da": "Forklare mig hurtigt, så afstanden ikke vokser" }, "tag": "A" },
+        { "id": "q3-4", "text": { "en": "Seek contact and reassurance", "da": "Søge kontakt og beroligelse" }, "tag": "A" },
+        { "id": "q3-5", "text": { "en": "Defend myself", "da": "Forsvare mig selv" }, "tag": "A" },
+        { "id": "q3-6", "text": { "en": "Withdraw or become silent", "da": "Trække mig eller blive tavs" }, "tag": "Av" },
+        { "id": "q3-7", "text": { "en": "Attack, criticise or protest", "da": "Angribe, kritisere eller protestere" }, "tag": "D" },
+        { "id": "q3-8", "text": { "en": "Freeze or lose access to my words", "da": "Fryse eller miste adgang til mine ord" }, "tag": "D" }
       ]
     },
     {
       "id": "q3b",
-      "text": "After a conflict, I usually:",
+      "text": { "en": "After a conflict, I usually:", "da": "Efter en konflikt plejer jeg at:" },
       "options": [
-        {
-          "text": "Try to repair and understand what happened",
-          "tag": "S"
-        },
-        {
-          "text": "Need reassurance before I can feel close again",
-          "tag": "A"
-        },
-        {
-          "text": "Prefer to move on and not talk too much about it",
-          "tag": "Av"
-        },
-        {
-          "text": "Feel ashamed or afraid that something has been damaged",
-          "tag": "D"
-        },
-        {
-          "text": "Want closeness, but find it hard to trust the repair",
-          "tag": "D"
-        }
+        { "id": "q3b-1", "text": { "en": "Try to repair and understand what happened", "da": "Forsøge at genoprette og forstå, hvad der skete" }, "tag": "S" },
+        { "id": "q3b-2", "text": { "en": "Need reassurance before I can feel close again", "da": "Have brug for beroligelse, før jeg kan føle nærhed igen" }, "tag": "A" },
+        { "id": "q3b-3", "text": { "en": "Prefer to move on and not talk too much about it", "da": "Foretrække at komme videre og ikke tale for meget om det" }, "tag": "Av" },
+        { "id": "q3b-4", "text": { "en": "Feel ashamed or afraid that something has been damaged", "da": "Føle skam eller frygt for, at noget er blevet beskadiget" }, "tag": "D" },
+        { "id": "q3b-5", "text": { "en": "Want closeness, but find it hard to trust the repair", "da": "Ønske nærhed, men have svært ved at stole på genoprettelsen" }, "tag": "D" }
       ]
     },
     {
       "id": "q4",
-      "text": "When I need comfort, I usually:",
+      "text": { "en": "When I need comfort, I usually:", "da": "Når jeg har brug for trøst, plejer jeg at:" },
       "options": [
-        {
-          "text": "Can ask for it directly",
-          "tag": "S"
-        },
-        {
-          "text": "Hope the other person notices",
-          "tag": "A"
-        },
-        {
-          "text": "Become frustrated if they do not understand me",
-          "tag": "A"
-        },
-        {
-          "text": "Tell myself I should manage alone",
-          "tag": "Av"
-        },
-        {
-          "text": "Feel ashamed of needing anything",
-          "tag": "D"
-        },
-        {
-          "text": "Want comfort, but do not fully trust it when it comes",
-          "tag": "D"
-        }
+        { "id": "q4-1", "text": { "en": "Can ask for it directly", "da": "Kunne bede om det direkte" }, "tag": "S" },
+        { "id": "q4-2", "text": { "en": "Hope the other person notices", "da": "Håbe, at den anden lægger mærke til det" }, "tag": "A" },
+        { "id": "q4-3", "text": { "en": "Become frustrated if they do not understand me", "da": "Blive frustreret, hvis de ikke forstår mig" }, "tag": "A" },
+        { "id": "q4-4", "text": { "en": "Tell myself I should manage alone", "da": "Sige til mig selv, at jeg bør klare mig alene" }, "tag": "Av" },
+        { "id": "q4-5", "text": { "en": "Feel ashamed of needing anything", "da": "Føle skam over at have brug for noget" }, "tag": "D" },
+        { "id": "q4-6", "text": { "en": "Want comfort, but do not fully trust it when it comes", "da": "Ønske trøst, men ikke helt stole på den, når den kommer" }, "tag": "D" }
       ]
     },
     {
       "id": "q5",
-      "text": "When someone depends on me emotionally, I often feel:",
+      "text": { "en": "When someone depends on me emotionally, I often feel:", "da": "Når nogen er følelsesmæssigt afhængig af mig, føler jeg ofte:" },
       "options": [
-        {
-          "text": "Touched and open",
-          "tag": "S"
-        },
-        {
-          "text": "Responsible and needed",
-          "tag": "S"
-        },
-        {
-          "text": "Pressured or trapped",
-          "tag": "Av"
-        },
-        {
-          "text": "Afraid of disappointing them",
-          "tag": "A"
-        },
-        {
-          "text": "Unsure what they expect from me",
-          "tag": "D"
-        },
-        {
-          "text": "Overwhelmed and wanting space",
-          "tag": "Av"
-        }
+        { "id": "q5-1", "text": { "en": "Touched and open", "da": "Berørt og åben" }, "tag": "S" },
+        { "id": "q5-2", "text": { "en": "Responsible and needed", "da": "Ansvarlig og nødvendig" }, "tag": "S" },
+        { "id": "q5-3", "text": { "en": "Pressured or trapped", "da": "Presset eller fanget" }, "tag": "Av" },
+        { "id": "q5-4", "text": { "en": "Afraid of disappointing them", "da": "Bange for at skuffe dem" }, "tag": "A" },
+        { "id": "q5-5", "text": { "en": "Unsure what they expect from me", "da": "Usikker på, hvad de forventer af mig" }, "tag": "D" },
+        { "id": "q5-6", "text": { "en": "Overwhelmed and wanting space", "da": "Overvældet og med et behov for plads" }, "tag": "Av" }
       ]
     },
     {
       "id": "q6",
-      "text": "My greatest fear in close relationships is often:",
+      "text": { "en": "My greatest fear in close relationships is often:", "da": "Min største frygt i nære relationer er ofte:" },
       "options": [
-        {
-          "text": "Losing the person",
-          "tag": "A"
-        },
-        {
-          "text": "Not being important enough",
-          "tag": "A"
-        },
-        {
-          "text": "Being rejected or abandoned",
-          "tag": "A"
-        },
-        {
-          "text": "Being controlled or swallowed up",
-          "tag": "Av"
-        },
-        {
-          "text": "Being criticised or not good enough",
-          "tag": "D"
-        },
-        {
-          "text": "Being hurt if I trust too much",
-          "tag": "D"
-        },
-        {
-          "text": "I can feel afraid, but I usually believe we can find our way back",
-          "tag": "S"
-        }
+        { "id": "q6-1", "text": { "en": "Losing the person", "da": "At miste personen" }, "tag": "A" },
+        { "id": "q6-2", "text": { "en": "Not being important enough", "da": "Ikke at være vigtig nok" }, "tag": "A" },
+        { "id": "q6-3", "text": { "en": "Being rejected or abandoned", "da": "At blive afvist eller forladt" }, "tag": "A" },
+        { "id": "q6-4", "text": { "en": "Being controlled or swallowed up", "da": "At blive kontrolleret eller opslugt" }, "tag": "Av" },
+        { "id": "q6-5", "text": { "en": "Being criticised or not good enough", "da": "At blive kritiseret eller ikke være god nok" }, "tag": "D" },
+        { "id": "q6-6", "text": { "en": "Being hurt if I trust too much", "da": "At blive såret, hvis jeg stoler for meget" }, "tag": "D" },
+        { "id": "q6-7", "text": { "en": "I can feel afraid, but I usually believe we can find our way back", "da": "Jeg kan føle frygt, men jeg tror som regel på, at vi kan finde vej tilbage" }, "tag": "S" }
       ]
     },
     {
       "id": "q7",
-      "text": "When I feel insecure in love, I tend to move:",
+      "text": { "en": "When I feel insecure in love, I tend to move:", "da": "Når jeg føler mig utryg i kærlighed, har jeg tendens til at bevæge mig:" },
       "options": [
-        {
-          "text": "Toward the other person",
-          "tag": "A"
-        },
-        {
-          "text": "Away from the other person",
-          "tag": "Av"
-        },
-        {
-          "text": "Back and forth between closeness and distance",
-          "tag": "D"
-        },
-        {
-          "text": "Into overthinking",
-          "tag": "A"
-        },
-        {
-          "text": "Into self-protection",
-          "tag": "Av"
-        },
-        {
-          "text": "Into protest, anger or silence",
-          "tag": "D"
-        },
-        {
-          "text": "I try to pause, notice what is happening in me, and reach for contact more clearly",
-          "tag": "S"
-        }
+        { "id": "q7-1", "text": { "en": "Toward the other person", "da": "Hen mod den anden person" }, "tag": "A" },
+        { "id": "q7-2", "text": { "en": "Away from the other person", "da": "Væk fra den anden person" }, "tag": "Av" },
+        { "id": "q7-3", "text": { "en": "Back and forth between closeness and distance", "da": "Frem og tilbage mellem nærhed og afstand" }, "tag": "D" },
+        { "id": "q7-4", "text": { "en": "Into overthinking", "da": "Ind i overtænkning" }, "tag": "A" },
+        { "id": "q7-5", "text": { "en": "Into self-protection", "da": "Ind i selvbeskyttelse" }, "tag": "Av" },
+        { "id": "q7-6", "text": { "en": "Into protest, anger or silence", "da": "Ind i protest, vrede eller tavshed" }, "tag": "D" },
+        { "id": "q7-7", "text": { "en": "I try to pause, notice what is happening in me, and reach for contact more clearly", "da": "Jeg forsøger at holde pause, mærke hvad der sker i mig, og række ud efter kontakt mere tydeligt" }, "tag": "S" }
       ]
     },
     {
       "id": "q8",
-      "text": "In my body, relational insecurity often feels like:",
+      "text": { "en": "In my body, relational insecurity often feels like:", "da": "I min krop føles relationel utryghed ofte som:" },
       "options": [
-        {
-          "text": "Tightness in the chest",
-          "tag": "A"
-        },
-        {
-          "text": "Restlessness",
-          "tag": "A"
-        },
-        {
-          "text": "A knot in the stomach",
-          "tag": "A"
-        },
-        {
-          "text": "Numbness",
-          "tag": "Av"
-        },
-        {
-          "text": "Tension in the jaw, shoulders or belly",
-          "tag": "D"
-        },
-        {
-          "text": "Heaviness or collapse",
-          "tag": "D"
-        },
-        {
-          "text": "A need to do something immediately",
-          "tag": "A"
-        },
-        {
-          "text": "I may feel activated, but I can usually return to my breath and body",
-          "tag": "S"
-        }
+        { "id": "q8-1", "text": { "en": "Tightness in the chest", "da": "Trykken i brystet" }, "tag": "A" },
+        { "id": "q8-2", "text": { "en": "Restlessness", "da": "Rastløshed" }, "tag": "A" },
+        { "id": "q8-3", "text": { "en": "A knot in the stomach", "da": "En knude i maven" }, "tag": "A" },
+        { "id": "q8-4", "text": { "en": "Numbness", "da": "Følelsesløshed" }, "tag": "Av" },
+        { "id": "q8-5", "text": { "en": "Tension in the jaw, shoulders or belly", "da": "Spænding i kæbe, skuldre eller mave" }, "tag": "D" },
+        { "id": "q8-6", "text": { "en": "Heaviness or collapse", "da": "Tyngde eller sammenbrud" }, "tag": "D" },
+        { "id": "q8-7", "text": { "en": "A need to do something immediately", "da": "Et behov for at gøre noget med det samme" }, "tag": "A" },
+        { "id": "q8-8", "text": { "en": "I may feel activated, but I can usually return to my breath and body", "da": "Jeg kan blive aktiveret, men jeg kan som regel vende tilbage til mit åndedræt og min krop" }, "tag": "S" }
       ]
     },
     {
       "id": "q9",
-      "text": "What I most long for in relationships is:",
+      "text": { "en": "What I most long for in relationships is:", "da": "Det, jeg længes mest efter i relationer, er:" },
       "options": [
-        {
-          "text": "To feel safe and chosen",
-          "tag": "S"
-        },
-        {
-          "text": "To feel free and not pressured",
-          "tag": "Av"
-        },
-        {
-          "text": "To be understood without having to fight for it",
-          "tag": "A"
-        },
-        {
-          "text": "To be close without losing myself",
-          "tag": "D"
-        },
-        {
-          "text": "To be able to trust love",
-          "tag": "D"
-        },
-        {
-          "text": "To feel that I matter",
-          "tag": "A"
-        }
+        { "id": "q9-1", "text": { "en": "To feel safe and chosen", "da": "At føle mig tryg og valgt" }, "tag": "S" },
+        { "id": "q9-2", "text": { "en": "To feel free and not pressured", "da": "At føle mig fri og ikke presset" }, "tag": "Av" },
+        { "id": "q9-3", "text": { "en": "To be understood without having to fight for it", "da": "At blive forstået uden at skulle kæmpe for det" }, "tag": "A" },
+        { "id": "q9-4", "text": { "en": "To be close without losing myself", "da": "At være tæt på uden at miste mig selv" }, "tag": "D" },
+        { "id": "q9-5", "text": { "en": "To be able to trust love", "da": "At kunne stole på kærligheden" }, "tag": "D" },
+        { "id": "q9-6", "text": { "en": "To feel that I matter", "da": "At føle, at jeg betyder noget" }, "tag": "A" }
       ]
     },
     {
       "id": "q9b",
-      "text": "When someone shows me love or care, I often:",
+      "text": { "en": "When someone shows me love or care, I often:", "da": "Når nogen viser mig kærlighed eller omsorg, plejer jeg ofte at:" },
       "options": [
-        {
-          "text": "Can take it in and feel moved",
-          "tag": "S"
-        },
-        {
-          "text": "Need more signs that it is real",
-          "tag": "A"
-        },
-        {
-          "text": "Feel uncomfortable or want to change the subject",
-          "tag": "Av"
-        },
-        {
-          "text": "Want it, but do not fully trust it",
-          "tag": "D"
-        },
-        {
-          "text": "Feel both longing and fear",
-          "tag": "D"
-        }
+        { "id": "q9b-1", "text": { "en": "Can take it in and feel moved", "da": "Kunne tage imod det og blive rørt" }, "tag": "S" },
+        { "id": "q9b-2", "text": { "en": "Need more signs that it is real", "da": "Have brug for flere tegn på, at det er ægte" }, "tag": "A" },
+        { "id": "q9b-3", "text": { "en": "Feel uncomfortable or want to change the subject", "da": "Føle ubehag eller ville skifte emne" }, "tag": "Av" },
+        { "id": "q9b-4", "text": { "en": "Want it, but do not fully trust it", "da": "Ønske det, men ikke helt stole på det" }, "tag": "D" },
+        { "id": "q9b-5", "text": { "en": "Feel both longing and fear", "da": "Føle både længsel og frygt" }, "tag": "D" }
       ]
     },
     {
       "id": "q10",
-      "text": "What I am slowly learning about myself is:",
+      "text": { "en": "What I am slowly learning about myself is:", "da": "Det, jeg langsomt er ved at lære om mig selv, er:" },
       "options": [
-        {
-          "text": "I may seek closeness when I feel afraid",
-          "tag": "A"
-        },
-        {
-          "text": "I may withdraw when I feel overwhelmed",
-          "tag": "Av"
-        },
-        {
-          "text": "I may protest when I do not feel important",
-          "tag": "A"
-        },
-        {
-          "text": "I may become independent when I actually need comfort",
-          "tag": "Av"
-        },
-        {
-          "text": "I may confuse danger with intimacy",
-          "tag": "D"
-        },
-        {
-          "text": "I may need more safety before I can be fully open",
-          "tag": "D"
-        },
-        {
-          "text": "I can learn to ask more clearly for what I need",
-          "tag": "S"
-        }
+        { "id": "q10-1", "text": { "en": "I may seek closeness when I feel afraid", "da": "Jeg kan søge nærhed, når jeg er bange" }, "tag": "A" },
+        { "id": "q10-2", "text": { "en": "I may withdraw when I feel overwhelmed", "da": "Jeg kan trække mig, når jeg føler mig overvældet" }, "tag": "Av" },
+        { "id": "q10-3", "text": { "en": "I may protest when I do not feel important", "da": "Jeg kan protestere, når jeg ikke føler mig vigtig" }, "tag": "A" },
+        { "id": "q10-4", "text": { "en": "I may become independent when I actually need comfort", "da": "Jeg kan blive uafhængig, når jeg i virkeligheden har brug for trøst" }, "tag": "Av" },
+        { "id": "q10-5", "text": { "en": "I may confuse danger with intimacy", "da": "Jeg kan forveksle fare med intimitet" }, "tag": "D" },
+        { "id": "q10-6", "text": { "en": "I may need more safety before I can be fully open", "da": "Jeg kan have brug for mere tryghed, før jeg kan være helt åben" }, "tag": "D" },
+        { "id": "q10-7", "text": { "en": "I can learn to ask more clearly for what I need", "da": "Jeg kan lære at bede tydeligere om det, jeg har brug for" }, "tag": "S" }
       ]
     }
   ],
+
   "tendencies": {
     "S": {
-      "label": "Secure",
+      "label": { "en": "Secure", "da": "Tryg" },
       "color": "#7a9e8a",
       "hlBg": "#eef5f1",
-      "title": "Secure tendencies",
-      "text": "You are often able to stay emotionally present, ask for what you need, listen to the other person and repair after conflict. You may still become triggered, but you usually have access to reflection and connection again."
+      "title": { "en": "Secure tendencies", "da": "Trygge tendenser" },
+      "text": {
+        "en": "You are often able to stay emotionally present, ask for what you need, listen to the other person and repair after conflict. You may still become triggered, but you usually have access to reflection and connection again.",
+        "da": "Du er ofte i stand til at blive følelsesmæssigt til stede, bede om det, du har brug for, lytte til den anden og genoprette efter konflikt. Du kan stadig blive trigget, men du har som regel adgang til refleksion og forbindelse igen."
+      }
     },
     "A": {
-      "label": "Anxious / Ambivalent",
+      "label": { "en": "Anxious / Ambivalent", "da": "Ængstelig / Ambivalent" },
       "color": "#c77f5a",
       "hlBg": "#fdf0e8",
-      "title": "Anxious / Ambivalent tendencies",
-      "text": "You may become very activated when you feel distance, uncertainty or emotional disconnection. You may seek reassurance, think a lot about the relationship, or feel a strong need to restore closeness quickly."
+      "title": { "en": "Anxious / Ambivalent tendencies", "da": "Ængstelige / ambivalente tendenser" },
+      "text": {
+        "en": "You may become very activated when you feel distance, uncertainty or emotional disconnection. You may seek reassurance, think a lot about the relationship, or feel a strong need to restore closeness quickly.",
+        "da": "Du kan blive meget aktiveret, når du mærker afstand, usikkerhed eller følelsesmæssig afbrydelse. Du kan søge beroligelse, tænke meget på relationen eller føle et stærkt behov for hurtigt at genoprette nærhed."
+      }
     },
     "Av": {
-      "label": "Avoidant / Withdrawn",
+      "label": { "en": "Avoidant / Withdrawn", "da": "Undvigende / Tilbagetrukken" },
       "color": "#6b8fa8",
       "hlBg": "#e8f0f5",
-      "title": "Avoidant / Withdrawn tendencies",
-      "text": "You may protect yourself by pulling back, becoming rational, staying silent or managing things alone. Closeness may feel important, but emotional pressure can feel overwhelming or intrusive."
+      "title": { "en": "Avoidant / Withdrawn tendencies", "da": "Undvigende / tilbagetrukne tendenser" },
+      "text": {
+        "en": "You may protect yourself by pulling back, becoming rational, staying silent or managing things alone. Closeness may feel important, but emotional pressure can feel overwhelming or intrusive.",
+        "da": "Du kan beskytte dig selv ved at trække dig, blive rationel, forblive tavs eller klare tingene alene. Nærhed kan føles vigtig, men følelsesmæssigt pres kan føles overvældende eller påtrængende."
+      }
     },
     "D": {
-      "label": "Disorganised / Conflicted",
+      "label": { "en": "Disorganised / Conflicted", "da": "Desorganiseret / Konfliktfyldt" },
       "color": "#9b82a8",
       "hlBg": "#f2eef5",
-      "title": "Disorganised / Conflicted tendencies",
-      "text": "You may both long for closeness and fear it. You may move between reaching out and pulling away, or between protest and shutdown. This often reflects earlier experiences where connection was also linked with fear, unpredictability or pain."
+      "title": { "en": "Disorganised / Conflicted tendencies", "da": "Desorganiserede / konfliktfyldte tendenser" },
+      "text": {
+        "en": "You may both long for closeness and fear it. You may move between reaching out and pulling away, or between protest and shutdown. This often reflects earlier experiences where connection was also linked with fear, unpredictability or pain.",
+        "da": "Du kan både længes efter nærhed og frygte den. Du kan bevæge dig mellem at række ud og trække dig, eller mellem protest og at lukke ned. Dette afspejler ofte tidligere erfaringer, hvor forbindelse også var forbundet med frygt, uforudsigelighed eller smerte."
+      }
     }
   }
 }
