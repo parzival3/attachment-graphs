@@ -31,160 +31,158 @@ var REFLECTION_CONFIG = {
   sections: {},
   scoring:  [],
 
+  // ── GENERATED FROM attachment-reflection-questions.json — do not edit by hand ──
   questions: [
     {
       id: 'q1', type: 'checkbox', required: false,
       text: 'When I feel emotionally close to someone, I usually feel:',
       options: [
-        { text: 'Calm and safe',                                              tag: 'S'  },
-        { text: 'Happy, but also a little afraid of losing the connection',   tag: 'A'  },
-        { text: 'Uncomfortable or slightly overwhelmed',                      tag: 'Av' },
-        { text: 'Unsure whether I can fully trust it',                        tag: 'D'  },
-        { text: 'Both longing for closeness and wanting to pull away',        tag: 'D'  }
+        { text: 'Calm and safe', tag: 'S' },
+        { text: 'Happy, but also a little afraid of losing the connection', tag: 'A' },
+        { text: 'Uncomfortable or slightly overwhelmed', tag: 'Av' },
+        { text: 'Unsure whether I can fully trust it', tag: 'D' },
+        { text: 'Both longing for closeness and wanting to pull away', tag: 'D' },
       ]
     },
     {
       id: 'q2', type: 'checkbox', required: false,
       text: 'When my partner or someone close to me becomes distant, I tend to:',
       options: [
-        { text: 'Ask directly what is happening',                tag: 'S'  },
-        { text: 'Become anxious and need reassurance',           tag: 'A'  },
-        { text: 'Think about it constantly',                     tag: 'A'  },
-        { text: 'Withdraw and pretend it does not affect me',    tag: 'Av' },
-        { text: 'Become angry, cold or shut down',               tag: 'D'  },
-        { text: 'Feel confused and unsafe',                      tag: 'D'  }
+        { text: 'Ask directly what is happening', tag: 'S' },
+        { text: 'Become anxious and need reassurance', tag: 'A' },
+        { text: 'Think about it constantly', tag: 'A' },
+        { text: 'Withdraw and pretend it does not affect me', tag: 'Av' },
+        { text: 'Become angry, cold or shut down', tag: 'D' },
+        { text: 'Feel confused and unsafe', tag: 'D' },
       ]
     },
     {
       id: 'q3', type: 'checkbox', required: false,
       text: 'In conflict, my first impulse is usually to:',
       options: [
-        { text: 'Stay present and try to understand',          tag: 'S'  },
-        { text: 'Slow down and try to share what is happening in me', tag: 'S'  },
-        { text: 'Explain myself quickly so the distance does not grow', tag: 'A'  },
-        { text: 'Seek contact and reassurance',          tag: 'A'  },
-        { text: 'Defend myself',                         tag: 'A'  },
-        { text: 'Withdraw or become silent',             tag: 'Av' },
-        { text: 'Attack, criticise or protest',          tag: 'D'  },
-        { text: 'Freeze or lose access to my words',     tag: 'D'  }
+        { text: 'Stay present and try to understand', tag: 'S' },
+        { text: 'Slow down and try to share what is happening in me', tag: 'S' },
+        { text: 'Explain myself quickly so the distance does not grow', tag: 'A' },
+        { text: 'Seek contact and reassurance', tag: 'A' },
+        { text: 'Defend myself', tag: 'A' },
+        { text: 'Withdraw or become silent', tag: 'Av' },
+        { text: 'Attack, criticise or protest', tag: 'D' },
+        { text: 'Freeze or lose access to my words', tag: 'D' },
       ]
     },
     {
       id: 'q3b', type: 'checkbox', required: false,
       text: 'After a conflict, I usually:',
       options: [
-        { text: 'Try to repair and understand what happened',       tag: 'S'  },
-        { text: 'Need reassurance before I can feel close again',   tag: 'A'  },
+        { text: 'Try to repair and understand what happened', tag: 'S' },
+        { text: 'Need reassurance before I can feel close again', tag: 'A' },
         { text: 'Prefer to move on and not talk too much about it', tag: 'Av' },
         { text: 'Feel ashamed or afraid that something has been damaged', tag: 'D' },
-        { text: 'Want closeness, but find it hard to trust the repair', tag: 'D' }
+        { text: 'Want closeness, but find it hard to trust the repair', tag: 'D' },
       ]
     },
     {
       id: 'q4', type: 'checkbox', required: false,
       text: 'When I need comfort, I usually:',
       options: [
-        { text: 'Can ask for it directly',                               tag: 'S'  },
-        { text: 'Hope the other person notices',                         tag: 'A'  },
-        { text: 'Become frustrated if they do not understand me',        tag: 'A'  },
-        { text: 'Tell myself I should manage alone',                     tag: 'Av' },
-        { text: 'Feel ashamed of needing anything',                      tag: 'D'  },
-        { text: 'Want comfort, but do not fully trust it when it comes', tag: 'D'  }
+        { text: 'Can ask for it directly', tag: 'S' },
+        { text: 'Hope the other person notices', tag: 'A' },
+        { text: 'Become frustrated if they do not understand me', tag: 'A' },
+        { text: 'Tell myself I should manage alone', tag: 'Av' },
+        { text: 'Feel ashamed of needing anything', tag: 'D' },
+        { text: 'Want comfort, but do not fully trust it when it comes', tag: 'D' },
       ]
     },
     {
       id: 'q5', type: 'checkbox', required: false,
       text: 'When someone depends on me emotionally, I often feel:',
       options: [
-        { text: 'Touched and open',               tag: 'S'  },
-        { text: 'Responsible and needed',         tag: 'S'  },
-        { text: 'Pressured or trapped',           tag: 'Av' },
-        { text: 'Afraid of disappointing them',   tag: 'A'  },
-        { text: 'Unsure what they expect from me', tag: 'D'  },
-        { text: 'Overwhelmed and wanting space',  tag: 'Av' }
+        { text: 'Touched and open', tag: 'S' },
+        { text: 'Responsible and needed', tag: 'S' },
+        { text: 'Pressured or trapped', tag: 'Av' },
+        { text: 'Afraid of disappointing them', tag: 'A' },
+        { text: 'Unsure what they expect from me', tag: 'D' },
+        { text: 'Overwhelmed and wanting space', tag: 'Av' },
       ]
     },
     {
       id: 'q6', type: 'checkbox', required: false,
       text: 'My greatest fear in close relationships is often:',
       options: [
-        { text: 'Losing the person',                    tag: 'A'  },
-        { text: 'Not being important enough',           tag: 'A'  },
-        { text: 'Being rejected or abandoned',          tag: 'A'  },
-        { text: 'Being controlled or swallowed up',     tag: 'Av' },
-        { text: 'Being criticised or not good enough',  tag: 'D'  },
-        { text: 'Being hurt if I trust too much',       tag: 'D'  },
-        { text: 'I can feel afraid, but I usually believe we can find our way back', tag: 'S' }
+        { text: 'Losing the person', tag: 'A' },
+        { text: 'Not being important enough', tag: 'A' },
+        { text: 'Being rejected or abandoned', tag: 'A' },
+        { text: 'Being controlled or swallowed up', tag: 'Av' },
+        { text: 'Being criticised or not good enough', tag: 'D' },
+        { text: 'Being hurt if I trust too much', tag: 'D' },
+        { text: 'I can feel afraid, but I usually believe we can find our way back', tag: 'S' },
       ]
     },
     {
       id: 'q7', type: 'checkbox', required: false,
       text: 'When I feel insecure in love, I tend to move:',
       options: [
-        { text: 'Toward the other person',                        tag: 'A'  },
-        { text: 'Away from the other person',                     tag: 'Av' },
-        { text: 'Back and forth between closeness and distance',  tag: 'D'  },
-        { text: 'Into overthinking',                              tag: 'A'  },
-        { text: 'Into self-protection',                           tag: 'Av' },
-        { text: 'Into protest, anger or silence',                 tag: 'D'  },
-        { text: 'I try to pause, notice what is happening in me, and reach for contact more clearly', tag: 'S' }
+        { text: 'Toward the other person', tag: 'A' },
+        { text: 'Away from the other person', tag: 'Av' },
+        { text: 'Back and forth between closeness and distance', tag: 'D' },
+        { text: 'Into overthinking', tag: 'A' },
+        { text: 'Into self-protection', tag: 'Av' },
+        { text: 'Into protest, anger or silence', tag: 'D' },
+        { text: 'I try to pause, notice what is happening in me, and reach for contact more clearly', tag: 'S' },
       ]
     },
     {
       id: 'q8', type: 'checkbox', required: false,
       text: 'In my body, relational insecurity often feels like:',
       options: [
-        { text: 'Tightness in the chest',              tag: 'A'  },
-        { text: 'Restlessness',                        tag: 'A'  },
-        { text: 'A knot in the stomach',               tag: 'A'  },
-        { text: 'Numbness',                            tag: 'Av' },
+        { text: 'Tightness in the chest', tag: 'A' },
+        { text: 'Restlessness', tag: 'A' },
+        { text: 'A knot in the stomach', tag: 'A' },
+        { text: 'Numbness', tag: 'Av' },
         { text: 'Tension in the jaw, shoulders or belly', tag: 'D' },
-        { text: 'Heaviness or collapse',               tag: 'D'  },
-        { text: 'A need to do something immediately',  tag: 'A'  },
-        { text: 'I may feel activated, but I can usually return to my breath and body', tag: 'S' }
+        { text: 'Heaviness or collapse', tag: 'D' },
+        { text: 'A need to do something immediately', tag: 'A' },
+        { text: 'I may feel activated, but I can usually return to my breath and body', tag: 'S' },
       ]
     },
     {
       id: 'q9', type: 'checkbox', required: false,
       text: 'What I most long for in relationships is:',
       options: [
-        { text: 'To feel safe and chosen',                          tag: 'S'  },
-        { text: 'To feel free and not pressured',                   tag: 'Av' },
-        { text: 'To be understood without having to fight for it',  tag: 'A'  },
-        { text: 'To be close without losing myself',                tag: 'D'  },
-        { text: 'To be able to trust love',                         tag: 'D'  },
-        { text: 'To feel that I matter',                            tag: 'A'  }
+        { text: 'To feel safe and chosen', tag: 'S' },
+        { text: 'To feel free and not pressured', tag: 'Av' },
+        { text: 'To be understood without having to fight for it', tag: 'A' },
+        { text: 'To be close without losing myself', tag: 'D' },
+        { text: 'To be able to trust love', tag: 'D' },
+        { text: 'To feel that I matter', tag: 'A' },
       ]
     },
     {
       id: 'q9b', type: 'checkbox', required: false,
       text: 'When someone shows me love or care, I often:',
       options: [
-        { text: 'Can take it in and feel moved',                 tag: 'S'  },
-        { text: 'Need more signs that it is real',               tag: 'A'  },
+        { text: 'Can take it in and feel moved', tag: 'S' },
+        { text: 'Need more signs that it is real', tag: 'A' },
         { text: 'Feel uncomfortable or want to change the subject', tag: 'Av' },
-        { text: 'Want it, but do not fully trust it',            tag: 'D'  },
-        { text: 'Feel both longing and fear',                    tag: 'D'  }
+        { text: 'Want it, but do not fully trust it', tag: 'D' },
+        { text: 'Feel both longing and fear', tag: 'D' },
       ]
     },
     {
       id: 'q10', type: 'checkbox', required: false,
       text: 'What I am slowly learning about myself is:',
       options: [
-        { text: 'I may seek closeness when I feel afraid',                    tag: 'A'  },
-        { text: 'I may withdraw when I feel overwhelmed',                     tag: 'Av' },
-        { text: 'I may protest when I do not feel important',                 tag: 'A'  },
-        { text: 'I may become independent when I actually need comfort',      tag: 'Av' },
-        { text: 'I may confuse danger with intimacy',                         tag: 'D'  },
-        { text: 'I may need more safety before I can be fully open',          tag: 'D'  },
-        { text: 'I can learn to ask more clearly for what I need',            tag: 'S'  }
+        { text: 'I may seek closeness when I feel afraid', tag: 'A' },
+        { text: 'I may withdraw when I feel overwhelmed', tag: 'Av' },
+        { text: 'I may protest when I do not feel important', tag: 'A' },
+        { text: 'I may become independent when I actually need comfort', tag: 'Av' },
+        { text: 'I may confuse danger with intimacy', tag: 'D' },
+        { text: 'I may need more safety before I can be fully open', tag: 'D' },
+        { text: 'I can learn to ask more clearly for what I need', tag: 'S' },
       ]
     }
   ],
 
-  // ── Tendency definitions ──────────────────────────────────────────────────
-  // Color, label and interpretation text for each tag.
-  // Edit the text here to update what appears on the results page.
   tendencies: {
     S: {
       label: 'Secure',
@@ -215,6 +213,7 @@ var REFLECTION_CONFIG = {
       text:  'You may both long for closeness and fear it. You may move between reaching out and pulling away, or between protest and shutdown. This often reflects earlier experiences where connection was also linked with fear, unpredictability or pain.'
     }
   },
+  // ── END GENERATED ──
 
   closing: 'Your attachment strategy was once an intelligent adaptation. It helped you stay connected, protected or emotionally safe. In adult relationships, the work is not to get rid of yourself, but to understand your protective movements and slowly build more secure ways of reaching for connection.'
 };

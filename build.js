@@ -12,6 +12,7 @@
  */
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 const { inlineSource } = require('inline-source');
 
 const ROOT = __dirname;
@@ -23,6 +24,12 @@ const PAGES = [
 ];
 
 async function build() {
+  // Regenerate the config's questions/tendencies from the JSON data file first,
+  // so the build always reflects the latest edits (and validation runs).
+  execFileSync(process.execPath, [path.join(ROOT, 'generate-config.js')], {
+    stdio: 'inherit',
+  });
+
   fs.mkdirSync(OUT, { recursive: true });
 
   for (const page of PAGES) {

@@ -189,11 +189,46 @@ npm run build     # writes dist/attachment-reflection.html and
                   #        dist/attachment-reflection-results.html
 ```
 
-Each output file inlines `questionnaire.css`, `attachment-reflection-config.js`
-and (for the entry page) `questionnaire-framework.js`. The jsPDF library on the
-results page is intentionally **not** inlined — it stays a CDN reference, so the
-"Download PDF" feature needs an internet connection. Assets are inlined only when
-tagged with the `inline` attribute in the source HTML; `dist/` is git-ignored.
+Each output file inlines `questionnaire.css`, `attachment-reflection-config.js`,
+`questionnaire-framework.js` and the vendored jsPDF library
+(`vendor/jspdf.umd.min.js`). The built files have **no runtime network
+dependencies** — the questionnaire and the PDF download work offline and will
+keep working regardless of any CDN. Assets are inlined only when tagged with the
+`inline` attribute in the source HTML; `dist/` is git-ignored.
+
+### Editing questions and answers
+
+The questions, answer options and tendency definitions for the Attachment
+Reflection live in a single data file: **`attachment-reflection-questions.json`**.
+Add, remove or re-tag options there — no need to touch any JavaScript.
+
+```jsonc
+{
+  "questions": [
+    {
+      "id": "q1",
+      "text": "When I feel emotionally close to someone, I usually feel:",
+      "options": [
+        { "text": "Calm and safe", "tag": "S" },
+        { "text": "Uncomfortable or slightly overwhelmed", "tag": "Av" }
+      ]
+    }
+  ],
+  "tendencies": {
+    "S":  { "label": "Secure", "color": "#7a9e8a", "hlBg": "#eef5f1",
+            "title": "Secure tendencies", "text": "…" }
+  }
+}
+```
+
+- Each option's `tag` must be one of the keys in `tendencies` (`S`, `A`, `Av`,
+  `D`). All questions default to multi-select checkboxes and are optional; add
+  `"type"` / `"required"` on a question only to override that.
+- After editing, run **`npm run generate`** (or just `npm run build`, which runs
+  it first). This validates the JSON — a bad edit (unknown tag, missing text,
+  duplicate id) fails with a clear message — and writes the questions into the
+  `// GENERATED` block of `attachment-reflection-config.js`. Don't hand-edit that
+  block; it is overwritten on every generate.
 
 ### Cache Busting
 
