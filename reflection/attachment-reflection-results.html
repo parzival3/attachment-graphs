@@ -374,15 +374,25 @@
           doc.setFont('helvetica', 'bold'); doc.setFontSize(15);
           doc.setTextColor(isHL ? td.color : P.dark);
           doc.text(String(c), bx + boxW / 2, by + 9, { align: 'center' });
-          // label
-          doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5);
+          // label — shrink the font until the full (uppercased) label fits the
+          // box; only fall back to the part before "/" if it still won't fit at
+          // the minimum size (keeps whole labels like Danish "Desorganiseret /
+          // Konfliktfyldt" from overflowing).
+          doc.setFont('helvetica', 'bold');
           doc.setTextColor(isHL ? td.color : P.light);
-          // Fit label — use the part before "/" if the full label is too wide
-          var labelText = L(td.label);
-          if (doc.getTextWidth(labelText) > boxW - 4) {
-            labelText = labelText.split('/')[0].trim();
+          var labelText = L(td.label).toUpperCase();
+          var maxW = boxW - 4;
+          var fs = 6.5, minFs = 4.5;
+          doc.setFontSize(fs);
+          while (fs > minFs && doc.getTextWidth(labelText) > maxW) {
+            fs -= 0.25;
+            doc.setFontSize(fs);
           }
-          doc.text(labelText.toUpperCase(), bx + boxW / 2, by + 15, { align: 'center' });
+          if (doc.getTextWidth(labelText) > maxW) {
+            labelText = L(td.label).split('/')[0].trim().toUpperCase();
+            doc.setFontSize(minFs);
+          }
+          doc.text(labelText, bx + boxW / 2, by + 15, { align: 'center' });
           // pct
           doc.setFont('helvetica', 'normal'); doc.setFontSize(6);
           doc.setTextColor(P.light);
