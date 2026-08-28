@@ -9,8 +9,8 @@
 #
 set -euo pipefail
 
-JSON_FILE="attachment-reflection-questions.json"
-CONFIG_FILE="attachment-reflection-config.js"
+JSON_FILE="reflection/attachment-reflection-questions.json"
+CONFIG_FILE="reflection/attachment-reflection-config.js"
 
 # Only do work when the questions JSON is staged; otherwise this is a no-op.
 if ! git diff --cached --name-only | grep -qx "$JSON_FILE"; then
@@ -32,7 +32,7 @@ run_node() {
 }
 
 echo "pre-commit: $JSON_FILE changed — regenerating $CONFIG_FILE"
-run_node generate-config.js
+run_node build/generate-config.js
 
 # Stage ONLY the generated config (never anything else), so unrelated unstaged
 # edits are not swept into the commit.

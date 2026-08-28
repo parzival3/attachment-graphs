@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Your Attachment Style Results</title>
-  <link rel="stylesheet" href="questionnaire.css">
+  <link rel="stylesheet" href="../shared/questionnaire.css">
   <style>
     body { background: linear-gradient(to bottom, #f2ede8, #e8dfd5); min-height: 100vh; }
 
@@ -117,9 +117,9 @@
   </main>
 
   <script src="attached-questionnaire-config.js"></script>
-  <script src="attachment-diagram.class.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="csv-loader.js"></script>
+  <script src="../diagrams/attachment-diagram.class.js"></script>
+  <script src="../vendor/jspdf.umd.min.js"></script>
+  <script src="../shared/csv-loader.js"></script>
   <script>
   loadQuestionsCSV('questions.csv', function (csvErr, questions) {
   if (csvErr) { document.getElementById('errorContent').style.display = ''; return; }

@@ -15,31 +15,37 @@ const path = require('path');
 const { execFileSync } = require('child_process');
 const { inlineSource } = require('inline-source');
 
-const ROOT = __dirname;
+const ROOT = path.join(__dirname, '..');   // repo root (this script lives in build/)
 const OUT = path.join(ROOT, 'dist');
 
+// Pages to bundle, relative to ROOT. Output keeps the same basename in dist/.
 const PAGES = [
-  'attachment-reflection.html',
-  'attachment-reflection-results.html',
+  'reflection/attachment-reflection.html',
+  'reflection/attachment-reflection-results.html',
 ];
 
 async function build() {
   // Regenerate the config's questions/tendencies from the JSON data file first,
   // so the build always reflects the latest edits (and validation runs).
-  execFileSync(process.execPath, [path.join(ROOT, 'generate-config.js')], {
+  execFileSync(process.execPath, [path.join(__dirname, 'generate-config.js')], {
     stdio: 'inherit',
   });
 
   fs.mkdirSync(OUT, { recursive: true });
 
   for (const page of PAGES) {
-    const html = await inlineSource(path.join(ROOT, page), {
-      rootpath: ROOT,
+    const srcPath = path.join(ROOT, page);
+    const html = await inlineSource(srcPath, {
+      // Resolve the page's relative asset paths (../shared, ../vendor) against
+      // its own folder.
+      rootpath: path.dirname(srcPath),
       compress: false,   // keep output readable / debuggable
       // Only inline assets explicitly tagged with `inline`; never fetch remote.
       ignore: [],
     });
-    const dest = path.join(OUT, page);
+    // Flatten into dist/ using just the basename, so the released files keep
+    // their familiar names.
+    const dest = path.join(OUT, path.basename(page));
     fs.writeFileSync(dest, html, 'utf8');
     console.log('built', path.relative(ROOT, dest));
   }

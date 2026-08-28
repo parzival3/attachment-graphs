@@ -14,9 +14,10 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = __dirname;
-const JSON_FILE = path.join(ROOT, 'attachment-reflection-questions.json');
-const CONFIG_FILE = path.join(ROOT, 'attachment-reflection-config.js');
+// This script lives in build/; the reflection data + config live in reflection/.
+const REFLECTION_DIR = path.join(__dirname, '..', 'reflection');
+const JSON_FILE = path.join(REFLECTION_DIR, 'attachment-reflection-questions.json');
+const CONFIG_FILE = path.join(REFLECTION_DIR, 'attachment-reflection-config.js');
 
 const BEGIN = '  // ── GENERATED FROM attachment-reflection-questions.json — do not edit by hand ──';
 const END = '  // ── END GENERATED ──';

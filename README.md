@@ -1,206 +1,54 @@
-# Attachment Style Diagram
+# Attachment Graphs
 
-An interactive, therapy-inspired visualization of attachment theory using the infinity symbol (lemniscate) to represent the four attachment styles. Built with pure JavaScript and optimized for both desktop and mobile devices.
+A small suite of self-hosted, API-free questionnaire tools and diagrams for the
+psychotherapy practice at [piatorp.dk](https://www.piatorp.dk).
 
-![Attachment Style Diagram](screenshot.png)
+Everything runs client-side in the browser. There is no backend: a completed
+questionnaire encodes its answers into the URL hash (base64 JSON) and redirects
+to a results page that decodes and renders them. Nothing is stored or sent
+anywhere.
 
-## Features
+Live site: https://parzival3.github.io/attachment-graphs/
 
-### Core Features
-- ✨ **Pure JavaScript** - No dependencies, works anywhere
-- 🎨 **Beautiful Design** - Warm, calming color palette inspired by therapy websites
-- 📱 **Mobile Responsive** - Fully optimized for smartphones and tablets
-- 🎯 **Interactive Sliders** - Move points along the curve to explore attachment styles
-- 👥 **Dual Points** - Track both "You" and "Partner" positions simultaneously
-- 🖱️ **Hover Tooltips** - Hover or tap points to see labels
-- 🔍 **Adjustable Scale** - Zoom slider to resize the curve (80-200)
-- 🎲 **Random Initialization** - Different positions on each page load
-- 📐 **Precise Positioning** - Labels stay within bounds at all scales
+## What's in here
 
-### Technical Features
-- Canvas-based rendering with smooth animations
-- Touch event support for mobile devices
-- Responsive layout with automatic canvas resizing
-- Cache-busting for development
-- Real-time updates as you adjust controls
+The repository contains four independent tools plus the shared code they build on:
 
-## Quick Start
+| Folder | Tool |
+|--------|------|
+| `reflection/` | **Attachment Reflection** — "How Do You Create Connection?" A step-by-step reflection whose questions live in an editable JSON file. This is the actively maintained tool. |
+| `attached/` | **Attachment Style Self-Assessment** (ECR-R based). Questions load from `questions.csv`. |
+| `survey/` | **Cross-Cultural Couple Questionnaire**, with results plotted on the attachment/tension diagrams. |
+| `diagrams/` | Standalone canvas diagrams (attachment "infinity curve" and relational-tension lines) used by the tools and by `index.html`. |
+| `shared/` | The questionnaire engine (`questionnaire-framework.js`), shared stylesheet (`questionnaire.css`) and the CSV loader. |
+| `vendor/` | Third-party libraries bundled locally (jsPDF, for PDF export). |
+| `build/` | Build tooling (see below). |
+| `docs/` | Project notes and history. |
 
-### View the Demo
+`index.html` (repo root) is the landing page and demos the diagrams.
 
-Simply open `index.html` in any modern web browser.
+Each questionnaire is two pages — an entry page and a results page — that live
+in the same folder and reference each other with plain relative links. Shared
+assets are referenced with `../shared/…` and `../vendor/…`.
 
-### Files Structure
+## Running locally
 
-```
-├── index.html              # Main HTML page
-├── attachment-diagram.js   # Core diagram logic
-├── README.md              # This file
-└── .gitignore            # Git ignore rules
-```
-
-## Usage
-
-### Interactive Controls
-
-1. **Your Position Slider** - Move your point along the attachment curve
-2. **Partner Position Slider** - Move your partner's point independently
-3. **Curve Size Slider** - Adjust the diagram zoom (80-200)
-
-### Attachment Styles
-
-The diagram shows four primary attachment styles:
-
-- **Secure** (Top) - Low anxiety, low avoidance - Healthy attachment
-- **Anxious** (Left) - High anxiety, low avoidance - Preoccupied with relationships
-- **Avoidant** (Right) - Low anxiety, high avoidance - Dismissive of closeness
-- **Fearful** (Bottom) - High anxiety, high avoidance - Fearful of intimacy
-
-### How to Use
-
-1. **Explore Positions**: Use sliders to move points around the curve
-2. **View Labels**: Hover (desktop) or tap (mobile) on points to see "You" or "Partner"
-3. **Adjust Size**: Use the Curve Size slider to zoom in or out
-4. **Compare Styles**: See how different positions relate to attachment styles
-
-## Embedding in Your Website
-
-### Basic Embedding
-
-```html
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-    <canvas id="attachmentCanvas" width="700" height="500"></canvas>
-    <script src="attachment-diagram.js"></script>
-</body>
-</html>
-```
-
-### Customization
-
-```javascript
-const diagram = new AttachmentDiagram('attachmentCanvas', {
-    scale: 200,                // Curve size
-    lineWidth: 3.5,           // Curve line thickness
-    curveColor: '#8b7d6f',    // Curve color
-    labelColor: '#5a5348',    // Label text color
-    fontSize: 16,             // Axis label font size
-    labelFontSize: 18,        // Style label font size
-    pointRadius: 10           // Point size
-});
-```
-
-### API Methods
-
-```javascript
-// Set the scale/zoom level
-diagram.setScale(150);
-
-// Plot a point with label
-diagram.plotPoint(anxiety, avoidance, color, label);
-// anxiety: -1 (low) to 1 (high)
-// avoidance: -1 (low) to 1 (high)
-// color: hex color code
-// label: text to show on hover
-
-// Clear and redraw
-diagram.clear();
-diagram.drawInfinityCurve();
-diagram.drawLabels();
-```
-
-## Mobile Optimization
-
-The diagram automatically adapts to mobile devices:
-
-- **Responsive Canvas**: Scales to fit screen width
-- **Touch Support**: Tap points to see tooltips
-- **Adaptive Text**: Smaller fonts on mobile
-- **Optimized Layout**: Reduced padding and margins
-- **Touch Targets**: Larger hit areas (20px) for easier tapping
-
-### Mobile Breakpoint
-
-Mobile styles activate when screen width ≤ 768px
-
-## Design System
-
-### Color Palette
-
-Inspired by therapeutic design with warm, calming tones:
-
-- **Background**: `#e8dfd4` → `#d4c9bd` (gradient)
-- **Curve**: `#8b7d6f` (warm gray)
-- **Labels**: `#5a5348` (dark warm gray)
-- **Axes**: `#d4c9bd` (light beige)
-- **Your Point**: `#c77f5a` (terracotta)
-- **Partner Point**: `#8b7d6f` (warm gray)
-
-### Typography
-
-- **Font Family**: Segoe UI, sans-serif
-- **Attachment Styles**: 18px, weight 600
-- **Axis Labels**: 14px, weight 400
-
-## Technical Details
-
-### Browser Support
-
-- Chrome/Edge (latest)
-- Firefox (latest)
-- Safari (latest)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-### Dependencies
-
-None! Pure vanilla JavaScript and HTML5 Canvas.
-
-### Performance
-
-- Lightweight: ~15KB total (HTML + JS + CSS)
-- Smooth animations
-- Efficient canvas rendering
-- No external requests
-
-## Development
-
-### Local Development
-
-1. Clone the repository
-2. Open `index.html` in a browser
-3. No build process needed for day-to-day editing — the source files stay split
-   (config JS, framework JS, shared CSS) so they are easy to work on individually.
-
-### Building single-file versions (for hosting)
-
-The Attachment Reflection questionnaire can be built into **self-contained HTML
-files** that inline all local CSS/JS — handy for dropping onto piatorp.dk as a
-single file. You keep editing the split source files; the build produces the
-bundled output.
+No build step is needed to work on the source. Serve the repo root with any
+static server and open a page:
 
 ```bash
-npm install       # one-time: installs inline-source
-npm run build     # writes dist/attachment-reflection.html and
-                  #        dist/attachment-reflection-results.html
+python3 -m http.server 8000
+# then open http://localhost:8000/reflection/attachment-reflection.html
 ```
 
-Each output file inlines `questionnaire.css`, `attachment-reflection-config.js`,
-`questionnaire-framework.js` and the vendored jsPDF library
-(`vendor/jspdf.umd.min.js`). The built files have **no runtime network
-dependencies** — the questionnaire and the PDF download work offline and will
-keep working regardless of any CDN. Assets are inlined only when tagged with the
-`inline` attribute in the source HTML; `dist/` is git-ignored.
+## Editing the Attachment Reflection questions
 
-### Editing questions and answers
+The questions, answer options and result categories for the Attachment
+Reflection live in one data file:
 
-The questions, answer options and tendency definitions for the Attachment
-Reflection live in a single data file: **`attachment-reflection-questions.json`**.
-Add, remove or re-tag options there — no need to touch any JavaScript.
+    reflection/attachment-reflection-questions.json
+
+Add, remove or re-tag options there — no JavaScript required.
 
 ```jsonc
 {
@@ -215,118 +63,85 @@ Add, remove or re-tag options there — no need to touch any JavaScript.
     }
   ],
   "tendencies": {
-    "S":  { "label": "Secure", "color": "#7a9e8a", "hlBg": "#eef5f1",
-            "title": "Secure tendencies", "text": "…" }
+    "S": { "label": "Secure", "color": "#7a9e8a", "hlBg": "#eef5f1",
+           "title": "Secure tendencies", "text": "..." }
   }
 }
 ```
 
-- Each option's `tag` must be one of the keys in `tendencies` (`S`, `A`, `Av`,
-  `D`). All questions default to multi-select checkboxes and are optional; add
-  `"type"` / `"required"` on a question only to override that.
-- After editing, run **`npm run generate`** (or just `npm run build`, which runs
-  it first). This validates the JSON — a bad edit (unknown tag, missing text,
-  duplicate id) fails with a clear message — and writes the questions into the
-  `// GENERATED` block of `attachment-reflection-config.js`. Don't hand-edit that
-  block; it is overwritten on every generate.
+- Each option's `tag` must be a key defined in `tendencies` (`S`, `A`, `Av`, `D`).
+- Questions default to multi-select checkboxes and are optional. Add `"type"` or
+  `"required"` on a question only to override that.
 
-#### Automatic regeneration on commit (optional)
+After editing, run:
 
-A committed git hook can run the generation for you: whenever
-`attachment-reflection-questions.json` is part of a commit, it regenerates the
-config and stages it into the same commit — so the committed config can never
-drift from the JSON. Enable it once per clone:
+```bash
+npm run generate
+```
+
+This validates the JSON — an unknown tag, missing text or duplicate id fails
+with a clear message — and writes the questions into the `GENERATED` block of
+`reflection/attachment-reflection-config.js`. Do not hand-edit that block; it is
+overwritten on every generate.
+
+### Regenerating automatically on commit (optional)
+
+A committed git hook can run the generation for you: whenever the questions JSON
+is part of a commit, it regenerates the config and stages it into the same
+commit, so the committed config can never drift from the data. Enable it once
+per clone:
 
 ```bash
 ./install-hooks.sh        # sets core.hooksPath -> .githooks
 ```
 
-The hook (`.githooks/pre-commit`) is a no-op for commits that don't touch the
-questions JSON, and it only ever stages the generated config. If neither `node`
-nor `nix-shell` is available it aborts and asks you to run `npm run generate`
-manually.
+The hook is a no-op for commits that do not touch the questions JSON, and it
+only ever stages the generated config.
 
-### Cache Busting
+## Building the single-file version
 
-The page includes cache-busting meta tags for development:
+The Attachment Reflection can be built into self-contained HTML files that
+inline all of their CSS, JavaScript and the jsPDF library — a single file per
+page with no runtime network dependencies, easy to host anywhere or hand to
+another developer.
 
-```html
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
+```bash
+npm install       # one-time: installs the inline-source build dependency
+npm run build     # regenerates the config, then writes:
+                  #   dist/attachment-reflection.html
+                  #   dist/attachment-reflection-results.html
 ```
 
-### Git History
+`npm run build` runs the generate step first, so the built output always
+reflects the latest JSON. The built files have no external dependencies at all;
+the questionnaire and the PDF download work offline. `dist/` is git-ignored.
 
-The project includes detailed commit messages for all changes:
+Assets are inlined only where the source HTML tags them with the `inline`
+attribute, which is why only the two reflection pages are bundled.
 
-- Initial setup with infinity curve
-- Color palette inspired by therapy website
-- Interactive sliders for position control
-- Hover tooltips
-- Mobile responsive design
-- Partner point tracking
-- Dynamic scaling
-- Label positioning optimization
+## Deployment and releases
 
-## Changelog
+Two GitHub Actions workflows handle publishing:
 
-### Latest Updates
+- **`deploy.yml`** — on every push to `main`, builds the single-file reflection
+  pages and publishes the whole site (all tools plus `index.html`) to GitHub
+  Pages, overlaying the built self-contained pages over the split source ones.
+- **`release.yml`** — on a version tag (`vX.Y.Z`), builds the pages, zips them
+  as `attachment-reflection.zip` and attaches it to a GitHub Release as a
+  shareable download.
 
-- ✅ Mobile responsive design with touch support
-- ✅ Random initial positions on page load
-- ✅ Adjustable curve size with slider (80-200)
-- ✅ Dual point tracking (You + Partner)
-- ✅ Hover/touch tooltips
-- ✅ Optimized label positioning at all scales
-- ✅ Cache-busting for development
-- ✅ Maximum scale default (200)
+To cut a release:
 
-## Use Cases
+```bash
+git tag -a v1.2.0 -m "..."
+git push origin v1.2.0
+```
 
-- **Therapy Practice**: Visualize client attachment patterns
-- **Relationship Counseling**: Compare partner attachment styles
-- **Self-Discovery**: Explore your own attachment tendencies
-- **Education**: Teach attachment theory concepts
-- **Research**: Plot questionnaire results
-- **Workshops**: Interactive attachment style demonstrations
+## Requirements
 
-## Contributing
-
-This is a personal project, but suggestions are welcome! Feel free to:
-
-1. Report issues
-2. Suggest features
-3. Submit improvements
+- A modern browser (Chrome, Firefox, Safari, Edge).
+- Node.js is required only for the build/generate tooling, not to run the pages.
 
 ## License
 
-MIT License - Free to use and modify
-
-## Credits
-
-**Developed with Warp AI**
-- All commits include: `Co-Authored-By: Warp <agent@warp.dev>`
-
-**Design Inspiration**
-- Color palette inspired by therapeutic website design
-- Infinity symbol represents the continuous nature of attachment patterns
-
-## Resources
-
-### Learn About Attachment Theory
-
-- [Attachment Theory Overview](https://en.wikipedia.org/wiki/Attachment_theory)
-- Understanding attachment styles in relationships
-- How attachment patterns develop and change
-
-### Technical Resources
-
-- HTML5 Canvas API
-- Touch Events API
-- Responsive Web Design
-- Lemniscate of Bernoulli (infinity curve mathematics)
-
----
-
-**Made with ❤️ for therapists, counselors, and anyone exploring attachment theory**
+MIT.

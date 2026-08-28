@@ -41,17 +41,24 @@ jobs:
         # Attachment Reflection pages are the self-contained builds.
         run: |
           mkdir -p _site
-          # Copy all site files except tooling / VCS / build dirs.
+          # Copy the site files (the questionnaires, diagrams, shared assets and
+          # index), excluding tooling, docs, VCS and build artifacts.
           rsync -a --delete \
             --exclude '.git' \
             --exclude '.github' \
+            --exclude '.githooks' \
             --exclude 'node_modules' \
             --exclude 'dist' \
             --exclude '_site' \
+            --exclude 'build' \
+            --exclude 'docs' \
+            --exclude 'package.json' \
+            --exclude 'package-lock.json' \
+            --exclude 'install-hooks.sh' \
             ./ _site/
-          # Overlay the inlined single-file builds.
-          cp dist/attachment-reflection.html         _site/attachment-reflection.html
-          cp dist/attachment-reflection-results.html _site/attachment-reflection-results.html
+          # Overlay the inlined single-file builds over the split reflection pages.
+          cp dist/attachment-reflection.html         _site/reflection/attachment-reflection.html
+          cp dist/attachment-reflection-results.html _site/reflection/attachment-reflection-results.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

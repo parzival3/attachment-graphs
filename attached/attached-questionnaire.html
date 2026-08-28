@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attachment Style Self-Assessment</title>
-  <link rel="stylesheet" href="questionnaire.css">
+  <link rel="stylesheet" href="../shared/questionnaire.css">
   <style>
     body { background: linear-gradient(to bottom, #f2ede8, #e8dfd5); }
     .q-main { padding-top: 40px; }
@@ -21,8 +21,8 @@
   </main>
 
   <script src="attached-questionnaire-config.js"></script>
-  <script src="questionnaire-framework.js"></script>
-  <script src="csv-loader.js"></script>
+  <script src="../shared/questionnaire-framework.js"></script>
+  <script src="../shared/csv-loader.js"></script>
   <script>
     loadQuestionsCSV('questions.csv', function (err, questions) {
       if (err) {

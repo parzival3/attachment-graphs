@@ -4,8 +4,8 @@
   "private": true,
   "description": "Self-hosted, API-free questionnaire tools for piatorp.dk",
   "scripts": {
-    "generate": "node generate-config.js",
-    "build": "node build.js"
+    "generate": "node build/generate-config.js",
+    "build": "node build/build.js"
   },
   "devDependencies": {
     "inline-source": "^8.0.3"
