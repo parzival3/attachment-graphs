@@ -206,24 +206,11 @@ class Questionnaire {
             '<div class="q-card q-intro-card">' +
             '  <h1 class="q-intro-title">' + this._esc(c.title) + '</h1>' +
             '  <div class="q-intro-text">' + introParas + '</div>' +
-            '  <div class="q-layout-toggle">' +
-            '    <button class="q-layout-btn' + (this.layout === 'paged' ? ' active' : '') + '" data-layout="paged">&#9654; Step by step</button>' +
-            '    <button class="q-layout-btn' + (this.layout === 'scroll' ? ' active' : '') + '" data-layout="scroll">&#9776; All at once</button>' +
-            '  </div>' +
             '  <div class="q-intro-actions">' +
-            '    <button class="btn-primary q-begin-btn">Begin &rarr;</button>' +
+            '    <button class="btn-primary q-begin-btn">Start &rarr;</button>' +
             '  </div>' +
+            (c.privacyNote ? '  <p class="q-privacy-note">' + c.privacyNote + '</p>' : '') +
             '</div>';
-
-        // Layout toggle
-        this.container.querySelectorAll('.q-layout-btn').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                self.layout = btn.dataset.layout;
-                self.container.querySelectorAll('.q-layout-btn').forEach(function (b) {
-                    b.classList.toggle('active', b === btn);
-                });
-            });
-        });
 
         this.container.querySelector('.q-begin-btn')
             .addEventListener('click', function () { self.next(); });

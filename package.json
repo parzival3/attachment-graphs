@@ -1,0 +1,12 @@
+{
+  "name": "attachment-graphs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Self-hosted, API-free questionnaire tools for piatorp.dk",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "devDependencies": {
+    "inline-source": "^8.0.3"
+  }
+}

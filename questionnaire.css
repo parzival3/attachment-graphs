@@ -608,6 +608,15 @@ body {
   justify-content: center;
 }
 
+.q-privacy-note {
+  margin: 24px auto 0;
+  max-width: 46ch;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted, #8a7d70);
+  text-align: center;
+}
+
 /* ── Completion screen ──────────────────────────────────── */
 
 .q-complete-card {

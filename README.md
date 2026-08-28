@@ -173,7 +173,27 @@ None! Pure vanilla JavaScript and HTML5 Canvas.
 
 1. Clone the repository
 2. Open `index.html` in a browser
-3. No build process needed!
+3. No build process needed for day-to-day editing — the source files stay split
+   (config JS, framework JS, shared CSS) so they are easy to work on individually.
+
+### Building single-file versions (for hosting)
+
+The Attachment Reflection questionnaire can be built into **self-contained HTML
+files** that inline all local CSS/JS — handy for dropping onto piatorp.dk as a
+single file. You keep editing the split source files; the build produces the
+bundled output.
+
+```bash
+npm install       # one-time: installs inline-source
+npm run build     # writes dist/attachment-reflection.html and
+                  #        dist/attachment-reflection-results.html
+```
+
+Each output file inlines `questionnaire.css`, `attachment-reflection-config.js`
+and (for the entry page) `questionnaire-framework.js`. The jsPDF library on the
+results page is intentionally **not** inlined — it stays a CDN reference, so the
+"Download PDF" feature needs an internet connection. Assets are inlined only when
+tagged with the `inline` attribute in the source HTML; `dist/` is git-ignored.
 
 ### Cache Busting
 

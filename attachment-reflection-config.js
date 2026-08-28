@@ -26,6 +26,8 @@ var REFLECTION_CONFIG = {
     'The purpose of this reflection is to help you notice your relational patterns with more compassion and clarity.'
   ].join('\n'),
 
+  privacyNote: 'Your privacy: this reflection runs entirely in your browser. It does not collect, store, or send any personal data — there is no account, no cookies, and no analytics. Your answers never leave your device and are not saved once you close the page. Because no personal data is processed, this tool is fully GDPR compliant.',
+
   sections: {},
   scoring:  [],
 
