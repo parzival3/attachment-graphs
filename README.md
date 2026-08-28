@@ -230,6 +230,22 @@ Add, remove or re-tag options there — no need to touch any JavaScript.
   `// GENERATED` block of `attachment-reflection-config.js`. Don't hand-edit that
   block; it is overwritten on every generate.
 
+#### Automatic regeneration on commit (optional)
+
+A committed git hook can run the generation for you: whenever
+`attachment-reflection-questions.json` is part of a commit, it regenerates the
+config and stages it into the same commit — so the committed config can never
+drift from the JSON. Enable it once per clone:
+
+```bash
+./install-hooks.sh        # sets core.hooksPath -> .githooks
+```
+
+The hook (`.githooks/pre-commit`) is a no-op for commits that don't touch the
+questions JSON, and it only ever stages the generated config. If neither `node`
+nor `nix-shell` is available it aborts and asks you to run `npm run generate`
+manually.
+
 ### Cache Busting
 
 The page includes cache-busting meta tags for development:
