@@ -6,9 +6,11 @@
   <title>How Do You Create Connection? — Attachment Style Reflection</title>
   <link rel="stylesheet" href="../shared/questionnaire.css" inline>
   <style>
-    body { background: linear-gradient(to bottom, #f2ede8, #e8dfd5); }
+    body { background: var(--page-gradient); }
     .q-main { padding-top: 40px; }
   </style>
+  <!-- palette-picker (TEMPORARY): apply saved theme before paint to avoid a flash -->
+  <script>try{var p=localStorage.getItem('reflection-palette');if(p&&p!=='warm')document.documentElement.setAttribute('data-theme',p);}catch(e){}</script>
 </head>
 <body>
 
@@ -26,6 +28,9 @@
     var q = new Questionnaire(REFLECTION_CONFIG);
     q.mount('app');
   </script>
+
+  <!-- palette-picker (TEMPORARY) — remove with its <head> snippet when colours are locked in -->
+  <script src="../shared/palette-picker.js" inline></script>
 
 </body>
 </html>

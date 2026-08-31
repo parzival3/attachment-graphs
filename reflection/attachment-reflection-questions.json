@@ -31,8 +31,8 @@
   },
 
   "intro": {
-    "en": "This reflection is designed to help you become more aware of how you create closeness, safety and connection in your intimate relationships.\nIt is not a diagnosis, and it does not place you in a fixed category. Most people contain more than one attachment strategy. Your way of relating may also change depending on the relationship, your life situation, your stress level and how emotionally safe you feel.\nFor each question, choose all the answers that feel true for you. There are no right or wrong answers.\nThe purpose of this reflection is to help you notice your relational patterns with more compassion and clarity.",
-    "da": "Denne refleksion er tænkt som en hjælp til at blive mere bevidst om, hvordan du skaber nærhed, tryghed og forbindelse i dine nære relationer.\nDet er ikke en diagnose, og den placerer dig ikke i en fast kategori. De fleste mennesker rummer mere end én tilknytningsstrategi. Din måde at være i relation på kan også ændre sig alt efter relationen, din livssituation, dit stressniveau og hvor følelsesmæssigt tryg du føler dig.\nVælg for hvert spørgsmål alle de svar, der føles sande for dig. Der er ingen rigtige eller forkerte svar.\nFormålet med denne refleksion er at hjælpe dig med at få øje på dine relationelle mønstre med mere medfølelse og klarhed."
+    "en": "This reflection is designed to help you become more aware of how you seek and create closeness, safety and emotional connection in your intimate relationships.\nIt is not a diagnosis and is not meant to place you in a particular or fixed category. Most people hold different attachment strategies, and the way we react in relationships can vary depending on who we are with, our life situation, our stress level and the degree of emotional safety in the relationship.\nFor each question, you can choose all the answers that feel relevant or recognisable to you. There are no right or wrong answers.\nThe purpose is to give you a clearer view of your relational patterns and tendencies — and a chance to meet them with greater understanding, curiosity and compassion.",
+    "da": "Denne refleksion er udviklet som en hjælp til at blive mere bevidst om, hvordan du søger og skaber nærhed, tryghed og følelsesmæssig forbindelse i dine nære relationer.\nDen er ikke en diagnose og har ikke til formål at placere dig i en bestemt eller fast kategori. De fleste mennesker rummer forskellige tilknytningsstrategier, og vores måde at reagere i relationer på kan variere afhængigt af, hvem vi er sammen med, vores livssituation, vores stressniveau og graden af følelsesmæssig tryghed i relationen.\nVed hvert spørgsmål kan du vælge alle de svar, som føles relevante eller genkendelige for dig. Der er ingen rigtige eller forkerte svar.\nFormålet er at give dig et klarere blik på dine relationelle mønstre og tendenser – og mulighed for at møde dem med større forståelse, nysgerrighed og medfølelse."
   },
 
   "privacyNote": {
@@ -41,8 +41,8 @@
   },
 
   "closing": {
-    "en": "Your attachment strategy was once an intelligent adaptation. It helped you stay connected, protected or emotionally safe. In adult relationships, the work is not to get rid of yourself, but to understand your protective movements and slowly build more secure ways of reaching for connection.",
-    "da": "Din tilknytningsstrategi var engang en intelligent tilpasning. Den hjalp dig med at bevare forbindelse, beskyttelse eller følelsesmæssig tryghed. I voksne relationer handler arbejdet ikke om at slippe af med dig selv, men om at forstå dine beskyttende bevægelser og langsomt opbygge mere trygge måder at række ud efter forbindelse på."
+    "en": "Your attachment strategy was once an intelligent adaptation. It helped you stay connected, protect yourself or create some form of emotional safety. In adult relationships, growth is not about fighting or getting rid of these sides of yourself, but about understanding what they are trying to protect you from — and gradually developing more, and safer, ways of seeking contact, handling insecurity and being in relationship.",
+    "da": "Din tilknytningsstrategi var engang en intelligent tilpasning. Den hjalp dig med at bevare forbindelse, beskytte dig selv eller skabe en form for følelsesmæssig tryghed. I voksne relationer handler udvikling ikke om at bekæmpe eller fjerne disse sider af dig selv, men om at forstå, hvad de forsøger at beskytte dig imod – og gradvist udvikle flere og tryggere måder at søge kontakt, håndtere utryghed og være i relation på."
   },
 
   "questions": [
@@ -203,8 +203,8 @@
       "hlBg": "#eef5f1",
       "title": { "en": "Secure tendencies", "da": "Trygge tendenser" },
       "text": {
-        "en": "You are often able to stay emotionally present, ask for what you need, listen to the other person and repair after conflict. You may still become triggered, but you usually have access to reflection and connection again.",
-        "da": "Du er ofte i stand til at blive følelsesmæssigt til stede, bede om det, du har brug for, lytte til den anden og genoprette efter konflikt. Du kan stadig blive trigget, men du har som regel adgang til refleksion og forbindelse igen."
+        "en": "You are often able to be emotionally present, put words to what you need, listen to the other person and find your way back to contact after a conflict. You may still become triggered or unsettled, but you can usually rediscover calm, reflection and the feeling of connection.",
+        "da": "Du er ofte i stand til at være følelsesmæssigt til stede, sætte ord på det, du har brug for, lytte til den anden og finde tilbage til kontakten efter en konflikt. Du kan stadig blive trigget eller utryg, men du vil som regel kunne genfinde ro, refleksion og følelsen af forbindelse."
       }
     },
     "A": {
@@ -213,8 +213,8 @@
       "hlBg": "#fdf0e8",
       "title": { "en": "Anxious / Ambivalent tendencies", "da": "Ængstelige / ambivalente tendenser" },
       "text": {
-        "en": "You may become very activated when you feel distance, uncertainty or emotional disconnection. You may seek reassurance, think a lot about the relationship, or feel a strong need to restore closeness quickly.",
-        "da": "Du kan blive meget aktiveret, når du mærker afstand, usikkerhed eller følelsesmæssig afbrydelse. Du kan søge beroligelse, tænke meget på relationen eller føle et stærkt behov for hurtigt at genoprette nærhed."
+        "en": "You may become strongly affected emotionally when you sense distance, uncertainty or signs of emotional disconnection in the relationship. You may develop a great need for reassurance and contact, think a lot about the relationship, and find it hard to settle until you feel closeness and connection again.",
+        "da": "Du kan blive stærkt følelsesmæssigt påvirket, når du mærker afstand, usikkerhed eller tegn på følelsesmæssig afbrydelse i relationen. Du kan få et stort behov for bekræftelse og kontakt, tænke meget på relationen og have svært ved at finde ro, før du igen mærker nærhed og forbindelse."
       }
     },
     "Av": {
@@ -223,8 +223,8 @@
       "hlBg": "#e8f0f5",
       "title": { "en": "Avoidant / Withdrawn tendencies", "da": "Undvigende / tilbagetrukne tendenser" },
       "text": {
-        "en": "You may protect yourself by pulling back, becoming rational, staying silent or managing things alone. Closeness may feel important, but emotional pressure can feel overwhelming or intrusive.",
-        "da": "Du kan beskytte dig selv ved at trække dig, blive rationel, forblive tavs eller klare tingene alene. Nærhed kan føles vigtig, men følelsesmæssigt pres kan føles overvældende eller påtrængende."
+        "en": "You may protect yourself by pulling back, becoming more inward, focusing on the rational or trying to manage things on your own. Closeness can be important to you, but when emotional demands or intensity become too great, you may need distance and more space.",
+        "da": "Du kan beskytte dig selv ved at trække dig, blive mere indadvendt, gå op i det rationelle eller forsøge at klare tingene på egen hånd. Nærhed kan være vigtig for dig, men når følelsesmæssige krav eller intensitet bliver for stor, kan du få behov for afstand og mere plads."
       }
     },
     "D": {
@@ -233,8 +233,8 @@
       "hlBg": "#f2eef5",
       "title": { "en": "Disorganised / Conflicted tendencies", "da": "Desorganiserede / konfliktfyldte tendenser" },
       "text": {
-        "en": "You may both long for closeness and fear it. You may move between reaching out and pulling away, or between protest and shutdown. This often reflects earlier experiences where connection was also linked with fear, unpredictability or pain.",
-        "da": "Du kan både længes efter nærhed og frygte den. Du kan bevæge dig mellem at række ud og trække dig, eller mellem protest og at lukke ned. Dette afspejler ofte tidligere erfaringer, hvor forbindelse også var forbundet med frygt, uforudsigelighed eller smerte."
+        "en": "You may both long for closeness and become unsettled when it arises. You may shift between seeking contact and pulling away, or between strong emotional reactions and shutting down. This can be connected to earlier experiences where closeness or connection was also linked with insecurity, unpredictability or pain.",
+        "da": "Du kan både længes efter nærhed og samtidig blive utryg, når den opstår. Du kan skifte mellem at søge kontakt og trække dig, eller mellem stærke følelsesmæssige reaktioner og at lukke ned. Det kan hænge sammen med tidligere erfaringer, hvor nærhed eller forbindelse også har været forbundet med utryghed, uforudsigelighed eller smerte."
       }
     }
   }

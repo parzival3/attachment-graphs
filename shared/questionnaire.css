@@ -21,6 +21,63 @@
   --radius:       12px;
   --radius-sm:    8px;
   --font:         'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --page-gradient: linear-gradient(to bottom, #f2ede8, #e8dfd5);
+}
+
+/* ── Palette themes (TEMPORARY — palette-picker.js) ──────────
+   Overrides for the page-chrome colour vars only. Semantic
+   tendency colours (green = Secure, etc.) live in the questions
+   JSON and are intentionally NOT themed. To lock a palette in for
+   the final site: copy the chosen block's values into :root above,
+   then delete palette-picker.js, its two <script> refs, and these
+   blocks. See palette-picker.js header. */
+[data-theme="light-blue"] {
+  --bg:           #EEF4F8;
+  --surface:      #FFFFFF;
+  --border:       #C9D8E2;
+  --text-dark:    #23303A;
+  --text-mid:     #4E6070;
+  --text-light:   #8497A5;
+  --accent:       #5A86A8;
+  --accent-light: rgba(90, 134, 168, 0.12);
+  --accent-hover: #4C7591;
+  --btn-bg:       #3C5568;
+  --btn-hover:    #2F4453;
+  --shadow:       rgba(35, 48, 58, 0.10);
+  --shadow-lg:    rgba(35, 48, 58, 0.16);
+  --page-gradient: linear-gradient(to bottom, #eef4f8, #dce8f0);
+}
+[data-theme="sage"] {
+  --bg:           #EEF5F0;
+  --surface:      #FDFEFC;
+  --border:       #C7D8CD;
+  --text-dark:    #263029;
+  --text-mid:     #566056;
+  --text-light:   #869084;
+  --accent:       #6F9080;
+  --accent-light: rgba(111, 144, 128, 0.12);
+  --accent-hover: #5E7C6D;
+  --btn-bg:       #465850;
+  --btn-hover:    #384843;
+  --shadow:       rgba(38, 48, 41, 0.10);
+  --shadow-lg:    rgba(38, 48, 41, 0.16);
+  --page-gradient: linear-gradient(to bottom, #eef5f0, #dde9e1);
+}
+[data-theme="blush"] {
+  --bg:           #F7EFEF;
+  --surface:      #FFFDFD;
+  --border:       #E3D0D0;
+  --text-dark:    #2F2528;
+  --text-mid:     #6B565B;
+  --text-light:   #9E888D;
+  --accent:       #B07079;
+  --accent-light: rgba(176, 112, 121, 0.12);
+  --accent-hover: #9B5E67;
+  --btn-bg:       #5A4247;
+  --btn-hover:    #48343A;
+  --shadow:       rgba(47, 37, 40, 0.10);
+  --shadow-lg:    rgba(47, 37, 40, 0.16);
+  --page-gradient: linear-gradient(to bottom, #f7efef, #ecdcdc);
 }
 
 *, *::before, *::after {
