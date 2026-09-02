@@ -468,6 +468,12 @@
         gap(2);
       });
 
+      // Privacy note — localized fine print, mirroring the web page footer.
+      if (CFG.privacyNote) {
+        gap(4); hline();
+        para(L(CFG.privacyNote), 8, P.light);
+      }
+
       var stamp = payload.timestamp
         ? new Date(payload.timestamp).toISOString().slice(0, 10)
         : 'export';
