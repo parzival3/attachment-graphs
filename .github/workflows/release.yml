@@ -30,17 +30,18 @@ jobs:
 
       - name: Package build into a zip
         run: |
+          VERSION="${GITHUB_REF_NAME#v}"
           cd dist
-          zip -j ../attachment-reflection.zip \
+          zip -j "../attachment-reflection-${VERSION}.zip" \
             attachment-reflection.html \
             attachment-reflection-results.html
           cd ..
-          ls -la attachment-reflection.zip
+          ls -la "attachment-reflection-${VERSION}.zip"
 
       - name: Create / update release and attach artifact
         uses: softprops/action-gh-release@v2
         with:
           # For tag pushes this is the tag; for manual runs it defaults to the
           # commit and GitHub creates a release named after it.
-          files: attachment-reflection.zip
+          files: attachment-reflection-*.zip
           generate_release_notes: true
