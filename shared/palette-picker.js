@@ -61,7 +61,7 @@
     var box = document.createElement('div');
     box.id = 'palette-picker';
     box.setAttribute('style',
-      'position:fixed;bottom:14px;right:14px;z-index:9999;display:flex;' +
+      'position:fixed;bottom:14px;right:14px;z-index:9999;display:none;' +
       'gap:6px;align-items:center;padding:7px 9px;border-radius:99px;' +
       'background:rgba(255,255,255,0.92);box-shadow:0 2px 10px rgba(0,0,0,0.18);' +
       'backdrop-filter:blur(4px);font:12px \'Segoe UI\',Arial,sans-serif;');

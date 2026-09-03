@@ -4,24 +4,24 @@
    ========================================================= */
 
 :root {
-  --bg:           #F2EDE8;
-  --surface:      #FEFDFB;
-  --border:       #D4C9BD;
-  --text-dark:    #2C2520;
-  --text-mid:     #6B5F52;
-  --text-light:   #9B8F82;
-  --accent:       #C77F5A;
-  --accent-light: rgba(199, 127, 90, 0.12);
-  --accent-hover: #B5714D;
-  --btn-bg:       #5A4840;
+  --bg:           #EEF5F0;
+  --surface:      #FDFEFC;
+  --border:       #C7D8CD;
+  --text-dark:    #263029;
+  --text-mid:     #566056;
+  --text-light:   #869084;
+  --accent:       #6F9080;
+  --accent-light: rgba(111, 144, 128, 0.12);
+  --accent-hover: #5E7C6D;
+  --btn-bg:       #465850;
   --btn-text:     #FEFDFB;
-  --btn-hover:    #4A3A32;
-  --shadow:       rgba(44, 37, 32, 0.10);
-  --shadow-lg:    rgba(44, 37, 32, 0.16);
+  --btn-hover:    #384843;
+  --shadow:       rgba(38, 48, 41, 0.10);
+  --shadow-lg:    rgba(38, 48, 41, 0.16);
   --radius:       12px;
   --radius-sm:    8px;
   --font:         'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-  --page-gradient: linear-gradient(to bottom, #f2ede8, #e8dfd5);
+  --page-gradient: linear-gradient(to bottom, #eef5f0, #dde9e1);
 }
 
 /* ── Palette themes (TEMPORARY — palette-picker.js) ──────────
